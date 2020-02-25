@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="#leetcode寒假刷题—动态规划（1）（Java实现）#5.最长回文子串  动态规划思路： 1.定义状态  动态规划实际上就是记录每个状态，每个状态受到之前状态影响。所以，需要定义一个数组（记录每个状态）。这里定义二维数组dp，最小状态dp[i][j]就是记录从第i+1到第j+1的子串是否为回文子串。 2.确定临界状态 很容易就能看出每个字符都相当于一个长度为1的回文子串。所以二维数组对角线元">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/2020/02/24/leetcode寒假刷题--动态规划/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="#leetcode寒假刷题—动态规划（1）（Java实现）#5.最长回文子串  动态规划思路： 1.定义状态  动态规划实际上就是记录每个状态，每个状态受到之前状态影响。所以，需要定义一个数组（记录每个状态）。这里定义二维数组dp，最小状态dp[i][j]就是记录从第i+1到第j+1的子串是否为回文子串。 2.确定临界状态 很容易就能看出每个字符都相当于一个长度为1的回文子串。所以二维数组对角线元">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-02-25T09:49:42.505Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="#leetcode寒假刷题—动态规划（1）（Java实现）#5.最长回文子串  动态规划思路： 1.定义状态  动态规划实际上就是记录每个状态，每个状态受到之前状态影响。所以，需要定义一个数组（记录每个状态）。这里定义二维数组dp，最小状态dp[i][j]就是记录从第i+1到第j+1的子串是否为回文子串。 2.确定临界状态 很容易就能看出每个字符都相当于一个长度为1的回文子串。所以二维数组对角线元">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-leetcode寒假刷题--动态规划" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/02/24/leetcode寒假刷题--动态规划/" class="article-date">
+  <time datetime="2020-02-24T15:04:55.171Z" itemprop="datePublished">2020-02-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="leetcode寒假刷题—动态规划（1）（Java实现）"><a href="#leetcode寒假刷题—动态规划（1）（Java实现）" class="headerlink" title="#leetcode寒假刷题—动态规划（1）（Java实现）"></a>#leetcode寒假刷题—动态规划（1）（Java实现）</h2><p>#5.最长回文子串</p>
+<p> 动态规划思路：</p>
+<p><strong>1.定义状态</strong></p>
+<p> 动态规划实际上就是记录每个状态，每个状态受到之前状态影响。所以，需要定义一个数组（记录每个状态）。这里定义二维数组dp，最小状态dp[i][j]就是记录从第i+1到第j+1的子串是否为回文子串。</p>
+<p><strong>2.确定临界状态</strong></p>
+<p>很容易就能看出每个字符都相当于一个长度为1的回文子串。所以二维数组对角线元素值都为1。</p>
+<p><strong>3.确定状态转移方程</strong></p>
+<p>dp[j][i]==（s[i]==s[j]）&amp;&amp;dp[j+1][i-1]</p>
+<p>代码如下</p>
+<pre><code>class Solution {
+public String longestPalindrome(String s) {
+if(s.length()==0)
+{
+    return &quot;&quot;;
+}
+boolean [][]dp=new boolean[s.length()][s.length()];
+for(int i=0;i&lt;s.length();i++)
+{
+    dp[i][i]=true;//把对角线元素都设为true，因为每个字符也可以当成回文子串
+}
+int maxlen=1;
+int b=0;
+for(int i=0;i&lt;s.length();i++)
+{
+    for(int j=0;j&lt;i;j++)
+    {
+        if(s.charAt(i)==s.charAt(j))
+        {
+            if(i-j&gt;2)
+                {
+                    dp[j][i]=dp[j+1][i-1];
+             }
+            else
+            {
+                dp[j][i]=true;
+            }
+        }
+        else
+        {
+            dp[j][i]=false;
+        }
+        if(dp[j][i])
+        {
+            if(i-j+1&gt;maxlen)
+            {
+                b=j;
+                maxlen=i-j+1;
+            }
+        }
+    }
+}
+        return s.substring(b,b+maxlen);//返回最长回文子串
+    }
+}</code></pre><p>时间复杂度：O(N^2)</p>
+<p>空间复杂度：O(N^2)<br> )，二维 dp 问题，一个状态得用二维有序数对表示，因此空间复杂度是 O(N^2)。</p>
+<p><strong>4.改进</strong></p>
+<p><strong>中心扩散</strong></p>
+<p>假设字符串的某个字符是回文子串的中心，尝试从此点开始向两端扩散。如果子串是偶数子串，该中心就是这个回文子串的字符间的空隙。若是奇数子串，就是字符。<br>因此中心扩散法的思路是：遍历每一个索引，以这个索引为中心，利用“回文串”中心对称的特点，往两边扩散，看最多能扩散多远。</p>
+<p><strong>代码实现</strong></p>
+<pre><code>public class Solution {
+
+public String longestPalindrome(String s) {
+    int len = s.length();
+    if (len &lt; 2) {
+        return s;
+    }
+    int maxLen = 1;
+    String res = s.substring(0, 1);
+    // 中心位置枚举到 len - 2 即可,因为中心位置只可能是下标1到len-2。下标0和len-1是无法向两端扩散的
+    for (int i = 0; i &lt; len - 1; i++) {
+        String os = centerSpread(s, i, i);
+        String es = centerSpread(s, i, i + 1);
+        String maxLenStr = os.length() &gt; es.length() ? os :es;//找到是奇数子串长度长还是偶数子串长度长
+        if (maxLenStr.length() &gt; maxLen) {
+            maxLen = maxLenStr.length();
+            res = maxLenStr;
+        }
+    }
+    return res;
+}
+
+private String centerSpread(String s, int left, int right) {
+    // left = right 的时候，此时回文中心是一个字符，回文串的长度是奇数
+    // right = left + 1 的时候，此时回文中心是一个空隙，回文串的长度是偶数
+    int len = s.length();
+    int i = left;
+    int j = right;
+    while (i &gt;= 0 &amp;&amp; j &lt; len) {
+        if (s.charAt(i) == s.charAt(j)) {
+            i--;
+            j++;
+        } else {
+            break;
+        }
+    }
+    // 不满足while条件，此时得到的最大满足条件的子串是下标为i+1到j-1的字符组成的，所以，substring方法的两个参数为i+1，j(substring方法不会截取第二个参数所在下标的字符)
+    return s.substring(i + 1, j);
+}
+}</code></pre><p>时间复杂度：O(N^2)，遍历每个可能的中心时间复杂度为O(N)，而在centerSpread中，向两端扩撒的时间复杂度为O(N)。因此总时间复杂度为O(N^2)。</p>
+<p>空间复杂度：O(1)，只使用到常数个临时变量，与字符串长度无关。</p>
+<hr>
+<p>#53.最大子序和</p>
+<p><strong>1.定义状态</strong></p>
+<p>dp[i]为以下标为i的元素结束的子序中元素相加最大的子序的元素和。</p>
+<p><strong>2.确定临界状态</strong></p>
+<p>dp[0]=下标为0的元素的值</p>
+<p><strong>3.确定状态转移方程</strong></p>
+<p>dp[i]=max(dp[i-1]+nums[i],nums[i])//nums[i]为下标为i的元素</p>
+<p>代码如下</p>
+<pre><code>class Solution {
+public int maxSubArray(int[] nums) {
+    int []dp=new int[nums.length];//定义dp数组记录状态
+    dp[0]=nums[0];
+    int max=dp[0];
+    for(int i=1;i&lt;nums.length;i++)
+    {
+        dp[i]=Math.max(dp[i-1]+nums[i],nums[i]);//状态转义方程
+        max=Math.max(max,dp[i]);
+    }
+}
+    return max;
+}</code></pre><p>时间复杂度：O(N)</p>
+<p>空间复杂度：O(N)</p>
+<p><strong>4.改进</strong></p>
+<p>动态规划实际上就是空间换时间，所以空间复杂度相对较大。但是一些情况下可以改进空间复杂度，如本题而言，由于状态转移方程为max(dp[i-1]+nums[i],nums[i]),每个状态都和前一个状态相关。那么，就可以定义一个变量记录前一状态的值（dp[i-1]）。这样空间复杂度就由O(N)变为了O(1)。</p>
+<pre><code>class Solution {
+public int maxSubArray(int[] nums) {
+    int ans = nums[0];
+    int sum = 0;
+    for(int num: nums) {
+        if(sum &gt; 0) {//即dp[i-1]+nums[i]&gt;nums[i]
+            sum += num;
+        } else {
+            sum = num;
+        }
+        ans = Math.max(ans, sum);
+    }
+        return ans;
+}
+}</code></pre><p>时间复杂度：O(N)</p>
+<p>空间复杂度：O(1)</p>
+<hr>
+<p>#62.不同路径</p>
+<p><strong>1.定义状态</strong></p>
+<p>dp[i][j]表示从起点到第i+1行j+1列路径数</p>
+<p><strong>2.定义临界状态</strong></p>
+<p>由题意可知，从某点开始行进只能向下或向右走（只能从一个点的左边或上边来到该点）。而在第一行，只能从其左边的点走至该点。在第一列，只能从该点上面的点来到此点。<br>所以对于第一行元素dp[0][i],都有dp[0][i]=1,对应的，对于第一列元素dp[i][0]，都有dp[i][0]=1。</p>
+<p><strong>3.定义状态转换方程</strong></p>
+<p>dp[i][j]=dp[i-1][j]+dp[i]<a href="1<=i<n;1<=j<m">j-1</a></p>
+<p>代码如下</p>
+<pre><code>class Solution {
+public int uniquePaths(int m, int n) {//n为行数，m为列数
+    int [][]dp=new int[n][m];
+    for(int i=0;i&lt;m;i++)
+    {
+        dp[0][i]=1;
+    }
+    for(int i=0;i&lt;n;i++)
+    {
+        dp[i][0]=1;
+    }
+    for(int i=1;i&lt;n;i++)
+    {
+        for(int j=1;j&lt;m;j++)
+        {
+            dp[i][j]=dp[i-1][j]+dp[i][j-1];
+        }
+    }
+    return dp[n-1][m-1];
+}
+}</code></pre><p>时间复杂度：O(m*n)</p>
+<p>空间复杂度：O(m*n)</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/02/24/leetcode寒假刷题--动态规划/" data-id="ck71pn4t6000164v9x46ct86p" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/12/02/xss/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/02/24/leetcode寒假刷题--动态规划/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/02/xss/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/22/新文档/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/06/04/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
