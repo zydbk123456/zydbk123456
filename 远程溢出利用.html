@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="远程溢出利用 1.栈溢出 栈溢出的基础： 栈，即堆栈，是一种具有一定规则的数据结构，它按照先进后出的原则存储数据，先进入的数据被压入栈底，最后的数据在栈顶。 堆栈数据结构的两种基本操作： PUSH：将数据压入栈顶 POP  ：将栈顶数据弹出 内存的分配 1.代码区(.text)：这个区域存储着被装入执行的二进制机器代码，处理器会到这个区域取指令执行。 2.数据区(.data)：用于存储全局变量和静">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/远程溢出利用.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="远程溢出利用 1.栈溢出 栈溢出的基础： 栈，即堆栈，是一种具有一定规则的数据结构，它按照先进后出的原则存储数据，先进入的数据被压入栈底，最后的数据在栈顶。 堆栈数据结构的两种基本操作： PUSH：将数据压入栈顶 POP  ：将栈顶数据弹出 内存的分配 1.代码区(.text)：这个区域存储着被装入执行的二进制机器代码，处理器会到这个区域取指令执行。 2.数据区(.data)：用于存储全局变量和静">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img-blog.csdn.net/20180904172333699">
+<meta property="og:updated_time" content="2020-02-29T13:34:38.042Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="远程溢出利用 1.栈溢出 栈溢出的基础： 栈，即堆栈，是一种具有一定规则的数据结构，它按照先进后出的原则存储数据，先进入的数据被压入栈底，最后的数据在栈顶。 堆栈数据结构的两种基本操作： PUSH：将数据压入栈顶 POP  ：将栈顶数据弹出 内存的分配 1.代码区(.text)：这个区域存储着被装入执行的二进制机器代码，处理器会到这个区域取指令执行。 2.数据区(.data)：用于存储全局变量和静">
+<meta name="twitter:image" content="https://img-blog.csdn.net/20180904172333699">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/远程溢出利用.html" class="article-date">
+  <time datetime="2020-02-29T13:34:38.042Z" itemprop="datePublished">2020-02-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="远程溢出利用"><a href="#远程溢出利用" class="headerlink" title="远程溢出利用"></a>远程溢出利用</h1><hr>
+<p><strong>1.栈溢出</strong></p>
+<p>栈溢出的基础：</p>
+<p>栈，即堆栈，是一种具有一定规则的数据结构，它按照先进后出的原则存储数据，先进入的数据被压入栈底，最后的数据在栈顶。</p>
+<p>堆栈数据结构的两种基本操作：</p>
+<p>PUSH：将数据压入栈顶</p>
+<p>POP  ：将栈顶数据弹出</p>
+<p><strong>内存的分配</strong></p>
+<p>1.代码区(.text)：这个区域存储着被装入执行的二进制机器代码，处理器会到这个区域取指令执行。</p>
+<p>2.数据区(.data)：用于存储全局变量和静态变量等。</p>
+<p>3.堆区：动态地分配和回收内存，进程可以在堆区动态地请求一定大小的内存，并在用完后归还给堆区。地址由高到低生长（手动分配内存和释放）</p>
+<p>4.栈区：用于动态地存储函数之间的调用关系，以保证被调用函数在返回时恢复到母函数中继续执行；此外局部变量也存储在栈区。地址由低到高生长（系统自动分配内存和释放）</p>
+<p>BSS段:（bss segment）通常是指用来存放程序中未初始化的全局变量的一块内存区域，属于静态内存分配。</p>
+<p><strong>栈的基础知识</strong></p>
+<p>栈地址由高地址到低地址，而栈的空间则由小到大。</p>
+<p>ESP：栈指针寄存器，指向栈顶的低地址</p>
+<p>EBP：基址指针寄存器，指向栈底的高地址</p>
+<p>EIP：指令指针，存储即将执行的程序指令的地址</p>
+<p>每个程序都有自己的进程地址空间，进程地址空间中的某一部分就是该程序的栈，用于保存函数调用信息和局部变量  </p>
+<p>函数调用：调用函数时，函数的参数从右到左依次进栈。之后是函数返回值进栈。上一函数的EBP也会进栈。如果在被调用的函数中又有被调用的函数，就会重复这个过程下来。（嵌套）这样同一时刻，一个堆栈中就有多个函数的信息。<br><img src="https://img-blog.csdn.net/20180904172333699" alt></p>
+<p>在函数调用结束时，栈顶的函数（callee）状态被弹出，栈顶恢复到调用函数（caller）的状态。函数调用栈在内存中从高地址向低地址生长，所以栈顶对应的内存地址在压栈时变小，退栈时变大。</p>
+<p><strong>栈溢出的原理</strong></p>
+<p>栈溢出是指向向栈中写入了超出限定长度的数据，溢出的数据会覆盖栈中相邻的其它数据，从而影响程序的运行。</p>
+<p>破坏程序内存结构<br>执行system(/bin/sh)<br>执行shellcode</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/远程溢出利用.html" data-id="ck7lot35n0000o0v916by2nol" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/03/10/leetcode-dynamic-programming-2/">leetcode-dynamic programming-2</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/08/leetcode-动态规划-2/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/02/29/Metasploit学习笔记/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/02/25/leetcode-动态规划-1/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/02/xss/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

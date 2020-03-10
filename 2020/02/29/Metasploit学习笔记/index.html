@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="#Metasploit学习笔记1.简介 目前最流行，最强大，最具拓展性的渗透测试平台。 2003年由HD More发布第一版。由Ruby语言编写 开发版本的更新非常活跃 2.Metasploit Framework Metasploit Framework是由Ruby语言编写，想要了解更深层次的框架需要对Ruby语言有一定的了解。Metasploit所有的任务都是基于模块实现的，有利于拓展和编写代">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/2020/02/29/Metasploit学习笔记/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="#Metasploit学习笔记1.简介 目前最流行，最强大，最具拓展性的渗透测试平台。 2003年由HD More发布第一版。由Ruby语言编写 开发版本的更新非常活跃 2.Metasploit Framework Metasploit Framework是由Ruby语言编写，想要了解更深层次的框架需要对Ruby语言有一定的了解。Metasploit所有的任务都是基于模块实现的，有利于拓展和编写代">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-03-01T11:15:24.197Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="#Metasploit学习笔记1.简介 目前最流行，最强大，最具拓展性的渗透测试平台。 2003年由HD More发布第一版。由Ruby语言编写 开发版本的更新非常活跃 2.Metasploit Framework Metasploit Framework是由Ruby语言编写，想要了解更深层次的框架需要对Ruby语言有一定的了解。Metasploit所有的任务都是基于模块实现的，有利于拓展和编写代">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Metasploit学习笔记" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/02/29/Metasploit学习笔记/" class="article-date">
+  <time datetime="2020-02-29T13:18:12.756Z" itemprop="datePublished">2020-02-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Metasploit学习笔记"><a href="#Metasploit学习笔记" class="headerlink" title="#Metasploit学习笔记"></a>#Metasploit学习笔记</h2><p><strong>1.简介</strong></p>
+<p>目前最流行，最强大，最具拓展性的渗透测试平台。</p>
+<p>2003年由HD More发布第一版。由Ruby语言编写</p>
+<p>开发版本的更新非常活跃</p>
+<p><strong>2.Metasploit Framework</strong></p>
+<p>Metasploit Framework是由Ruby语言编写，想要了解更深层次的框架需要对Ruby语言有一定的了解。Metasploit所有的任务都是基于模块实现的，有利于拓展和编写代码。</p>
+<p>Metasploit Framework的框架组成结构可以分为：库，接口，模块。</p>
+<p><strong>3.Metasploit Framework库</strong></p>
+<p>库是已经封装好的可用程序。用户可以在完成逻辑的前提下调用库。</p>
+<p>库的文件目录：<br>    usr/share/mteasploit-framework/lib<br>其中rex库提供各种利用漏洞的类库，也提供套接字连接，原始函数和各种其他形式的重新格式化。core库给所有新模块提供基本的API。</p>
+<p><strong>4.Metasploit Framework接口</strong></p>
+<p>Metasploit Framework提供两个接口：控制台和GUI接口。终端输入    <code>msfconsole</code> 启动Metasploit Framework。</p>
+<p><strong>5.Metasploit Framework模块</strong></p>
+<p>主要技术功能模块有：Payload模块（成功exploit后，真正在系统执行的代码和指令），辅助模块，POST模块，编码器模块，NOP模块，exploit模块（对于每个漏洞的攻击方法），evasion模块，auxiliary(常被用来扫描)等。</p>
+<p>框架目录 <code>usr/share/metasploit-framework/modules</code><br>shellcode是获取shell的代码，属于payload。payload包含三种：single（只要通过内存跳转连接到目标就计算机就可以独立执行所有的代码），stager（目标计算机内存有限无法single时，先建立一个网络连接，为在黑客电脑上下载其他payload），stages（利用stager建立连接下载的payload）。</p>
+<p>#Metasploit-Framework的控制台命令</p>
+<hr>
+<p>banner 查看metasploit的基本信息</p>
+<p>help 查看命令</p>
+<p>connect 连接到目标服务器的指定端口（类似nc）</p>
+<p>show 展示模块的信息(非常重要的命令)</p>
+<p>search 搜索模块和漏洞的名称，进行模糊匹配</p>
+<p>check 检查是否可用</p>
+<p>back 退回msf console</p>
+<p>下面以ms08_067为例：<code>search msf08_067</code> 找到这个漏洞利用模块，<code>use exploit/windows/smb/msf08_067_netapi</code> 进入这个漏洞利用模块。<code>show options</code> 显示相应的选项信息。</p>
+<p>在设置过程中要用到的命令：</p>
+<pre><code>set ：设置模块的参数，比如设置rhost(目标主机)
+unset：清除设置
+setg：全局设置，即只要有那个名称变量，都会被设置成一样的）
+unsetg ：清除全局设置
+save：保存设置的值，即保存之后退出仍然会存在
+Run / exploit ：相同的作用，都用于执行
+jobs：进行的工作
+load：调用加载其他插件
+unload：取消调用加载其他插件
+loadpath ：当有个人开发的模块，调用指定目录存放的模块
+Session：可以看到回话，即已经建立的连接
+– session -l / -i 可以进入响应的shell（Shell 、Meterpreter session、VNC等不同的回话）
+route通过指定session添加路由流量，即当开防火墙端口有漏洞，已经控制了，攻击者路由指定session通向建立的连接路由到被攻击者的机器。原理即是：流量转发的过程
+irb：内置的编程开发模块
+Resource ：前面已经介绍过了，即指定资源文件，存的就是配置信息（将各种命令存入文件当中）</code></pre><h1 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h1><hr>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/02/29/Metasploit学习笔记/" data-id="ck7lot36n0003o0v98p9hoyb2" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/03/08/leetcode-动态规划-2/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/02/25/leetcode-动态规划-1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/03/10/leetcode-dynamic-programming-2/">leetcode-dynamic programming-2</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/08/leetcode-动态规划-2/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/02/29/Metasploit学习笔记/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/02/25/leetcode-动态规划-1/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/12/02/xss/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
