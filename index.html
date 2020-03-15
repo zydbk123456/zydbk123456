@@ -62,6 +62,119 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-python-urllib" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/15/python-urllib/" class="article-date">
+  <time datetime="2020-03-15T11:19:45.000Z" itemprop="datePublished">2020-03-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/15/python-urllib/">python urllib</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Python-urllib库"><a href="#Python-urllib库" class="headerlink" title="Python urllib库"></a>Python urllib库</h1><hr>
+<p>urllib 是一个收集了多个用到URL模块的包。</p>
+<p>urllib分为4个主要模块：url.request(打开和读取URL)，url.error(包含url.request抛出的异常)，urllib.parse(用于解析URL)，urllib.robotparser(用于解析robots.txt文件)。</p>
+<h2 id="request"><a href="#request" class="headerlink" title="request"></a><strong>request</strong></h2><p>urllib的request模块可以非常方便地抓取URL内容，也就是发送一个GET请求到指定的页面，然后返回HTTP的响应：</p>
+<p>例如，对百度的一个URL<a href="https://www.baidu.com进行抓取，并返回响应：" target="_blank" rel="noopener">https://www.baidu.com进行抓取，并返回响应：</a></p>
+<pre><code>from urllib import request
+with request.urlopen(&apos;https://www.baidu.com/&apos;) as f:
+    data = f.read()
+    print(&apos;Status:&apos;, f.status, f.reason)
+    for k, v in f.getheaders():
+        print(&apos;%s: %s&apos; % (k, v))
+       print(&apos;Data:&apos;, data.decode(&apos;utf-8&apos;))</code></pre><p><strong>urllib.request.urlopen</strong></p>
+<p>urllib.request.urlopen(url,data=None,[timeout,],cafile=None,capath=None,cadefault=False,context=None)</p>
+<p>这些参数中url是必选的，data是可选的，内容为字节流编码格式的即bytes类型，如果传递data参数，urlopen将使用Post方式请求。timeout是设置等待响应的时长，超出这个时长将抛出异常。</p>
+<p>请求对象，返回一个HTTPResponse类型的对象，包含的方法和属性：</p>
+<p>方法：read()、readinto()、getheader(name)、getheaders()、fileno()</p>
+<p>属性：msg、version、status、reason、bebuglevel、closed</p>
+<p>代码示例：</p>
+<pre><code>from urllib import request
+    rep=request.urlopen(&quot;https://www.baidu.com&quot;)#请求站点返回一个HTTPResponse对象
+    print(rep.read().decode(&apos;utf-8&apos;))   #返回网页内容
+    print(rep.getheader(&apos;server&apos;)) #返回响应头中的server值
+    print(rep.getheaders()) #以列表元祖对的形式返回响应头信息
+        # print(rep.fileno()) #返回文件描述符
+    print(rep.version)  #返回版本信息
+    print(rep.status)  #返回状态码200，404代表网页未找到
+    print(rep.debuglevel) #返回调试等级
+    print(rep.closed)  #返回对象是否关闭布尔值
+    print(rep.geturl()) #返回检索的URL
+    print(rep.info()) #返回网页的头信息
+    print(rep.getcode()) #返回响应的HTTP状态码
+    print(rep.msg)  #访问成功则返回ok
+    print(rep.reason) #返回状态信息</code></pre><p><strong>urllib.request.Requset()</strong></p>
+<p>urllib.request.Request(url,data=None,headers={},origin_req_host=None,unverifiable=False,method=None)</p>
+<p>参数：</p>
+<p>url：请求的URL，必须传递的参数，其他都是可选参数</p>
+<p>data：上传的数据，必须传bytes字节流类型的数据，如果它是字典，可以先用urllib.parse模块里的urlencode()编码</p>
+<p>headers：它是一个字典，传递的是请求头数据，可以通过它构造请求头，也可以通过调用请求实例的方法add_header()来添加</p>
+<p>origin_req_host：指请求方的host名称或者IP地址</p>
+<p>unverifiable：表示这个请求是否是无法验证的，默认为False，如我们请求一张图片如果没有权限获取图片那它的值就是true</p>
+<p>method：是一个字符串，用来指示请求使用的方法，如：GET,POST,PUT等</p>
+<p><strong>parse</strong></p>
+<hr>
+<p>urllib库提供了parse模块，它定义了处理URL的标准接口，如实现URL各部分的抽取，合并以及链接转换，它支持如下协议的URL处理：file,ftp,gopher,hdl,http,https,imap,mailto,mms,news,nntp,prospero,rsync,rtsp,rtspu,sftp,sip,sips,snews,svn,snv+ssh,telnet,wais</p>
+<p><strong>urlparse</strong></p>
+<p>urlparse实现url的实现和分段。返回</p>
+<p>urllib.parse.urlparse(urlstring,scheme=’’,allow_fragments=True)</p>
+<p>参数：urlstring：传递目标url，scheme：协议的类型 scheme(协议),netloc(域名),path(路径),params(参数),query(查询条件),fragment(锚点)</p>
+<pre><code>from urllib import parse
+    url = &apos;https://blog.csdn.net/&apos;
+    result = parse.urlparse(url=url,scheme=&apos;https&apos;,allow_fragments=True)
+    print(result)
+       print(result.scheme)</code></pre><p><strong>urlunparse()</strong></p>
+<p>与urlparse()相反，通过列表或者元祖的形式接受一个可迭代的对象，实现URL构造</p>
+<pre><code>from urllib.parse import urlunparse
+data=[&apos;http&apos;,&apos;www.baidu.com&apos;,&apos;index.html&apos;,&apos;user&apos;,&apos;a=6&apos;,&apos;comment&apos;]
+print(urlunparse(data)) #构造一个完整的URL</code></pre><p><strong>urlsplit</strong></p>
+<p>与urlparse()方法类似，它会返回5个部分，把params合并到path中</p>
+<pre><code>from urllib.parse import urlsplit
+result=urlsplit(&apos;http://www.baidu.com/index.html;user?id=5#comment&apos;)
+print(result)</code></pre><p><strong>urlunsplit</strong></p>
+<p>与urlunparse()类似，它也是将链接的各部分组合完整的链接的方法，传入的参数也是可迭代的对象，如列表元祖等，唯一的区别是长度必须是5个，它省略了params</p>
+<pre><code>from urllib.parse import urlsplit,urlunsplit
+data=[&apos;http&apos;,&apos;www.baidu.com&apos;,&apos;index.html&apos;,&apos;a=5&apos;,&apos;comment&apos;]
+result=urlunsplit(data)
+print(result)</code></pre><p><strong>urljoin</strong></p>
+<p>将两个url结合成一个完整的url</p>
+<pre><code>from urllib.parse import urljoin
+
+print(urljoin(&apos;http://www.baidu.com&apos;,&apos;index.html&apos;))
+print(urljoin(&apos;http://www.baidu.com&apos;,&apos;http://cdblogs.com/index.html&apos;))
+print(urljoin(&apos;http://www.baidu.com/home.html&apos;,&apos;https://cnblog.com/index.html&apos;))</code></pre><p><strong>urlencode</strong></p>
+<p> urlencode()在构造GET请求参数时很有用，它可以将字典转化为GET请求参数</p>
+<pre><code>from urllib.parse import urlencode
+params = {&apos;username&apos;:&apos;zs&apos;,&apos;password&apos;:&apos;123&apos;}
+base_url=&apos;http://www.baidu.com&apos;
+url=base_url+&apos;?&apos;+urlencode(params) #将字典转化为get参数
+print(url)</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/03/15/python-urllib/" data-id="ck7sy9brn00036wv9vmf37iqv" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-buuoj-Hack-World-easy-tornado" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/03/15/buuoj-Hack-World-easy-tornado/" class="article-date">
@@ -173,7 +286,7 @@ if __name__ == &apos;__main__&apos;:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/03/15/buuoj-Hack-World-easy-tornado/" data-id="ck7st7j9t0001iwv9f7802edt" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/03/15/buuoj-Hack-World-easy-tornado/" data-id="ck7sy9brp00046wv9dgkjxdya" class="article-share-link">Share</a>
       
       
     </footer>
@@ -369,7 +482,7 @@ return dp[s.length()-1]；
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/03/10/leetcode-dynamic-programming-2/" data-id="ck7st7ja40003iwv9cw86mmr4" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/03/10/leetcode-dynamic-programming-2/" data-id="ck7sy9brj00026wv9c45opf3g" class="article-share-link">Share</a>
       
       
     </footer>
@@ -555,7 +668,7 @@ return dp[s.length()-1]；
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/03/08/leetcode-动态规划-2/" data-id="ck7st7ja90006iwv957bkabqd" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/03/08/leetcode-动态规划-2/" data-id="ck7sy9brx00076wv92w2eci1l" class="article-share-link">Share</a>
       
       
     </footer>
@@ -622,7 +735,7 @@ Resource ：前面已经介绍过了，即指定资源文件，存的就是配�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/02/29/Metasploit学习笔记/" data-id="ck7st7ja00002iwv96wtsskm5" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/02/29/Metasploit学习笔记/" data-id="ck7sy9brc00016wv92073m5du" class="article-share-link">Share</a>
       
       
     </footer>
@@ -820,7 +933,7 @@ public int uniquePaths(int m, int n) {//n为行数，m为列数
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/02/25/leetcode-动态规划-1/" data-id="ck7st7ja80005iwv9phhbh107" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/02/25/leetcode-动态规划-1/" data-id="ck7sy9bru00066wv9mwg57wz3" class="article-share-link">Share</a>
       
       
     </footer>
@@ -891,7 +1004,7 @@ print(&quot;&lt;svg&gt;&lt;script&gt;eval&amp;#40&amp;#34&quot; + output + &quot
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/12/02/xss/" data-id="ck7st7jab0007iwv99q01vk5s" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/12/02/xss/" data-id="ck7sy9brz00086wv9fh6wimiw" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1029,7 +1142,7 @@ if( isset( $_REQUEST[ &apos;Submit&apos; ] ) ) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/10/22/新文档/" data-id="ck7st7jag0008iwv987nstwya" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/10/22/新文档/" data-id="ck7sy9bs700096wv93uj05hxd" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1078,7 +1191,7 @@ if( isset( $_REQUEST[ &apos;Submit&apos; ] ) ) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/04/hello-world/" data-id="ck7st7ja60004iwv9n54c9ypz" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/06/04/hello-world/" data-id="ck7sy9brr00056wv9nri4pbyb" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1119,6 +1232,10 @@ if( isset( $_REQUEST[ &apos;Submit&apos; ] ) ) {
       <ul>
         
           <li>
+            <a href="/2020/03/15/python-urllib/">python urllib</a>
+          </li>
+        
+          <li>
             <a href="/2020/03/15/buuoj-Hack-World-easy-tornado/">buuoj Hack World  easy_tornado</a>
           </li>
         
@@ -1132,10 +1249,6 @@ if( isset( $_REQUEST[ &apos;Submit&apos; ] ) ) {
         
           <li>
             <a href="/2020/02/29/Metasploit学习笔记/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2020/02/25/leetcode-动态规划-1/">(no title)</a>
           </li>
         
       </ul>

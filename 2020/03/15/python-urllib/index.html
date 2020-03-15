@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>python urllib | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Python urllib库 urllib 是一个收集了多个用到URL模块的包。 urllib分为4个主要模块：url.request(打开和读取URL)，url.error(包含url.request抛出的异常)，urllib.parse(用于解析URL)，urllib.robotparser(用于解析robots.txt文件)。 requesturllib的request模块可以非常方便地抓取">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python urllib">
+<meta property="og:url" content="http://yoursite.com/2020/03/15/python-urllib/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Python urllib库 urllib 是一个收集了多个用到URL模块的包。 urllib分为4个主要模块：url.request(打开和读取URL)，url.error(包含url.request抛出的异常)，urllib.parse(用于解析URL)，urllib.robotparser(用于解析robots.txt文件)。 requesturllib的request模块可以非常方便地抓取">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-03-15T11:22:11.644Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python urllib">
+<meta name="twitter:description" content="Python urllib库 urllib 是一个收集了多个用到URL模块的包。 urllib分为4个主要模块：url.request(打开和读取URL)，url.error(包含url.request抛出的异常)，urllib.parse(用于解析URL)，urllib.robotparser(用于解析robots.txt文件)。 requesturllib的request模块可以非常方便地抓取">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-python-urllib" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/15/python-urllib/" class="article-date">
+  <time datetime="2020-03-15T11:19:45.000Z" itemprop="datePublished">2020-03-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      python urllib
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Python-urllib库"><a href="#Python-urllib库" class="headerlink" title="Python urllib库"></a>Python urllib库</h1><hr>
+<p>urllib 是一个收集了多个用到URL模块的包。</p>
+<p>urllib分为4个主要模块：url.request(打开和读取URL)，url.error(包含url.request抛出的异常)，urllib.parse(用于解析URL)，urllib.robotparser(用于解析robots.txt文件)。</p>
+<h2 id="request"><a href="#request" class="headerlink" title="request"></a><strong>request</strong></h2><p>urllib的request模块可以非常方便地抓取URL内容，也就是发送一个GET请求到指定的页面，然后返回HTTP的响应：</p>
+<p>例如，对百度的一个URL<a href="https://www.baidu.com进行抓取，并返回响应：" target="_blank" rel="noopener">https://www.baidu.com进行抓取，并返回响应：</a></p>
+<pre><code>from urllib import request
+with request.urlopen(&apos;https://www.baidu.com/&apos;) as f:
+    data = f.read()
+    print(&apos;Status:&apos;, f.status, f.reason)
+    for k, v in f.getheaders():
+        print(&apos;%s: %s&apos; % (k, v))
+       print(&apos;Data:&apos;, data.decode(&apos;utf-8&apos;))</code></pre><p><strong>urllib.request.urlopen</strong></p>
+<p>urllib.request.urlopen(url,data=None,[timeout,],cafile=None,capath=None,cadefault=False,context=None)</p>
+<p>这些参数中url是必选的，data是可选的，内容为字节流编码格式的即bytes类型，如果传递data参数，urlopen将使用Post方式请求。timeout是设置等待响应的时长，超出这个时长将抛出异常。</p>
+<p>请求对象，返回一个HTTPResponse类型的对象，包含的方法和属性：</p>
+<p>方法：read()、readinto()、getheader(name)、getheaders()、fileno()</p>
+<p>属性：msg、version、status、reason、bebuglevel、closed</p>
+<p>代码示例：</p>
+<pre><code>from urllib import request
+    rep=request.urlopen(&quot;https://www.baidu.com&quot;)#请求站点返回一个HTTPResponse对象
+    print(rep.read().decode(&apos;utf-8&apos;))   #返回网页内容
+    print(rep.getheader(&apos;server&apos;)) #返回响应头中的server值
+    print(rep.getheaders()) #以列表元祖对的形式返回响应头信息
+        # print(rep.fileno()) #返回文件描述符
+    print(rep.version)  #返回版本信息
+    print(rep.status)  #返回状态码200，404代表网页未找到
+    print(rep.debuglevel) #返回调试等级
+    print(rep.closed)  #返回对象是否关闭布尔值
+    print(rep.geturl()) #返回检索的URL
+    print(rep.info()) #返回网页的头信息
+    print(rep.getcode()) #返回响应的HTTP状态码
+    print(rep.msg)  #访问成功则返回ok
+    print(rep.reason) #返回状态信息</code></pre><p><strong>urllib.request.Requset()</strong></p>
+<p>urllib.request.Request(url,data=None,headers={},origin_req_host=None,unverifiable=False,method=None)</p>
+<p>参数：</p>
+<p>url：请求的URL，必须传递的参数，其他都是可选参数</p>
+<p>data：上传的数据，必须传bytes字节流类型的数据，如果它是字典，可以先用urllib.parse模块里的urlencode()编码</p>
+<p>headers：它是一个字典，传递的是请求头数据，可以通过它构造请求头，也可以通过调用请求实例的方法add_header()来添加</p>
+<p>origin_req_host：指请求方的host名称或者IP地址</p>
+<p>unverifiable：表示这个请求是否是无法验证的，默认为False，如我们请求一张图片如果没有权限获取图片那它的值就是true</p>
+<p>method：是一个字符串，用来指示请求使用的方法，如：GET,POST,PUT等</p>
+<p><strong>parse</strong></p>
+<hr>
+<p>urllib库提供了parse模块，它定义了处理URL的标准接口，如实现URL各部分的抽取，合并以及链接转换，它支持如下协议的URL处理：file,ftp,gopher,hdl,http,https,imap,mailto,mms,news,nntp,prospero,rsync,rtsp,rtspu,sftp,sip,sips,snews,svn,snv+ssh,telnet,wais</p>
+<p><strong>urlparse</strong></p>
+<p>urlparse实现url的实现和分段。返回</p>
+<p>urllib.parse.urlparse(urlstring,scheme=’’,allow_fragments=True)</p>
+<p>参数：urlstring：传递目标url，scheme：协议的类型 scheme(协议),netloc(域名),path(路径),params(参数),query(查询条件),fragment(锚点)</p>
+<pre><code>from urllib import parse
+    url = &apos;https://blog.csdn.net/&apos;
+    result = parse.urlparse(url=url,scheme=&apos;https&apos;,allow_fragments=True)
+    print(result)
+       print(result.scheme)</code></pre><p><strong>urlunparse()</strong></p>
+<p>与urlparse()相反，通过列表或者元祖的形式接受一个可迭代的对象，实现URL构造</p>
+<pre><code>from urllib.parse import urlunparse
+data=[&apos;http&apos;,&apos;www.baidu.com&apos;,&apos;index.html&apos;,&apos;user&apos;,&apos;a=6&apos;,&apos;comment&apos;]
+print(urlunparse(data)) #构造一个完整的URL</code></pre><p><strong>urlsplit</strong></p>
+<p>与urlparse()方法类似，它会返回5个部分，把params合并到path中</p>
+<pre><code>from urllib.parse import urlsplit
+result=urlsplit(&apos;http://www.baidu.com/index.html;user?id=5#comment&apos;)
+print(result)</code></pre><p><strong>urlunsplit</strong></p>
+<p>与urlunparse()类似，它也是将链接的各部分组合完整的链接的方法，传入的参数也是可迭代的对象，如列表元祖等，唯一的区别是长度必须是5个，它省略了params</p>
+<pre><code>from urllib.parse import urlsplit,urlunsplit
+data=[&apos;http&apos;,&apos;www.baidu.com&apos;,&apos;index.html&apos;,&apos;a=5&apos;,&apos;comment&apos;]
+result=urlunsplit(data)
+print(result)</code></pre><p><strong>urljoin</strong></p>
+<p>将两个url结合成一个完整的url</p>
+<pre><code>from urllib.parse import urljoin
+
+print(urljoin(&apos;http://www.baidu.com&apos;,&apos;index.html&apos;))
+print(urljoin(&apos;http://www.baidu.com&apos;,&apos;http://cdblogs.com/index.html&apos;))
+print(urljoin(&apos;http://www.baidu.com/home.html&apos;,&apos;https://cnblog.com/index.html&apos;))</code></pre><p><strong>urlencode</strong></p>
+<p> urlencode()在构造GET请求参数时很有用，它可以将字典转化为GET请求参数</p>
+<pre><code>from urllib.parse import urlencode
+params = {&apos;username&apos;:&apos;zs&apos;,&apos;password&apos;:&apos;123&apos;}
+base_url=&apos;http://www.baidu.com&apos;
+url=base_url+&apos;?&apos;+urlencode(params) #将字典转化为get参数
+print(url)</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/03/15/python-urllib/" data-id="ck7sy9brn00036wv9vmf37iqv" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/03/15/buuoj-Hack-World-easy-tornado/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">buuoj Hack World  easy_tornado</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/03/15/python-urllib/">python urllib</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/15/buuoj-Hack-World-easy-tornado/">buuoj Hack World  easy_tornado</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/10/leetcode-dynamic-programming-2/">leetcode-dynamic programming-2</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/08/leetcode-动态规划-2/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/02/29/Metasploit学习笔记/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
