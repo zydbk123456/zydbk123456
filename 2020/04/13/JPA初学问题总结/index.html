@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="JPA初学问题总结 1.IDE无法解析junit和spring framework-test   创建实体DAO的测试类时，按往常一样导入junit和spring framework-test的依赖。但是发现在测试类中导入相关的类时发现eclipse报错’cannot reslove …’，一开始纳闷导入的类都是正确的，为什么eclipse无法解析？原来是需要如下这样在项目的pom.xml文件中导">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/2020/04/13/JPA初学问题总结/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="JPA初学问题总结 1.IDE无法解析junit和spring framework-test   创建实体DAO的测试类时，按往常一样导入junit和spring framework-test的依赖。但是发现在测试类中导入相关的类时发现eclipse报错’cannot reslove …’，一开始纳闷导入的类都是正确的，为什么eclipse无法解析？原来是需要如下这样在项目的pom.xml文件中导">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-04-13T13:43:04.831Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="JPA初学问题总结 1.IDE无法解析junit和spring framework-test   创建实体DAO的测试类时，按往常一样导入junit和spring framework-test的依赖。但是发现在测试类中导入相关的类时发现eclipse报错’cannot reslove …’，一开始纳闷导入的类都是正确的，为什么eclipse无法解析？原来是需要如下这样在项目的pom.xml文件中导">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-JPA初学问题总结" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/04/13/JPA初学问题总结/" class="article-date">
+  <time datetime="2020-04-13T13:04:54.234Z" itemprop="datePublished">2020-04-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="JPA初学问题总结"><a href="#JPA初学问题总结" class="headerlink" title="JPA初学问题总结"></a>JPA初学问题总结</h1><hr>
+<p><strong>1.IDE无法解析junit和spring framework-test</strong></p>
+<p>  创建实体DAO的测试类时，按往常一样导入junit和spring framework-test的依赖。但是发现在测试类中导入相关的类时发现eclipse报错’cannot reslove …’，一开始纳闷导入的类都是正确的，为什么eclipse无法解析？原来是需要如下这样在项目的pom.xml文件中导入依赖</p>
+<!-- ============== test begin ============== -->
+<pre><code>&lt;dependency&gt;&lt;!-- JUnit单元测试框架 --&gt;
+    &lt;groupId&gt;junit&lt;/groupId&gt;
+    &lt;artifactId&gt;junit&lt;/artifactId&gt;
+    &lt;version&gt;4.12&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;!-- https://mvnrepository.com/artifact/org.springframework/spring-test --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-test&lt;/artifactId&gt;
+    &lt;version&gt;5.1.6.RELEASE&lt;/version&gt;
+    &lt;scope&gt;provided&lt;/scope&gt;
+&lt;/dependency&gt;
+
+&lt;!-- ============== test end ============== --&gt;</code></pre><hr>
+<p><strong>2.junit test运行时报错</strong></p>
+<p>报错信息：</p>
+<pre><code>Caused by: org.hibernate.MappingException: Could not get constructor for org.hibernate.persister.entity.SingleTableEntityPersister
+at org.hibernate.persister.internal.PersisterFactoryImpl.createEntityPersister(PersisterFactoryImpl.java:123) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.persister.internal.PersisterFactoryImpl.createEntityPersister(PersisterFactoryImpl.java:77) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.metamodel.internal.MetamodelImpl.initialize(MetamodelImpl.java:128) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.internal.SessionFactoryImpl.&lt;init&gt;(SessionFactoryImpl.java:300) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:460) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:892) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:58) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
+at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:365) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
+at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:391) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
+at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:378) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
+at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:341) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1855) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1792) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:595) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:517) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:323) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:222) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:321) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1108) ~[spring-context-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+...
+...25 more
+Caused by: org.hibernate.HibernateException: Unable to instantiate default tuplizer [org.hibernate.tuple.entity.PojoEntityTuplizer]
+at org.hibernate.tuple.entity.EntityTuplizerFactory.constructTuplizer(EntityTuplizerFactory.java:91) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.tuple.entity.EntityTuplizerFactory.constructDefaultTuplizer(EntityTuplizerFactory.java:116) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.tuple.entity.EntityMetamodel.&lt;init&gt;(EntityMetamodel.java:382) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.persister.entity.AbstractEntityPersister.&lt;init&gt;(AbstractEntityPersister.java:519) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.persister.entity.SingleTableEntityPersister.&lt;init&gt;(SingleTableEntityPersister.java:124) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[?:?]
+at jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62) ~[?:?]
+at jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[?:?]
+at java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:500) ~[?:?]
+at java.lang.reflect.Constructor.newInstance(Constructor.java:481) ~[?:?]
+at org.hibernate.persister.internal.PersisterFactoryImpl.createEntityPersister(PersisterFactoryImpl.java:96) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.persister.internal.PersisterFactoryImpl.createEntityPersister(PersisterFactoryImpl.java:77) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.metamodel.internal.MetamodelImpl.initialize(MetamodelImpl.java:128) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.internal.SessionFactoryImpl.&lt;init&gt;(SessionFactoryImpl.java:300) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:460) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:892) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:58) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
+at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:365) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
+at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:391) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
+...
+... 25 more
+...</code></pre><p>最初还提示’org.springframework.beans.factory.BeanCreationException:’，我一开始以为是配置文件applicationContextTest-resources.xml的问题。一直在找是不是bean定义的问题。但是怎么改都这样。查了网上的资料才知道有可能不是配置文件的问题。’Caused by: org.hibernate.MappingException: Could not get constructor for org.hibernate.persister.entity.SingleTableEntityPersister’可能是有三种原因导致的。</p>
+<p>1.实体类属性没有get,set方法，或者get，set方法的格式不严谨</p>
+<p>右键source，选择’generate getter and setter’生成属性的get,set方法。但是检查了一下，发现我都是eclipse自动生成的get，set方法。格式是严格按照要求的，属性也都有get，set方法。但是每次运行测试类之前最好检查一下实体类属性的get,set方法</p>
+<p>2.没有导入需要的jar文件</p>
+<p>这里需要导入java-assist的jar文件，在pom中添加这个</p>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.javassist&lt;/groupId&gt;
+    &lt;artifactId&gt;javassist&lt;/artifactId&gt;
+    &lt;version&gt;3.23.1-GA&lt;/version&gt;
+&lt;/dependency&gt;</code></pre><p>导入这个jar包后发现，不报错，说明需要导入这个jar包。</p>
+<p>3.实体属性名和映射文件的property name不一致</p>
+<p>这个的解决方法就是让实体属性名和映射文件property name一致就行了。</p>
+<hr>
+<p><strong>3.javax.net.ssl.SSLException</strong></p>
+<p>在stackflow上看到了解决方法，在jdbc配置文件（我这里是jdbc.properties）给url添加一个参数useSSL=false,不再报错。</p>
+<hr>
+<p>参考链接：<a href="https://stackoverflow.com/questions/18042247/could-not-get-constructor-for-org-hibernate-persister-entity-singletableentitype" target="_blank" rel="noopener">https://stackoverflow.com/questions/18042247/could-not-get-constructor-for-org-hibernate-persister-entity-singletableentitype</a></p>
+<p><a href="https://blog.51cto.com/zero01/2294152" target="_blank" rel="noopener">https://blog.51cto.com/zero01/2294152</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/04/13/JPA初学问题总结/" data-id="ck9gz156q000f9sv9iy0m2c7j" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/04/25/SWPUCTF2019 web1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/04/11/python序列化及反序列化/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/04/26/BUUCTF-old-hack/">BUUCTF old hack</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/26/RoarCTF2019-easy-Java/">RoarCTF2019 easy Java</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/25/SWPUCTF2019 web1/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/13/JPA初学问题总结/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/11/python序列化及反序列化/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

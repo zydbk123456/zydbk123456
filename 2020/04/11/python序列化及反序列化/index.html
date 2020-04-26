@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Python序列化及反序列化 1.为什么要使用序列化？   由于TCP/IP协议不能够传输对象，我们需要将对象转换为字节数组来传输。所以对象序列化后结果就是字节数组。当通信双方进行通讯时，发送方通过序列化将对象转化为可传输的二进制字节序列。而接受方则通过反序列化将二进制字节序列转换为对象。 2.什么是序列化及反序列化？   通俗地讲，序列化就是将内存中的变量转换成可存储的，可传输的二进制序列。而反">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/2020/04/11/python序列化及反序列化/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Python序列化及反序列化 1.为什么要使用序列化？   由于TCP/IP协议不能够传输对象，我们需要将对象转换为字节数组来传输。所以对象序列化后结果就是字节数组。当通信双方进行通讯时，发送方通过序列化将对象转化为可传输的二进制字节序列。而接受方则通过反序列化将二进制字节序列转换为对象。 2.什么是序列化及反序列化？   通俗地讲，序列化就是将内存中的变量转换成可存储的，可传输的二进制序列。而反">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-04-11T10:50:49.846Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="Python序列化及反序列化 1.为什么要使用序列化？   由于TCP/IP协议不能够传输对象，我们需要将对象转换为字节数组来传输。所以对象序列化后结果就是字节数组。当通信双方进行通讯时，发送方通过序列化将对象转化为可传输的二进制字节序列。而接受方则通过反序列化将二进制字节序列转换为对象。 2.什么是序列化及反序列化？   通俗地讲，序列化就是将内存中的变量转换成可存储的，可传输的二进制序列。而反">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-python序列化及反序列化" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/04/11/python序列化及反序列化/" class="article-date">
+  <time datetime="2020-04-11T08:12:38.980Z" itemprop="datePublished">2020-04-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Python序列化及反序列化"><a href="#Python序列化及反序列化" class="headerlink" title="Python序列化及反序列化"></a>Python序列化及反序列化</h1><hr>
+<p><strong>1.为什么要使用序列化？</strong></p>
+<p>  由于TCP/IP协议不能够传输对象，我们需要将对象转换为字节数组来传输。所以对象序列化后结果就是字节数组。当通信双方进行通讯时，发送方通过序列化将对象转化为可传输的二进制字节序列。而接受方则通过反序列化将二进制字节序列转换为对象。</p>
+<p><strong>2.什么是序列化及反序列化？</strong></p>
+<p>  通俗地讲，序列化就是将内存中的变量转换成可存储的，可传输的二进制序列。而反序列化就是二进制序列重新转换成对象。在python中序列化可以理解为将对象转换成json字符串，而反序列化则是将json字符串转换成对象。序列化在python中被称作pickling，反之，反序列化就称做unpickling。python为我们提供了json和pickle库来执行序列化及反序列化的操作。</p>
+<p><strong>3.pickle模块</strong></p>
+<p>  pickle模块只限于通信双方都是python的情况。和json比较，pickle模块可以持久化用户自定义的对象，而json只限于python的基本类型。python的pickle模块提供了几个函数：</p>
+<pre><code>dump 将对象序列化，存在文件中
+dumps 将对象序列化 但不存入文件而是返回bytes数组
+load 文件中读取的数据反序列化
+loads bytes数组反序列化</code></pre><p>示例：</p>
+<p>首先要导入pickle模块</p>
+<pre><code>import pickle
+list=&apos;a b c h j k&apos;.split(&apos; &apos;)
+data=pickle.dumps(list)
+print(&apos;序列化{}&apos;.format(data))
+data2=pickle.loads(data)
+print(&apos;反序列化{}&apos;.format(data2))</code></pre><p>输出：</p>
+<pre><code>序列化b&apos;\x80\x03]q\x00(X\x01\x00\x00\x00aq\x01X\x01\x00\x00\x00bq\x02X\x01\x00\x00\x00cq\x03X\x01\x00\x00\x00hq\x04X\x01\x00\x00\x00jq\x05X\x01\x00\x00\x00kq\x06e.&apos;
+反序列化[&apos;a&apos;, &apos;b&apos;, &apos;c&apos;, &apos;h&apos;, &apos;j&apos;, &apos;k&apos;]</code></pre><p>第一个示例是序列化为了bytes 我们也可以利用dump方法直接写入文件。得到file like object。不过pickle是以二进制的形式处理文件，所以读写文件要用’wb’和’rb’。</p>
+<pre><code>import pickle
+d=dict(name=&quot;张三&quot;,age=16,grade=&quot;五年级&quot;,score=&quot;90&quot;)
+with open(&quot;json_pickle.txt&quot;,&apos;wb&apos;) as f:
+    pickle.dump(d,f)
+with open(&quot;json_pickle.txt&quot;,&apos;rb&apos;) as f:
+    d2=pickle.load(f)
+print(d2)</code></pre><p>对自定义对象进行序列化：</p>
+<pre><code>import pickle
+class car:
+
+
+
+    def __init__(self,brand):
+           self.brand=brand
+       def show(self):
+        print(&quot;the car belongs to&quot;+self.brand)
+with open(&apos;json_pickle.txt&apos;,&apos;wb&apos;) as f:
+s=car(&apos;法拉利&apos;)
+s.show()
+pickle.dump(s,f)
+with open(&apos;json_pickle.txt&apos;,&apos;rb&apos;) as f:
+    s2=pickle.load(f)
+    s2.show()</code></pre><p>输出：</p>
+<pre><code>the car belongs to法拉利
+the car belongs to法拉利</code></pre><p><strong>4.json模块</strong></p>
+<p>怎么在不同的编程语言之间传递对象？这里就用到了json（javascript object notation）JSON表示出来就是一个字符串(特殊格式），可以被所有语言读取，也可以方便地存储到磁盘或者通过网络传输。JSON不仅是标准格式，并且比XML更快，而且可以直接在Web页面中读取，非常方便。</p>
+<p>json的数据类型可以是双引号引起来的字符串，数值，true和false，null（None），对象（字典），数组（列表）。其中null相当python的none，ture，false相当python的True，False。</p>
+<p>json常用函数：</p>
+<pre><code>dumps json 编码 
+dump json 编码并存入文件
+loads json 解码
+load json 解码，从文件读取数据</code></pre><p>示例</p>
+<pre><code>import json
+    list=&quot;a b c h j k&quot;.split(&apos; &apos;)
+    print(list)
+with open(&apos;json_pickle.txt&apos;,&apos;w&apos;) as f:
+    json.dump(list,f)
+with open(&apos;json_pickle.txt&apos;,&apos;r&apos;) as f:
+    d2=json.load(f)
+print(d2)</code></pre><p>输出：</p>
+<pre><code>[&apos;a&apos;, &apos;b&apos;, &apos;c&apos;, &apos;h&apos;, &apos;j&apos;, &apos;k&apos;]
+[&apos;a&apos;, &apos;b&apos;, &apos;c&apos;, &apos;h&apos;, &apos;j&apos;, &apos;k&apos;]</code></pre><p>json不能对自定义对象进行序列化和反序列化。</p>
+<pre><code>import json
+class Car:
+    def __init__(self,brand):
+        self.brand=brand
+    def show(self):
+        print(&quot;the car belongs to&quot;+self.brand)
+car=Car(&apos;法拉利&apos;)
+def car2dict(car):
+return {
+&apos;brand&apos;: car.brand,
+}
+
+# 对自定义类的对象进行序列化操作
+print(json.dumps(car, default=car2dict))</code></pre><p>##python序列化及反序列化中的安全问题</p>
+<hr>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/04/11/python序列化及反序列化/" data-id="ck9gz156j000d9sv9i31zws75" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/04/13/JPA初学问题总结/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/03/15/tie-san-webshell/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">tie-san-webshell</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/04/26/BUUCTF-old-hack/">BUUCTF old hack</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/26/RoarCTF2019-easy-Java/">RoarCTF2019 easy Java</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/25/SWPUCTF2019 web1/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/13/JPA初学问题总结/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/11/python序列化及反序列化/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>BUUCTF old hack | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="#[BUUCTF] old hack  1.打开页面，获取提示信息 打开页面，页面提示powered by Thinkphp。说明可能和thinkphp框架有关。也确实如此，这里用到了thinkphp5的远程命令执行漏洞。在用这个thinkphp的漏洞前，先了解一下有关thinkphp的一些基础知识: thinkphp是一个用来简化企业应用开发和敏捷WEB应用的php框架。thinkphp包含了底">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BUUCTF old hack">
+<meta property="og:url" content="http://yoursite.com/2020/04/26/BUUCTF-old-hack/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="#[BUUCTF] old hack  1.打开页面，获取提示信息 打开页面，页面提示powered by Thinkphp。说明可能和thinkphp框架有关。也确实如此，这里用到了thinkphp5的远程命令执行漏洞。在用这个thinkphp的漏洞前，先了解一下有关thinkphp的一些基础知识: thinkphp是一个用来简化企业应用开发和敏捷WEB应用的php框架。thinkphp包含了底">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200426175644953.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200426175658860.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200426175709668.JPG">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200426175926466.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200426175850451.JPG">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200426175945856.JPG">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200426175958959.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20200426180016596.JPG">
+<meta property="og:updated_time" content="2020-04-26T11:29:46.508Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="BUUCTF old hack">
+<meta name="twitter:description" content="#[BUUCTF] old hack  1.打开页面，获取提示信息 打开页面，页面提示powered by Thinkphp。说明可能和thinkphp框架有关。也确实如此，这里用到了thinkphp5的远程命令执行漏洞。在用这个thinkphp的漏洞前，先了解一下有关thinkphp的一些基础知识: thinkphp是一个用来简化企业应用开发和敏捷WEB应用的php框架。thinkphp包含了底">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20200426175644953.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-BUUCTF-old-hack" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/04/26/BUUCTF-old-hack/" class="article-date">
+  <time datetime="2020-04-26T11:25:37.220Z" itemprop="datePublished">2020-04-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      BUUCTF old hack
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#[BUUCTF] old hack</p>
+<hr>
+<p><strong>1.打开页面，获取提示信息</strong></p>
+<p>打开页面，页面提示powered by Thinkphp。说明可能和thinkphp框架有关。也确实如此，这里用到了thinkphp5的远程命令执行漏洞。在用这个thinkphp的漏洞前，先了解一下有关thinkphp的一些基础知识:</p>
+<p>thinkphp是一个用来简化企业应用开发和敏捷WEB应用的php框架。thinkphp包含了底层架构、兼容处理、基类库、数据库访问层、模板引擎、缓存机制、插件机制、角色认证、表单处理等常用的组件。简而言之，thinkphp是一个用来简化php网站开发的框架，让开发者更注重于业务逻辑。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200426175644953.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt></p>
+<hr>
+<p><strong>2.thinkphp5远程命令执行漏洞</strong></p>
+<p>漏洞描述：由于thinkphp对框架中的核心Requests类的方法method方法提供了表单请求伪造，该功能利用 <code>$_POST[&#39;_method&#39;]</code>来传递真实的请求方法。但由于框架没有对参数进行验证，导致攻击者可以设置<code>$_POST[&#39;_method&#39;]=&#39;__construct&#39;</code>而让该类的变量被覆盖。攻击者利用该方式将filter变量覆盖为system等函数名，当内部进行参数过滤时便会进行执行任意命令。</p>
+<p>使用kali查找一下漏洞的利用方法：</p>
+<p>1.<code>searchsploit thinkphp</code> 查找thinkphp相关的漏洞</p>
+<p><img src="https://img-blog.csdnimg.cn/20200426175658860.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt></p>
+<p>2.<code>cd usr/share/exploitdb/exploits/php/webapp/46150.txt</code> 查看漏洞的利用方法</p>
+<p><img src="https://img-blog.csdnimg.cn/20200426175709668.JPG" alt></p>
+<p>3.post传参，发现页面提示flag在路径下存放</p>
+<p><img src="https://img-blog.csdnimg.cn/20200426175926466.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt></p>
+<p><img src="https://img-blog.csdnimg.cn/20200426175850451.JPG" alt></p>
+<p>4.把<code>ls /</code>换成<code>cat /flag</code>,获得最后的flag</p>
+<p>5.提交flag</p>
+<h2 id><a href="#" class="headerlink" title></a><img src="https://img-blog.csdnimg.cn/20200426175945856.JPG" alt></h2><p><strong>3.漏洞复现</strong></p>
+<p>下载thinkphp5.0.22: <a href="http://www.thinkphp.cn/donate/download/id/1260.html" target="_blank" rel="noopener">http://www.thinkphp.cn/donate/download/id/1260.html</a></p>
+<p>通过phpstudy搭建环境，解压文件到WWW目录下</p>
+<p>访问：localhost/thinkphp5.0.22/public</p>
+<p>post传参 这里可以换成<code>echo 233</code>测试一下</p>
+<p><img src="https://img-blog.csdnimg.cn/20200426175958959.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt></p>
+<p>写入shell 换成 <code>echo ^&lt;?php @eval($_POST[cmd]);?^&gt; &gt;shell.php</code></p>
+<p>可以看到成功写入shell，用菜刀连接试试。能连上，说明写入shell成功了</p>
+<p><img src="https://img-blog.csdnimg.cn/20200426180016596.JPG" alt></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/04/26/BUUCTF-old-hack/" data-id="ck9gz156100019sv9f6w9n7e7" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/04/26/RoarCTF2019-easy-Java/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">RoarCTF2019 easy Java</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/04/26/BUUCTF-old-hack/">BUUCTF old hack</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/26/RoarCTF2019-easy-Java/">RoarCTF2019 easy Java</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/25/SWPUCTF2019 web1/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/13/JPA初学问题总结/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/11/python序列化及反序列化/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
