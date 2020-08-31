@@ -62,6 +62,388 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-leetcode-dynamic-programming-2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/10/leetcode-dynamic-programming-2/" class="article-date">
+  <time datetime="2020-03-10T09:21:40.000Z" itemprop="datePublished">2020-03-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/10/leetcode-dynamic-programming-2/">leetcode-dynamic programming-2</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="leetcode-动态规划2（java实现）"><a href="#leetcode-动态规划2（java实现）" class="headerlink" title="leetcode 动态规划2（java实现）"></a>leetcode 动态规划2（java实现）</h1><hr>
+<p>#64.最小路径和</p>
+<p>这是一个经典的动态规划题，类似于走楼梯问题。</p>
+<p><strong>1.定义状态：</strong></p>
+<p>本题目是让求从左上角到右下角最短路径，且只能向下或向右。那么我们可以缩小范围，假设与起点相邻的下面节点和右面节点是更小范围的矩形的左上角。那么求这个大矩形的状态（最短路径）就是选择向右和向下中路径相对较短的。所以最小状态就是每个节点到右下角节点的最短距离。</p>
+<p><strong>2.确定临界状态：</strong></p>
+<p>由题意，我们知道在最下面行和最右列的节点只能有一种选择。所以有式子：</p>
+<pre><code>dp[dp.size-1][IndexOfCol]+=dp[dp.size-1][IndexOfCol+1],
+dp[IndexOfRow][dp[0].size-1]+=dp[IndexOfRow+1][dp[0].size-1] 0&lt;=IndexOfRow&lt;dp.size 0&lt;=IndexOfCol&lt;dp[0].size</code></pre><p>不过如果路建立数组记录每个状态，空间复杂度就会达到O（n^2)，显然开销是巨大的。我们可以直接在原数组上修改</p>
+<pre><code>grid[IndexOfRow][grid[0].length-1]+=grid[IndexOfRow+1][grid[0].length-1];
+grid[grid.length-1][IndexOfCol]+=gird[grid.length-1][IndexOfCol+1]; 0&lt;=IndexOfRow&lt;dp.size 0&lt;=IndexOfCol&lt;dp[0].size</code></pre><p><strong>3.状态转移方程</strong></p>
+<pre><code>grid[i][j]=min(grid[i+1][j],grid[i][j+1])(i&lt;=0&lt;grid.length-1,j&lt;=0&lt;grid[0].length-1)</code></pre><p><strong>4.代码实现：</strong></p>
+<pre><code>class Solution {
+public int minPathSum(int[][] grid) {
+for(int i=grid.length-1;i&gt;=0;i--)
+{
+        for(int j=grid.length-1;j&gt;=0;j--)
+     { 
+        if(i==grid.length-1&amp;&amp;j!=grid[0].length-1)
+        {
+                grid[i][j]+=grid[i][j + 1];
+        }
+        else if(j==grid[0].length-1&amp;&amp;i!=grid.length-1)
+        {
+            grid[i][j]+=grid[i + 1][j];
+           }
+           else if(j!=grid[0].length-1&amp;&amp;i!=grid.length-1)
+           {
+                grid[i][j]+= Math.min(grid[i + 1][j],grid[i][j + 1]);
+           }
+        }
+}
+return grid[0][0];
+}
+}</code></pre><p>时间复杂度:O(mn)</p>
+<p>空间复杂度:O(1)</p>
+<h2 id="70-爬楼梯"><a href="#70-爬楼梯" class="headerlink" title="#70.爬楼梯"></a>#70.爬楼梯</h2><p>经典的动态规划题</p>
+<p><strong>1.定义状态</strong></p>
+<p>我们可以把问题分解成最小的问题，即计算1-n（n为楼层数）中到每层楼梯的方法有多少种。由于上楼是层层递进的，而由题目可知上楼无非是从该层往下数的第二层爬两个台阶，或者从该层往下数的第一层爬一个台阶（前提是该楼层的层数大于2)。这样通过递推就可以求出从起点到n层爬楼梯的方法数了。</p>
+<p><strong>2.临界状态</strong></p>
+<p>有两个特例，即第一层是无法用前两层的方法数相加。从起点到第一层只有一种方法。</p>
+<p><strong>3.状态转义方程</strong></p>
+<pre><code>dp[i]=dp[i-1]+dp[i-2](2&lt;=i&lt;=n)</code></pre><p><strong>4.代码实现</strong></p>
+<pre><code>class Solution {
+    public int climbStairs(int n) {
+    int []dp=new int[n+1];//定义数组记录到每层的方法数dp[n]就是起点到第n层的方法数
+    if(n&lt;2)
+    {
+        return 1;
+    }
+    dp[1]=1;
+       dp[2]=2;
+    for(int i=3;i&lt;=n;i++)
+    {
+       dp[i]=dp[i-1]+dp[i-2]; 
+    }
+    return dp[n];
+    }
+}</code></pre><p>这样的空间复杂度未免有点高，可以定义两个变量代替dp[i-1],dp[i-2]</p>
+<pre><code>class Solution {
+    public int climbStairs(int n) {
+     if(n&lt;2)
+        {
+       return 1;
+     }
+     int oldpre=1;
+     int pre=1;
+     int ans=0;
+     for(int i=2;i&lt;=n;i++)
+     {
+         ans=oldpre+pre;
+         oldpre=pre; 
+         pre=ans;
+     }
+     return ans;
+   }
+}</code></pre><p>时间复杂度:O(n)</p>
+<p>空间复杂度:O(1)</p>
+<p>看状态转移方程其实可以发现这道题就是求斐波那契数列，斐波那契数列的具体定义（体现了动态规划中的递推思想）：</p>
+<p>如果设F(n）为该数列的第n项（n∈N*），那么这句话可以写成如下形式：</p>
+<p>　　　　F(n)=F(n-1)+F(n-2)</p>
+<p>有关斐波那契数列的问题在这里就不做过多的阐述了。</p>
+<h1 id="91-解码方法"><a href="#91-解码方法" class="headerlink" title="91.解码方法"></a>91.解码方法</h1><hr>
+<p>这道题在leetcode上的通过率只有20%,看来还是有挑战性的。</p>
+<p><strong>1.定义状态</strong></p>
+<p>老套路，把大问题分解为可解的小问题。题目要求算出解码的方法数，可以递推求每个字符结尾的子字符串的解码方法，就得到了整个字符串的解码方法有多少种。</p>
+<p><strong>2.临界状态</strong></p>
+<p>这个题比较繁琐的一点要考虑各种状态。由于A-Z编码是对应1-26的，因此还要考虑0的情况。如果是0，还要判断前一位以及这个0的下标，为0就说明没法解码，直接返回0。下标1或者更大的情况还要看前一位的数字。是1或2，如果下标为1且前面的数字是1或2，说明字符串可以编码为J或T。以该数字为结束的子字符串的编码方法就为1,如果下标更大只需在满足前面数字的为1或2时，令记录该处的值改为下标为i-2处的值。其他情况都为直接返回0(字符串无法编码)。</p>
+<p>如果不是0的话也有很多种情况。如果假设s[i]为当前下标处的数字，如果s[i]&gt;0且s[i]&lt;7且s[i-1]=1或者s[i-1]=2，说明编码的方式有很多种，dp[i]=dp[i-1]+dp[i-2]。否则dp[i]=dp[i-1]</p>
+<p><strong>3.定义状态方程</strong></p>
+<p>dp[i]=dp[i-1]+dp[i-2] (s[i]==1||s[i]==2&amp;&amp;s[i]&gt;0&amp;&amp;s[i]&lt;7)</p>
+<p><strong>4.代码实现</strong></p>
+<pre><code>class Solution {
+public int numDecodings(String s) {
+    int []dp=new int[n];
+       for(int i=0;i&lt;s.length();i++)
+    {
+        if(s[i]==&apos;0&apos;)
+        { 
+            if(i==0)
+            {
+               return 0;
+            }
+            else if(i==1)
+            {
+                if(s[i-1]==&apos;1&apos;||s[i-1]==&apos;2&apos;)
+                {
+                     dp[i]=1;
+                }
+                else
+                {
+                     return 0;
+                }
+            }
+            else
+            {
+                if(s[i-1]==&apos;1&apos;||s[i-1]==&apos;2&apos;)
+                {
+                    dp[i]=dp[i-2];
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+       }
+      else
+      {
+          if(i==0)
+          {
+               dp[i]=1;
+          }
+         else if(i==1)
+         {
+             if(s[i-1]==&apos;1&apos;||(s[i-1]==&apos;2&apos;&amp;&amp;s[i]&gt;&apos;0&apos;&amp;&amp;s[i]&lt;&apos;7&apos;))
+             {
+                dp[i]=2;
+             }
+            else
+            {
+               dp[i]=dp[i-1];
+            }
+         }
+        else
+        {
+            if(s[i-1]==&apos;1&apos;||(s[i-1]==&apos;2&apos;&amp;&amp;s[i]&gt;&apos;0&apos;&amp;&amp;s[i]&lt;&apos;7&apos;))
+             {
+                    dp[i]=dp[i-1]+dp[i-2];
+             }
+             else
+             {
+                 dp[i]=dp[i-1];
+             }
+        }
+     }
+  }
+return dp[s.length()-1]；
+   }
+}</code></pre><p>时间复杂度:O(N)</p>
+<p>空间复杂度:O(N)</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/03/10/leetcode-dynamic-programming-2/" data-id="ckeilds190007k0v9l20wrgu7" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-leetcode-动态规划-2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/08/leetcode-动态规划-2/" class="article-date">
+  <time datetime="2020-03-08T14:26:37.812Z" itemprop="datePublished">2020-03-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="leetcode-动态规划2（java实现）"><a href="#leetcode-动态规划2（java实现）" class="headerlink" title="leetcode 动态规划2（java实现）"></a>leetcode 动态规划2（java实现）</h1><hr>
+<p>#64.最小路径和</p>
+<p>这是一个经典的动态规划题，类似于走楼梯问题。</p>
+<p><strong>1.定义状态：</strong></p>
+<p>本题目是让求从左上角到右下角最短路径，且只能向下或向右。那么我们可以缩小范围，假设与起点相邻的下面节点和右面节点是更小范围的矩形的左上角。那么求这个大矩形的状态（最短路径）就是选择向右和向下中路径相对较短的。所以最小状态就是每个节点到右下角节点的最短距离。</p>
+<p><strong>2.确定临界状态：</strong></p>
+<p>由题意，我们知道在最下面行和最右列的节点只能有一种选择。所以有式子：</p>
+<pre><code>dp[dp.size-1][IndexOfCol]+=dp[dp.size-1][IndexOfCol+1],
+dp[IndexOfRow][dp[0].size-1]+=dp[IndexOfRow+1][dp[0].size-1] 0&lt;=IndexOfRow&lt;dp.size 0&lt;=IndexOfCol&lt;dp[0].size</code></pre><p>不过如果路建立数组记录每个状态，空间复杂度就会达到O（n^2)，显然开销是巨大的。我们可以直接在原数组上修改</p>
+<pre><code>grid[IndexOfRow][grid[0].length-1]+=grid[IndexOfRow+1][grid[0].length-1];
+grid[grid.length-1][IndexOfCol]+=gird[grid.length-1][IndexOfCol+1]; 0&lt;=IndexOfRow&lt;dp.size 0&lt;=IndexOfCol&lt;dp[0].size</code></pre><p><strong>3.状态转移方程</strong></p>
+<pre><code>grid[i][j]=min(grid[i+1][j],grid[i][j+1])(i&lt;=0&lt;grid.length-1,j&lt;=0&lt;grid[0].length-1)</code></pre><p><strong>4.代码实现：</strong></p>
+<pre><code>class Solution {
+public int minPathSum(int[][] grid) {
+for(int i=grid.length-1;i&gt;=0;i--)
+{
+        for(int j=grid.length-1;j&gt;=0;j--)
+     { 
+        if(i==grid.length-1&amp;&amp;j!=grid[0].length-1)
+        {
+                grid[i][j]+=grid[i][j + 1];
+        }
+        else if(j==grid[0].length-1&amp;&amp;i!=grid.length-1)
+        {
+            grid[i][j]+=grid[i + 1][j];
+           }
+           else if(j!=grid[0].length-1&amp;&amp;i!=grid.length-1)
+           {
+                grid[i][j]+= Math.min(grid[i + 1][j],grid[i][j + 1]);
+           }
+        }
+}
+return grid[0][0];
+}
+}</code></pre><p>时间复杂度:O(mn)</p>
+<p>空间复杂度:O(1)</p>
+<h2 id="70-爬楼梯"><a href="#70-爬楼梯" class="headerlink" title="#70.爬楼梯"></a>#70.爬楼梯</h2><p>经典的动态规划题</p>
+<p><strong>1.定义状态</strong></p>
+<p>我们可以把问题分解成最小的问题，即计算1-n（n为楼层数）中到每层楼梯的方法有多少种。由于上楼是层层递进的，而由题目可知上楼无非是从该层往下数的第二层爬两个台阶，或者从该层往下数的第一层爬一个台阶（前提是该楼层的层数大于2)。这样通过递推就可以求出从起点到n层爬楼梯的方法数了。</p>
+<p><strong>2.临界状态</strong></p>
+<p>有两个特例，即第一层是无法用前两层的方法数相加。从起点到第一层只有一种方法。</p>
+<p><strong>3.状态转义方程</strong></p>
+<pre><code>dp[i]=dp[i-1]+dp[i-2](2&lt;=i&lt;=n)</code></pre><p><strong>4.代码实现</strong></p>
+<pre><code>class Solution {
+    public int climbStairs(int n) {
+    int []dp=new int[n+1];//定义数组记录到每层的方法数dp[n]就是起点到第n层的方法数
+    if(n&lt;2)
+    {
+        return 1;
+    }
+    dp[1]=1;
+       dp[2]=2;
+    for(int i=3;i&lt;=n;i++)
+    {
+       dp[i]=dp[i-1]+dp[i-2]; 
+    }
+    return dp[n];
+    }
+}</code></pre><p>这样的空间复杂度未免有点高，可以定义两个变量代替dp[i-1],dp[i-2]</p>
+<pre><code>class Solution {
+    public int climbStairs(int n) {
+     if(n&lt;2)
+        {
+       return 1;
+     }
+     int oldpre=1;
+     int pre=1;
+     int ans=0;
+     for(int i=2;i&lt;=n;i++)
+     {
+         ans=oldpre+pre;
+         oldpre=pre; 
+         pre=ans;
+     }
+     return ans;
+   }
+}</code></pre><p>时间复杂度:O(n)</p>
+<p>空间复杂度:O(1)</p>
+<p>看状态转移方程其实可以发现这道题就是求斐波那契数列，斐波那契数列的具体定义（体现了动态规划中的递推思想）：</p>
+<p>如果设F(n）为该数列的第n项（n∈N*），那么这句话可以写成如下形式：</p>
+<p>　　　　F(n)=F(n-1)+F(n-2)</p>
+<p>有关斐波那契数列的问题在这里就不做过多的阐述了。</p>
+<h1 id="91-解码方法"><a href="#91-解码方法" class="headerlink" title="91.解码方法"></a>91.解码方法</h1><hr>
+<p>这道题在leetcode上的通过率只有20%,看来还是有挑战性的。</p>
+<p><strong>1.定义状态</strong></p>
+<p>老套路，把大问题分解为可解的小问题。题目要求算出解码的方法数，可以递推求每个字符结尾的子字符串的解码方法，就得到了整个字符串的解码方法有多少种。</p>
+<p><strong>2.临界状态</strong></p>
+<p>这个题比较繁琐的一点要考虑各种状态。由于A-Z编码是对应1-26的，因此还要考虑0的情况。如果是0，还要判断前一位以及这个0的下标，为0就说明没法解码，直接返回0。下标1或者更大的情况还要看前一位的数字。是1或2，如果下标为1且前面的数字是1或2，说明字符串可以编码为J或T。以该数字为结束的子字符串的编码方法就为1,如果下标更大只需在满足前面数字的为1或2时，令记录该处的值改为下标为i-2处的值。其他情况都为直接返回0(字符串无法编码)。</p>
+<p>如果不是0的话也有很多种情况。如果假设s[i]为当前下标处的数字，如果s[i]&gt;0且s[i]&lt;7且s[i-1]=1或者s[i-1]=2，说明编码的方式有很多种，dp[i]=dp[i-1]+dp[i-2]。否则dp[i]=dp[i-1]</p>
+<p><strong>3.定义状态方程</strong></p>
+<p>dp[i]=dp[i-1]+dp[i-2] (s[i]==1||s[i]==2&amp;&amp;s[i]&gt;0&amp;&amp;s[i]&lt;7)</p>
+<p><strong>4.代码实现</strong></p>
+<pre><code>class Solution {
+public int numDecodings(String s) {
+    int []dp=new int[n];
+       for(int i=0;i&lt;s.length();i++)
+    {
+        if(s[i]==&apos;0&apos;)
+        { 
+            if(i==0)
+            {
+               return 0;
+            }
+            else if(i==1)
+            {
+                if(s[i-1]==&apos;1&apos;||s[i-1]==&apos;2&apos;)
+                {
+                     dp[i]=1;
+                }
+                else
+                {
+                     return 0;
+                }
+            }
+            else
+            {
+                if(s[i-1]==&apos;1&apos;||s[i-1]==&apos;2&apos;)
+                {
+                    dp[i]=dp[i-2];
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+       }
+      else
+      {
+          if(i==0)
+          {
+               dp[i]=1;
+          }
+         else if(i==1)
+         {
+             if(s[i-1]==&apos;1&apos;||(s[i-1]==&apos;2&apos;&amp;&amp;s[i]&gt;&apos;0&apos;&amp;&amp;s[i]&lt;&apos;7&apos;))
+             {
+                dp[i]=2;
+             }
+            else
+            {
+               dp[i]=dp[i-1];
+            }
+         }
+        else
+        {
+            if(s[i-1]==&apos;1&apos;||(s[i-1]==&apos;2&apos;&amp;&amp;s[i]&gt;&apos;0&apos;&amp;&amp;s[i]&lt;&apos;7&apos;))
+             {
+                    dp[i]=dp[i-1]+dp[i-2];
+             }
+             else
+             {
+                 dp[i]=dp[i-1];
+             }
+        }
+     }
+  }
+return dp[s.length()-1]；
+   }
+}</code></pre><p>时间复杂度:O(N)</p>
+<p>空间复杂度:O(N)</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/03/08/leetcode-动态规划-2/" data-id="ckeilds1d000ak0v9vo0aru12" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Metasploit学习笔记" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/02/29/Metasploit学习笔记/" class="article-date">
@@ -119,7 +501,7 @@ Resource ：前面已经介绍过了，即指定资源文件，存的就是配�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/02/29/Metasploit学习笔记/" data-id="ck9gz156b00069sv92nu1axnv" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/02/29/Metasploit学习笔记/" data-id="ckeilds100002k0v9rv79w9jo" class="article-share-link">Share</a>
       
       
     </footer>
@@ -317,7 +699,7 @@ public int uniquePaths(int m, int n) {//n为行数，m为列数
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/02/25/leetcode-动态规划-1/" data-id="ck9gz156f00099sv9i67zallw" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/02/25/leetcode-动态规划-1/" data-id="ckeilds1a0008k0v9bsi1kox9" class="article-share-link">Share</a>
       
       
     </footer>
@@ -388,7 +770,7 @@ print(&quot;&lt;svg&gt;&lt;script&gt;eval&amp;#40&amp;#34&quot; + output + &quot
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/12/02/xss/" data-id="ck9gz156j000e9sv99fh3kliy" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/12/02/xss/" data-id="ckeilds1i000dk0v9b89sbjj8" class="article-share-link">Share</a>
       
       
     </footer>
@@ -526,7 +908,7 @@ if( isset( $_REQUEST[ &apos;Submit&apos; ] ) ) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/10/22/新文档/" data-id="ck9gz156q000g9sv92m832kte" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/10/22/新文档/" data-id="ckeilds1u000hk0v9wnsmyf9v" class="article-share-link">Share</a>
       
       
     </footer>
@@ -575,7 +957,7 @@ if( isset( $_REQUEST[ &apos;Submit&apos; ] ) ) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/04/hello-world/" data-id="ck9gz156e00089sv9y8qhjdos" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/06/04/hello-world/" data-id="ckeilds1c0009k0v9urkyo0cn" class="article-share-link">Share</a>
       
       
     </footer>
@@ -608,7 +990,7 @@ if( isset( $_REQUEST[ &apos;Submit&apos; ] ) ) {
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
     </div>
   </div>
 
@@ -621,6 +1003,14 @@ if( isset( $_REQUEST[ &apos;Submit&apos; ] ) ) {
       <ul>
         
           <li>
+            <a href="/2020/08/31/vue-element-admin用户登录流程/">vue-element-admin用户登录流程</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/13/git版本回退提交操作/">(no title)</a>
+          </li>
+        
+          <li>
             <a href="/2020/04/26/BUUCTF-old-hack/">BUUCTF old hack</a>
           </li>
         
@@ -630,14 +1020,6 @@ if( isset( $_REQUEST[ &apos;Submit&apos; ] ) ) {
         
           <li>
             <a href="/2020/04/25/SWPUCTF2019 web1/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2020/04/13/JPA初学问题总结/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2020/04/11/python序列化及反序列化/">(no title)</a>
           </li>
         
       </ul>

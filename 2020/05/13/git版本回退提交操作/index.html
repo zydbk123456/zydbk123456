@@ -5,15 +5,19 @@
   
 
   
-  <title>Archives: 2020 | Hexo</title>
+  <title>Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
+  <meta name="description" content="git版本回退以及提交操作 ###1.git pull后发现问题 今天pull下来git上的项目文件，发现pom和一些文件被组员整理项目结构时不小心删了。感觉如果再重新写有点耗时间。打算利用git的版本回退功能，去找回原来的文件。  ###2.使用git log命令 打开git控制台输入’git log’查看以前的提交记录。输入git reset --hard commit id(hash)回退。">
+<meta property="og:type" content="article">
 <meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/archives/2020/page/2/index.html">
+<meta property="og:url" content="http://yoursite.com/2020/05/13/git版本回退提交操作/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="git版本回退以及提交操作 ###1.git pull后发现问题 今天pull下来git上的项目文件，发现pom和一些文件被组员整理项目结构时不小心删了。感觉如果再重新写有点耗时间。打算利用git的版本回退功能，去找回原来的文件。  ###2.使用git log命令 打开git控制台输入’git log’查看以前的提交记录。输入git reset --hard commit id(hash)回退。">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-05-13T15:16:30.887Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="git版本回退以及提交操作 ###1.git pull后发现问题 今天pull下来git上的项目文件，发现pom和一些文件被组员整理项目结构时不小心删了。感觉如果再重新写有点耗时间。打算利用git的版本回退功能，去找回原来的文件。  ###2.使用git log命令 打开git控制台输入’git log’查看以前的提交记录。输入git reset --hard commit id(hash)回退。">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -60,84 +64,63 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2020/03/10/leetcode-dynamic-programming-2/" class="archive-article-date">
-  <time datetime="2020-03-10T09:21:40.000Z" itemprop="datePublished">Mar 10</time>
+        <section id="main"><article id="post-git版本回退提交操作" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/05/13/git版本回退提交操作/" class="article-date">
+  <time datetime="2020-05-13T14:43:43.283Z" itemprop="datePublished">2020-05-13</time>
 </a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/03/10/leetcode-dynamic-programming-2/">leetcode-dynamic programming-2</a>
-    </h1>
-  
+        <h1 id="git版本回退以及提交操作"><a href="#git版本回退以及提交操作" class="headerlink" title="git版本回退以及提交操作"></a>git版本回退以及提交操作</h1><hr>
+<p>###1.git pull后发现问题</p>
+<p>今天pull下来git上的项目文件，发现pom和一些文件被组员整理项目结构时不小心删了。感觉如果再重新写有点耗时间。打算利用git的版本回退功能，去找回原来的文件。</p>
+<hr>
+<p>###2.使用git log命令</p>
+<p>打开git控制台输入’git log’查看以前的提交记录。输入<code>git reset --hard commit id(hash)</code>回退。或者使用tortoisegit选择’show log’,选择之前的版本右键’reset master to this’去回退。</p>
+<p>reset的三个参数：</p>
+<pre><code>soft 仅移动head指针，不对工作区和暂存区操作
+mixed 改变head指针，工作区但不改变暂存区内容
+hard head指针，工作区，暂存区内容都改变</code></pre><p>版本回退到指定的版本，上一版本可以为HEAD^。发现需要merge。否则重新push到远程库时会提示’non-fast-forward’</p>
+<hr>
+<p>###3.解决git push non-fast-forward</p>
+<p>出现这个问题，我的解决方法是 <code>git pull origin master --force</code>意思是直接替代remote的内容。发现可以成功提交。但事后了解这种方式适用于改动不大时的提交。更合适的方法是先pull下来最新的版本，在本地合并。</p>
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2020/03/08/leetcode-动态规划-2/" class="archive-article-date">
-  <time datetime="2020-03-08T14:26:37.812Z" itemprop="datePublished">Mar 8</time>
-</a>
       
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2020/02/29/Metasploit学习笔记/" class="archive-article-date">
-  <time datetime="2020-02-29T13:18:12.756Z" itemprop="datePublished">Feb 29</time>
-</a>
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/05/13/git版本回退提交操作/" data-id="ckeilds180006k0v9fw7s1l71" class="article-share-link">Share</a>
       
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2020/02/25/leetcode-动态规划-1/" class="archive-article-date">
-  <time datetime="2020-02-25T09:59:29.059Z" itemprop="datePublished">Feb 25</time>
-</a>
       
-    </header>
+    </footer>
   </div>
-</article>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/08/31/vue-element-admin用户登录流程/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          vue-element-admin用户登录流程
+        
+      </div>
+    </a>
   
   
-    </div></section>
+    <a href="/2020/04/26/BUUCTF-old-hack/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">BUUCTF old hack</div>
+    </a>
   
+</nav>
 
-
-  <nav id="page-nav">
-    
-    <a class="extend prev" rel="prev" href="/archives/2020/">&laquo; Prev</a><a class="page-number" href="/archives/2020/">1</a><span class="page-number current">2</span>
-  </nav>
+  
+</article>
 
 </section>
         
