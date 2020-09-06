@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>springboot分页 pageable作参数以及List转换为Page | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Page与PageablePage是spring data jpa提供的一个接口。包含了部分数据集合以及相关的下一部分数据集合以及数据总数等信息。可以获得当前的页面的记录以及总页数和总数据数，以及数据是否能够再分页。 PageImpl是Page接口的实现类。重写了 hashcode(),equals(),toString()方法。 Pageable也是spring data jpa提供的接口，包含">
+<meta property="og:type" content="article">
+<meta property="og:title" content="springboot分页 pageable作参数以及List转换为Page">
+<meta property="og:url" content="http://yoursite.com/2020/09/06/springboot分页-pageable作参数以及List转换为Page/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Page与PageablePage是spring data jpa提供的一个接口。包含了部分数据集合以及相关的下一部分数据集合以及数据总数等信息。可以获得当前的页面的记录以及总页数和总数据数，以及数据是否能够再分页。 PageImpl是Page接口的实现类。重写了 hashcode(),equals(),toString()方法。 Pageable也是spring data jpa提供的接口，包含">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-09-06T09:32:59.802Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="springboot分页 pageable作参数以及List转换为Page">
+<meta name="twitter:description" content="Page与PageablePage是spring data jpa提供的一个接口。包含了部分数据集合以及相关的下一部分数据集合以及数据总数等信息。可以获得当前的页面的记录以及总页数和总数据数，以及数据是否能够再分页。 PageImpl是Page接口的实现类。重写了 hashcode(),equals(),toString()方法。 Pageable也是spring data jpa提供的接口，包含">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-springboot分页-pageable作参数以及List转换为Page" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/09/06/springboot分页-pageable作参数以及List转换为Page/" class="article-date">
+  <time datetime="2020-09-06T09:16:59.861Z" itemprop="datePublished">2020-09-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      springboot分页 pageable作参数以及List转换为Page
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Page与Pageable"><a href="#Page与Pageable" class="headerlink" title="Page与Pageable"></a>Page与Pageable</h2><p>Page是spring data jpa提供的一个接口。包含了部分数据集合以及相关的下一部分数据集合以及数据总数等信息。可以获得当前的页面的记录以及总页数和总数据数，以及数据是否能够再分页。</p>
+<p>PageImpl是Page接口的实现类。重写了 <code>hashcode(),equals(),toString()</code>方法。</p>
+<p>Pageable也是spring data jpa提供的接口，包含了分页的信息，页数getPageNumber()和每页的数据数getPageSzie()。以便JPA通过<br>Pageable得到一个带分页信息的sql语句。PageRequest是Pageable的实现类。提供了排序功能。</p>
+<h2 id="使用Page实现分页"><a href="#使用Page实现分页" class="headerlink" title="使用Page实现分页"></a>使用Page实现分页</h2><p>数据库访问层的接口继承<strong>JpaRepository接口</strong>和<strong>JpaSpecificationExecutor接口</strong></p>
+<pre><code>public interface UserRepository extends JpaRepository&lt;User, String&gt;,JpaSpecificationExecutor&lt;User&gt; {
+    public User findByName(String name);
+    @Query(value=&quot;select count(*) from user&quot;,nativeQuery = true)
+    public int countUser();
+    public User findByUserId(String userId);
+    @Modifying
+    @Query(value=&quot;update user set password=?1 where user_id=?2&quot;,nativeQuery = true)
+    public void updatePassword(String newpassword,String userId);
+    @Modifying
+    @Query(value=&quot;update user set permission=?1 where user_id=?2&quot;,nativeQuery = true)
+    public void updatePermission(String permission,String userId);
+}</code></pre><p>这样可以实现Page实现分页查询</p>
+<h2 id="定义sql语句中的Pageable参数"><a href="#定义sql语句中的Pageable参数" class="headerlink" title="定义sql语句中的Pageable参数"></a>定义sql语句中的Pageable参数</h2><p>定义Pageable参数使用了Pageable接口的实现类PageRequest。之前的new PageRequest()方式已被弃用。现在使用PageRequest.of来定义Pageable接口的具体内容，如数据为总集合的第几页以及页数。</p>
+<pre><code>Pageable pageable;
+pageable= PageRequest.of(page,pageSize, Sort.by(Sort.Direction.DESC,&quot;time&quot;));</code></pre><p>这段代码定义了查询数据集的第几页数据以及每页的数据数。并按time属性的倒序排序查询的结果。</p>
+<p>@Query定义的sql语句声明pagable参数</p>
+<pre><code>@Query(value=&quot;select * from camera where user_id=?1 order by &quot;,nativeQuery = true)
+public Page&lt;Camera&gt; findAllByUserId(String userId, Pageable pageable);</code></pre><p>使用#pageable声明pageable参数。</p>
+<h2 id="List转换为Page"><a href="#List转换为Page" class="headerlink" title="List转换为Page"></a>List转换为Page<t></t></h2><p>有时数据库操作需要执行动态sql语句，我们可以通过entityManager实现动态sql。但是如果采用entityManager执行访问数据库操作的话，我们需要借助NativeQuery执行sql语句，这样返回的结果一般是List类型的。那么，如何让结果转换为Page类型呢？其实，只需要借助Pageable接口和Page接口的实现PageImpl。</p>
+<p>具体的代码如下：</p>
+<pre><code>String sql=&quot;select * from &quot;+tableName+&quot; order by time desc&quot;;//&quot; limit &quot;+Integer.toString(page*pageSize)+&quot;,&quot;+Integer.toString(pageSize);
+Query nativeQuery=entityManager.createNativeQuery(sql);
+List&lt;WeighData&gt; resultList=nativeQuery.getResultList();
+int begin= (int) pageable.getOffset();
+int en=(begin+pageable.getPageSize())&gt;resultList.size()?resultList.size():(begin+pageable.getPageSize());
+return new PageImpl&lt;WeighData&gt;(resultList.subList(begin,en),pageable,resultList.size());</code></pre><p>其中通过getOffset获得这一页的开头在原结果集中的位置，并且通过判断开头的位置加上每页数据数后的结果是否大于最后一个数据在原数据集的位置获取每页的最后数据的位置。(末页的数据数可能不够一个pagesize)，最终获取到一个Page。完成(类似于sql中的limit)分页查询.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/09/06/springboot分页-pageable作参数以及List转换为Page/" data-id="ckeqw4yfu000ej0v9golrt30u" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/09/06/new-post/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          new post
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/08/31/vue-element-admin用户登录流程/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">vue-element-admin用户登录流程</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/09/06/new-post/">new post</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/06/springboot分页-pageable作参数以及List转换为Page/">springboot分页 pageable作参数以及List转换为Page</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/31/vue-element-admin用户登录流程/">vue-element-admin用户登录流程</a>
+          </li>
+        
+          <li>
+            <a href="/2020/05/13/git版本回退提交操作/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/26/BUUCTF-old-hack/">BUUCTF old hack</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
