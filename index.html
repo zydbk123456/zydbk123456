@@ -62,6 +62,61 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-flutter与spring-boot交互获取session" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/10/07/flutter与spring-boot交互获取session/" class="article-date">
+  <time datetime="2020-10-07T12:45:45.480Z" itemprop="datePublished">2020-10-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/10/07/flutter与spring-boot交互获取session/">flutter与spring boot交互获取session</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在使用springboot做项目，和前端flutter交互时，发现flutter无法通过后台的登录验证。后来发现是因为flutter向后台发送http请求时session为空，无法通过拦截器的验证。</p>
+<h2 id="1-springboot后台拦截器代码"><a href="#1-springboot后台拦截器代码" class="headerlink" title="1.springboot后台拦截器代码"></a>1.springboot后台拦截器代码</h2><pre><code>String url=request.getRequestURI();
+HttpSession session=request.getSession(false);
+Logger logger= LogManager.getLogger();
+User user= (User) request.getSession().getAttribute(&quot;user&quot;);
+if( user == null){
+     response.sendRedirect(&quot;&quot;);
+     return false;
+}</code></pre><p>我这里的拦截器会从http请求的request请求中获取session，并且获取存入session的user键对应的值。如果session为空，就会重新回到登录页面。</p>
+<h2 id="2-解决方法"><a href="#2-解决方法" class="headerlink" title="2.解决方法"></a>2.解决方法</h2><p>解决方法其实很简单，我们要从http请求头入手。如果对cookie以及session认证机制有所了解的话，可以知道用户在客户端发出请求后，服务器会生成session并存储在服务器中。但是服务器一旦通过验证会生成JSESSIONID并放在本地存储的cookie中。所以我们只需要获取后台生成的session id并在每次发出http请求时在报文头部中添加这个session id。</p>
+<p><strong>后台代码</strong></p>
+<pre><code>session.setAttribute(&quot;user&quot;,userDB);//HttpSession session
+logger.info(&quot;sessioni: &quot;+session.getId());
+response.setHeader(&quot;Set-Cookie&quot;, session.getId());</code></pre><p>在响应头添加生成的session的id，在flutter这样操作：</p>
+<p>response.header[‘set-cookie’]=$jsessionId</p>
+<p>之后的每次请求在请求头上添加</p>
+<p>cookie：JSESSIONID=<strong>***</strong>;</p>
+<p>每次请求为请求头设置，可以设置一个全局变量赋值</p>
+<p>request.header[‘cookie’]=’JSESSIONID=<strong>****</strong>‘</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/10/07/flutter与spring-boot交互获取session/" data-id="ckfze3hug0004gcv9npuw53kb" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-new-post" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/09/06/new-post/" class="article-date">
@@ -88,7 +143,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/09/06/new-post/" data-id="ckeqw4yfq000cj0v9y16wpdh9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/09/06/new-post/" data-id="ckfze3hum0009gcv9ywqwegi9" class="article-share-link">Share</a>
       
       
     </footer>
@@ -154,7 +209,7 @@ return new PageImpl&lt;WeighData&gt;(resultList.subList(begin,en),pageable,resul
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/09/06/springboot分页-pageable作参数以及List转换为Page/" data-id="ckeqw4yfu000ej0v9golrt30u" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/09/06/springboot分页-pageable作参数以及List转换为Page/" data-id="ckfze3huq000bgcv92vhk8sif" class="article-share-link">Share</a>
       
       
     </footer>
@@ -261,7 +316,7 @@ public Map&lt;String, Object&gt; confirm(@RequestBody User user) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/08/31/vue-element-admin用户登录流程/" data-id="ckeqw4yfw000gj0v9em7hhttq" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/08/31/vue-element-admin用户登录流程/" data-id="ckfze3huv000ggcv9nr8yeyie" class="article-share-link">Share</a>
       
       
     </footer>
@@ -300,7 +355,7 @@ hard head指针，工作区，暂存区内容都改变</code></pre><p>版本回�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/05/13/git版本回退提交操作/" data-id="ckeqw4yf40005j0v9l4egb05a" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/05/13/git版本回退提交操作/" data-id="ckfze3huk0007gcv9m67f5lu4" class="article-share-link">Share</a>
       
       
     </footer>
@@ -364,7 +419,7 @@ hard head指针，工作区，暂存区内容都改变</code></pre><p>版本回�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/04/26/BUUCTF-old-hack/" data-id="ckeqw4yf00002j0v9iyf20nfo" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/04/26/BUUCTF-old-hack/" data-id="ckfze3htx0001gcv9wp2swbnp" class="article-share-link">Share</a>
       
       
     </footer>
@@ -472,7 +527,7 @@ webapp下的文件目录是容易出现安全问题的
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/04/26/RoarCTF2019-easy-Java/" data-id="ckeqw4yew0001j0v9tuck45b0" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/04/26/RoarCTF2019-easy-Java/" data-id="ckfze3hue0003gcv9n6b382n2" class="article-share-link">Share</a>
       
       
     </footer>
@@ -514,7 +569,7 @@ webapp下的文件目录是容易出现安全问题的
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/04/25/SWPUCTF2019 web1/" data-id="ckeqw4yf30004j0v90z44j91u" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/04/25/SWPUCTF2019 web1/" data-id="ckfze3huh0005gcv9jvy8bjqr" class="article-share-link">Share</a>
       
       
     </footer>
@@ -624,7 +679,7 @@ at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntit
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/04/13/JPA初学问题总结/" data-id="ckeqw4yfl0009j0v9kswt4hhf" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/04/13/JPA初学问题总结/" data-id="ckfze3hv7000jgcv9h8s1qhjr" class="article-share-link">Share</a>
       
       
     </footer>
@@ -727,137 +782,7 @@ print(json.dumps(car, default=car2dict))</code></pre><p>##python序列化及反�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/04/11/python序列化及反序列化/" data-id="ckeqw4yfs000dj0v9v89d0eh3" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="new-tie-san-webshell" class="article article-type-new" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/03/15/tie-san-webshell/" class="article-date">
-  <time datetime="2020-03-15T11:42:11.000Z" itemprop="datePublished">2020-03-15</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/15/tie-san-webshell/">tie-san-webshell</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="铁三知识点复习-webshell"><a href="#铁三知识点复习-webshell" class="headerlink" title="铁三知识点复习 webshell"></a>铁三知识点复习 webshell</h1><hr>
-<p><strong>什么是webshell？</strong></p>
-<p>webshell就是以asp、php、jsp或者cgi等网页文件形式存在的一种命令执行环境，也可以将其称做为一种网页后门。黑客在入侵了一个网站后，通常会将asp或php后门文件与网站服务器WEB目录下正常的网页文件混在一起，然后就可以使用浏览器来访问asp或者php后门，得到一个命令执行环境，以达到控制网站服务器的目的。简单来说就是通过网站漏洞获得网站控制权限。(百度百科的解释)</p>
-<p>在计算机科学中，shell指的是”为用户提供操作界面的软件”。类似于windows的cmd.exe和Linux下的bash。webshell是网站的后门，也是一个命令解释器。不过是以http协议这样的方式通信。继承了web权限。我们也可以把webshell理解为在服务器端可执行的文件，后缀名通常为.asp,.php,.aspx,.jsp。</p>
-<hr>
-<p><strong>解析漏洞</strong></p>
-<p>解析漏洞就是web服务器没有严格处理http请求。导致不该执行的文件或脚本当作可执行的文件或脚本执行。大部分都是通过带有特别后缀的文件使得网页将其解析成可执行的文件或脚本，从而导致网站被恶意攻击。</p>
-<p><strong>常见的解析漏洞</strong></p>
-<p>1.IIS 5.x/6.0解析漏洞</p>
-<p>在IIS5.X和IIS6.0版本中存在以下两个解析漏洞。第一种是如果上传的文件后缀是”*.asp;1.jpg”分号后面不会被解析 而会被服务器当成asp文件执行,从而绕过服务器能上传asp文件的限制.<br>IIS6.0版本中，默认可执行文件除了test.asp以外，还包括test.asa、test.cer、test.cdx这三种，同样也存在解析漏洞</p>
-<pre><code>webshell.asp;1.jpg
-webshell.asa;1.jpg
-webshell.cer;1.jpg
-webshell.cdx;1.jpg</code></pre><p>第二种叫做目录解析,在网站中建立名字为<em>.asp、</em>.asa的文件夹，其目录内的任何扩展名文件都会被IIS当做ASP文件来解析并执行。</p>
-<pre><code>xxxxxx/xxxxx/.asp/xx.jpg(xx.jpg会被当作asp文件执行)</code></pre><p>2.IIS 7.0/IIS 7.5/ Nginx &lt;8.03畸形解析漏洞</p>
-<p>IIS 7.0/IIS 7.5/ Nginx &lt;8.03在Fast-CGI运行模式下，在一个文件路径(/xx.jpg)后面加上/xx.php会将/xx.jpg/xx.php 解析为 php 文件。</p>
-<p>在某些使用有漏洞的网站中，访问<a href="http://127.0.0.1/1.jpg/1.php，此时的1.jpg会被当作PHP脚本来解析,此时就认为1.php是不存在的。" target="_blank" rel="noopener">http://127.0.0.1/1.jpg/1.php，此时的1.jpg会被当作PHP脚本来解析,此时就认为1.php是不存在的。</a></p>
-<p>这就意味着攻击者可以上传合法的“图片”（图片木马）然后在URL后面加上“/xxx.php”，就可以获得网站的webshell，在使用菜刀链接即可。</p>
-<pre><code>1.jpg/1.php(1.jpg就是图片马,可以用Ultraedit等生成)</code></pre><p>3.Nginx &lt;8.03 空字节代码执行漏洞</p>
-<p>影响范围：Nginx0.5.,0.6., 0.7-0.7.65, 0.8- 0.8.37<br>访问以下网址，服务器将把xx.jpg文件当做php解析并执行。<br>    <a href="http://www.xxx.com/xx.jpg%00.php" target="_blank" rel="noopener">http://www.xxx.com/xx.jpg%00.php</a></p>
-<p>4.Apache解析漏洞</p>
-<p>apache1或apache2版本</p>
-<p>apache解析文件后缀是从右到左解析,如果遇到apache不能解析的文件后缀就会略过而解析下一个后缀.</p>
-<pre><code>xxxx.php.rar(apache不能解析rar,会略过.但php可以被apache解析.文件会被解析成php文件)</code></pre><p>5.CVE-2013-4547 Nginx解析漏洞</p>
-<p>访问以下网址，服务器将把xx.jpg文件当做php解析并执行。</p>
-<pre><code>http://www.xxx.com/xx.jpg（非编码空格）\0.php</code></pre><hr>
-<p><strong>中间件</strong></p>
-<p>一个正常的web访问顺序：浏览器-&gt;服务器(WWW)-&gt;web容器-&gt;中间件(web应用服务器)-&gt;数据库服务器。而中间件主要包括Tomcat,jboss,weblogic等等。</p>
-<pre><code>web服务器：IIS、Apache、Nginx、Tomcat、Jboss、Jetty、Weblogic、Webshere、Glasshfish、Lighttpd等
-web中间件：Tomcat、Jboss、Jetty、Weblogic、Webshere、Glasshfish等
-web容器：IIS(asp容器)、Tomcat(servlet容器)、Jboss(EJB容器)</code></pre><p><strong>什么是中间件？</strong><br>中间件是介于应用系统和系统软件之间的一类软件，它使用系统软件所提供的基础服务（功能），衔接网络上应用系统的各个部分或不同的应用，能够达到资源共享、功能共享的目的。</p>
-<p><strong>iis简介</strong></p>
-<p>iis（internet information service）是微软开发的针对WINDOWS 系统下运行的中间件。主要用来解析.ASP，.ASA，.CER三种文件格式的文件。 </p>
-<p>不同windows版本对应的iis版本</p>
-<pre><code>Windows 2003 server -------&gt;IIS 6.0
-Windows 7 -------&gt;IIS 7.0和IIS 7.5
-Windows 2008 server sp2 -------&gt; IIS 7.0
-Windows 2008 server R2--------&gt;IIS 7.5
-xp和2000 server对应的IIS 5.0</code></pre><p>安装iis（windows10）：控制面板-&gt;程序-&gt;启用或关闭windows功能-&gt;选择”internet information service”</p>
-<p><img src="https://img-blog.csdnimg.cn/2020031519471530.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt></p>
-<p>iis默认的web目录是 \inetpub\wwwroot</p>
-<p>iis日志分析：默认为W3C拓展日志文件格式，该内容可在站点属性中查看。iis日志可以分析web攻击。</p>
-<p><img src="https://img-blog.csdnimg.cn/20200315194814669.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt></p>
-<pre><code>date : 发出请求时候的日期。
-
-time: 发出请求时候的时间。注意：默认情况下这个时间是格林威治时间，比我们的北京时间晚8个小时。
-
-s-sitename：服务名，记录当记录事件运行于客户端上的Internet服务的名称和实例的编号。
-
-s-ip：服务器的IP地址。
-
-cs-method：请求中使用的HTTP方法，GET/POST。（POST方法可能无法记录请求的详细内容）
-
-cs-uri-stem：URI资源，记录做为操作目标的统一资源标识符（URI），即访问的页面文件。
-
-cs-uri-query：URI查询，记录客户尝试执行的查询，只有动态页面需要URI查询，如果有则记录，没有则以连接符-表示。即访问网址的附带参数。
-
-s-port：为服务配置的服务器端口号。
-
-cs-username：用户名，访问服务器的已经过验证用户的名称，匿名用户用连接符-表示。
-
-c-ip：客户端IP地址。
-
-cs(User-Agent)：用户代理，客户端浏览器、操作系统等情况。
-
-sc-status：协议状态，记录HTTP状态代码，200表示成功，403表示没有权限，404表示找不到该页面。
-
-sc-substatus：协议子状态，记录HTTP子状态代码
-
-sc-win32-status：Win32状态，记录Windows状态代码。
-
-sc-bytes：服务器发送的字节数。
-
-cs-bytes：服务器接受的字节数。
-
-time-taken：记录操作所花费的时间，单位是毫秒。</code></pre><p><strong>apache简介</strong></p>
-<p>apache是一种开源的web服务器，支持HTTP协议。</p>
-<p>LINUX下安装apache服务：<code>yum -y install httpd</code> 启动apache服务：<code>service httpd start</code></p>
-<p>Apache日志分析：Apache日志主要分为以下类：error.log(错误日志)和access.log(访问日志),ssl_access_log(http访问日志),ssl_error_log(http错误日志),ssl_request_log(http请求日志) ，实际排查过程中更常用的是error_log，apache日志同样可以查看web攻击（sql注入，xss）。一般可以通过查看apache配置文件查看apache日志的位置。有关apache日志的详细内容可以访问：<a href="https://www.freebuf.com/column/144833.html" target="_blank" rel="noopener">https://www.freebuf.com/column/144833.html</a>,讲解的还是比较详细的。这里就不再做过多的介绍了。</p>
-<p><strong>nginx简介</strong></p>
-<p>Nginx是一个开源且高性能、可靠的HTTP中间件、代理服务。是一个异步框架的web服务器。也可以用作反向代理，负载平衡器 和 请求分发。其特点是相对于apache服务器占有内存少，并发能力强。</p>
-<p>打开nginx\conf\nginx.conf可以对nginx进行配置。这里是几个比较重要的配置参数：</p>
-<pre><code>user 设置nginx的系统使用用户
-
-work_processes 设置进程数
-
-error_log nginx的错误日志
-
-pid nginx服务启动时的pid（进程编号） 
-
-event: worker_connections 每个进程允许的最大连接数
-
-    use 工作进程数</code></pre><p>nginx日志也有两种：access.log(记录网页的访问信息) errors.log(记录处理http请求的错误状态以及nginx本身服务的错误状态)。</p>
-<p><strong>JBOSS简介</strong></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/03/15/tie-san-webshell/" data-id="ckeqw4yfx000hj0v9z8gttdtp" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/04/11/python序列化及反序列化/" data-id="ckfze3huw000hgcv9wvcinowt" class="article-share-link">Share</a>
       
       
     </footer>
@@ -890,7 +815,7 @@ event: worker_connections 每个进程允许的最大连接数
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
     </div>
   </div>
 
@@ -901,6 +826,10 @@ event: worker_connections 每个进程允许的最大连接数
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2020/10/07/flutter与spring-boot交互获取session/">flutter与spring boot交互获取session</a>
+          </li>
         
           <li>
             <a href="/2020/09/06/new-post/">new post</a>
@@ -916,10 +845,6 @@ event: worker_connections 每个进程允许的最大连接数
         
           <li>
             <a href="/2020/05/13/git版本回退提交操作/">(no title)</a>
-          </li>
-        
-          <li>
-            <a href="/2020/04/26/BUUCTF-old-hack/">BUUCTF old hack</a>
           </li>
         
       </ul>
