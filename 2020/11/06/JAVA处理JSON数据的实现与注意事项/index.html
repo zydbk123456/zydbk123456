@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>JAVA处理JSON数据的实现与注意事项 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1.JSON简介   JSON(Javascript Object Notation,JS对象简谱)是一种轻量级的数据交换格式。它基于 ECMAScript (欧洲计算机协会制定的js规范)的一个子集，采用完全独立于编程语言的文本格式来存储和表示数据。简洁和清晰的层次结构使得 JSON 成为理想的数据交换语言。 易于人阅读和编写，同时也易于机器解析和生成，并有效地提升网络传输效率。 2.JSON格">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JAVA处理JSON数据的实现与注意事项">
+<meta property="og:url" content="http://yoursite.com/2020/11/06/JAVA处理JSON数据的实现与注意事项/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1.JSON简介   JSON(Javascript Object Notation,JS对象简谱)是一种轻量级的数据交换格式。它基于 ECMAScript (欧洲计算机协会制定的js规范)的一个子集，采用完全独立于编程语言的文本格式来存储和表示数据。简洁和清晰的层次结构使得 JSON 成为理想的数据交换语言。 易于人阅读和编写，同时也易于机器解析和生成，并有效地提升网络传输效率。 2.JSON格">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20201106183813720.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70#pic_center">
+<meta property="og:updated_time" content="2020-11-06T11:07:28.510Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JAVA处理JSON数据的实现与注意事项">
+<meta name="twitter:description" content="1.JSON简介   JSON(Javascript Object Notation,JS对象简谱)是一种轻量级的数据交换格式。它基于 ECMAScript (欧洲计算机协会制定的js规范)的一个子集，采用完全独立于编程语言的文本格式来存储和表示数据。简洁和清晰的层次结构使得 JSON 成为理想的数据交换语言。 易于人阅读和编写，同时也易于机器解析和生成，并有效地提升网络传输效率。 2.JSON格">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20201106183813720.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70#pic_center">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-JAVA处理JSON数据的实现与注意事项" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/11/06/JAVA处理JSON数据的实现与注意事项/" class="article-date">
+  <time datetime="2020-11-06T11:05:53.955Z" itemprop="datePublished">2020-11-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      JAVA处理JSON数据的实现与注意事项
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-JSON简介"><a href="#1-JSON简介" class="headerlink" title="1.JSON简介"></a>1.JSON简介</h2><p>   JSON(Javascript Object Notation,JS对象简谱)是一种轻量级的数据交换格式。它基于 ECMAScript (欧洲计算机协会制定的js规范)的一个子集，采用完全独立于编程语言的文本格式来存储和表示数据。简洁和清晰的层次结构使得 JSON 成为理想的数据交换语言。 易于人阅读和编写，同时也易于机器解析和生成，并有效地提升网络传输效率。</p>
+<h2 id="2-JSON格式"><a href="#2-JSON格式" class="headerlink" title="2.JSON格式"></a>2.JSON格式</h2><p>JSON实际上类似于键值对。以大括号”{“开始并以大括号”}”结束,结构如下：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	key1:value1</span><br><span class="line">	<span class="selector-tag">key2</span><span class="selector-pseudo">:value2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>熟悉JSON的人都知道两个概念：JSON对象以及JSON字符串。之前总是分不清这两个概念，仔细查询了资料发现两者其实很好区分。</p>
+<p>json字符串：指的其实是符合json格式的字符串。比如：<br><code>var jsonStr=&#39;{&quot;name&quot;:&quot;stu&quot;,&quot;sno&quot;:101,&quot;grade&quot;:80}&#39;</code><br>实际上就是用字符串的格式表现json对象。<br>json对象：指的是js对象的字符串表示<br><code>var jsonObj={&quot;name&quot;:&quot;stu&quot;,&quot;sno&quot;:101,&quot;grade&quot;:80}</code></p>
+<p>json对象可以直观的表现js对象的结构，但是客户端向服务器发起一些（例如http）请求时，一般会以json字符串的形式发送到客户端。</p>
+<p>js中，json对象和json字符串之间的转换也比较简单，通常使用<code>JSON.parse()</code>把json字符转换为json对象。而使用<code>JSON.stringify()</code>把json对象转换为json字符串(js发送ajax请求传送对象时通常会采用这个方法)。</p>
+<h2 id="3-JAVA对JSON的处理"><a href="#3-JAVA对JSON的处理" class="headerlink" title="3.JAVA对JSON的处理"></a>3.JAVA对JSON的处理</h2><hr>
+<p>这里以springboot为例演示代码。</p>
+<p>对于json数据的处理在java开发的后台中还是非常常见的，因此也有不少的第三方库使开发者能够快捷处理json数据。这里我采用了阿里的fastjson对json数据进行处理。在最近的项目中需用到科大讯飞的接口实现语音听写功能，但是返回的处理数据是json，还要转换为数据库可接受的类型才能进行数据库的查询。</p>
+<p>科大讯飞接口返回的数据：<br><img src="https://img-blog.csdnimg.cn/20201106183813720.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>使用java对json数据处理，并把分词拼接为字符串</p>
+<pre><code>public String getString(String jsonStr){
+    StringBuffer stringBuffer=new StringBuffer(&quot;&quot;);
+    JSONObject jsonObject=JSON.parseObject(jsonStr);
+    JSONArray wsArr=jsonObject.getJSONArray(&quot;ws&quot;);
+    for(int i=0;i&lt;wsArr.size();i++) {
+      JSONObject wsArrObj=wsArr.getJSONObject(i);
+      JSONArray CWArr=wsArrObj.getJSONArray(&quot;cw&quot;);
+      for (int j = 0; j &lt; CWArr.size(); j++) {
+        JSONObject CWArrObj = CWArr.getJSONObject(j);
+        String wStr = CWArrObj.getString(&quot;w&quot;);
+        stringBuffer.append(wStr);
+        str.add(wStr);
+      }
+    }
+   return stringBuffer.toString();
+}</code></pre><p>首先jsonStr是科大讯飞语音识别后得到的json数据，调用 <code>parseObject(String str)</code>把数据转换为JSON对象。由于返回的JSON对象当中有的键值对值为数组(表示分词结果的数组对象)我们需要调用<code>getJSONArray(JSONObject jsonObject)</code>得到这个JSON格式的数组。之后循环遍历得到每个中文分词结果，在采用同样的操作，得到“w”（分词）的值。最后定义stringbuffer拼接每个分词。</p>
+<h2 id="4-springMVC与JSON有关的几个注解"><a href="#4-springMVC与JSON有关的几个注解" class="headerlink" title="4.springMVC与JSON有关的几个注解"></a>4.springMVC与JSON有关的几个注解</h2><p>@RequestBody</p>
+<p>注解用于读取http请求的内容(字符串)，通过springmvc提供了可用的接口lHttpMessageConverter接口将读到的内容（json数据）转换为java对象并绑定到Controller方法的参数上。</p>
+<pre><code>public Map&lt;String,Object&gt; addFavorite(@PathVariable Integer userId, @RequestBody List&lt;Integer&gt; typeList){</code></pre><p>这个代码表示了发送的list是json格式的。格式:[0,1,2] (传了一个元素为0，1，2的list)。<br>@ResponseBody<br>用于将Controller的方法返回的对象，通过springmvc提供的HttpMessageConverter接口转换为指定格式的数据如：json,xml等，通过Response响应给客户端。一般来说，如果在类加上了@RestController注解可以不在方法上加上@RepsonseBody注解。</p>
+<h2 id="5-springMVC返回JSON"><a href="#5-springMVC返回JSON" class="headerlink" title="5.springMVC返回JSON"></a>5.springMVC返回JSON</h2><pre><code>@GetMapping(value = &quot;/fuzz&quot;,produces = &quot;application/json;charset=UTF-8&quot;)</code></pre><p>produces指定返回的数据MIME类型为application/json类型的数据。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/11/06/JAVA处理JSON数据的实现与注意事项/" data-id="ckh65nszw0003jsv90oj6yiev" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/10/07/flutter与spring-boot交互获取session/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">flutter与spring boot交互获取session</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/11/06/JAVA处理JSON数据的实现与注意事项/">JAVA处理JSON数据的实现与注意事项</a>
+          </li>
+        
+          <li>
+            <a href="/2020/10/07/flutter与spring-boot交互获取session/">flutter与spring boot交互获取session</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/06/new-post/">new post</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/06/springboot分页-pageable作参数以及List转换为Page/">springboot分页 pageable作参数以及List转换为Page</a>
+          </li>
+        
+          <li>
+            <a href="/2020/08/31/vue-element-admin用户登录流程/">vue-element-admin用户登录流程</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

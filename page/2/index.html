@@ -62,6 +62,109 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-python序列化及反序列化" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/04/11/python序列化及反序列化/" class="article-date">
+  <time datetime="2020-04-11T08:12:38.980Z" itemprop="datePublished">2020-04-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Python序列化及反序列化"><a href="#Python序列化及反序列化" class="headerlink" title="Python序列化及反序列化"></a>Python序列化及反序列化</h1><hr>
+<p><strong>1.为什么要使用序列化？</strong></p>
+<p>  由于TCP/IP协议不能够传输对象，我们需要将对象转换为字节数组来传输。所以对象序列化后结果就是字节数组。当通信双方进行通讯时，发送方通过序列化将对象转化为可传输的二进制字节序列。而接受方则通过反序列化将二进制字节序列转换为对象。</p>
+<p><strong>2.什么是序列化及反序列化？</strong></p>
+<p>  通俗地讲，序列化就是将内存中的变量转换成可存储的，可传输的二进制序列。而反序列化就是二进制序列重新转换成对象。在python中序列化可以理解为将对象转换成json字符串，而反序列化则是将json字符串转换成对象。序列化在python中被称作pickling，反之，反序列化就称做unpickling。python为我们提供了json和pickle库来执行序列化及反序列化的操作。</p>
+<p><strong>3.pickle模块</strong></p>
+<p>  pickle模块只限于通信双方都是python的情况。和json比较，pickle模块可以持久化用户自定义的对象，而json只限于python的基本类型。python的pickle模块提供了几个函数：</p>
+<pre><code>dump 将对象序列化，存在文件中
+dumps 将对象序列化 但不存入文件而是返回bytes数组
+load 文件中读取的数据反序列化
+loads bytes数组反序列化</code></pre><p>示例：</p>
+<p>首先要导入pickle模块</p>
+<pre><code>import pickle
+list=&apos;a b c h j k&apos;.split(&apos; &apos;)
+data=pickle.dumps(list)
+print(&apos;序列化{}&apos;.format(data))
+data2=pickle.loads(data)
+print(&apos;反序列化{}&apos;.format(data2))</code></pre><p>输出：</p>
+<pre><code>序列化b&apos;\x80\x03]q\x00(X\x01\x00\x00\x00aq\x01X\x01\x00\x00\x00bq\x02X\x01\x00\x00\x00cq\x03X\x01\x00\x00\x00hq\x04X\x01\x00\x00\x00jq\x05X\x01\x00\x00\x00kq\x06e.&apos;
+反序列化[&apos;a&apos;, &apos;b&apos;, &apos;c&apos;, &apos;h&apos;, &apos;j&apos;, &apos;k&apos;]</code></pre><p>第一个示例是序列化为了bytes 我们也可以利用dump方法直接写入文件。得到file like object。不过pickle是以二进制的形式处理文件，所以读写文件要用’wb’和’rb’。</p>
+<pre><code>import pickle
+d=dict(name=&quot;张三&quot;,age=16,grade=&quot;五年级&quot;,score=&quot;90&quot;)
+with open(&quot;json_pickle.txt&quot;,&apos;wb&apos;) as f:
+    pickle.dump(d,f)
+with open(&quot;json_pickle.txt&quot;,&apos;rb&apos;) as f:
+    d2=pickle.load(f)
+print(d2)</code></pre><p>对自定义对象进行序列化：</p>
+<pre><code>import pickle
+class car:
+
+
+
+    def __init__(self,brand):
+           self.brand=brand
+       def show(self):
+        print(&quot;the car belongs to&quot;+self.brand)
+with open(&apos;json_pickle.txt&apos;,&apos;wb&apos;) as f:
+s=car(&apos;法拉利&apos;)
+s.show()
+pickle.dump(s,f)
+with open(&apos;json_pickle.txt&apos;,&apos;rb&apos;) as f:
+    s2=pickle.load(f)
+    s2.show()</code></pre><p>输出：</p>
+<pre><code>the car belongs to法拉利
+the car belongs to法拉利</code></pre><p><strong>4.json模块</strong></p>
+<p>怎么在不同的编程语言之间传递对象？这里就用到了json（javascript object notation）JSON表示出来就是一个字符串(特殊格式），可以被所有语言读取，也可以方便地存储到磁盘或者通过网络传输。JSON不仅是标准格式，并且比XML更快，而且可以直接在Web页面中读取，非常方便。</p>
+<p>json的数据类型可以是双引号引起来的字符串，数值，true和false，null（None），对象（字典），数组（列表）。其中null相当python的none，ture，false相当python的True，False。</p>
+<p>json常用函数：</p>
+<pre><code>dumps json 编码 
+dump json 编码并存入文件
+loads json 解码
+load json 解码，从文件读取数据</code></pre><p>示例</p>
+<pre><code>import json
+    list=&quot;a b c h j k&quot;.split(&apos; &apos;)
+    print(list)
+with open(&apos;json_pickle.txt&apos;,&apos;w&apos;) as f:
+    json.dump(list,f)
+with open(&apos;json_pickle.txt&apos;,&apos;r&apos;) as f:
+    d2=json.load(f)
+print(d2)</code></pre><p>输出：</p>
+<pre><code>[&apos;a&apos;, &apos;b&apos;, &apos;c&apos;, &apos;h&apos;, &apos;j&apos;, &apos;k&apos;]
+[&apos;a&apos;, &apos;b&apos;, &apos;c&apos;, &apos;h&apos;, &apos;j&apos;, &apos;k&apos;]</code></pre><p>json不能对自定义对象进行序列化和反序列化。</p>
+<pre><code>import json
+class Car:
+    def __init__(self,brand):
+        self.brand=brand
+    def show(self):
+        print(&quot;the car belongs to&quot;+self.brand)
+car=Car(&apos;法拉利&apos;)
+def car2dict(car):
+return {
+&apos;brand&apos;: car.brand,
+}
+
+# 对自定义类的对象进行序列化操作
+print(json.dumps(car, default=car2dict))</code></pre><p>##python序列化及反序列化中的安全问题</p>
+<hr>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/04/11/python序列化及反序列化/" data-id="ckh65nt0a000cjsv9g7ex9xa0" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="new-tie-san-webshell" class="article article-type-new" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/03/15/tie-san-webshell/" class="article-date">
@@ -182,7 +285,7 @@ event: worker_connections 每个进程允许的最大连接数
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/03/15/tie-san-webshell/" data-id="ckfze3huu000fgcv9z6be3nfs" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/03/15/tie-san-webshell/" data-id="ckh65nt0j000jjsv9gh7f2mb3" class="article-share-link">Share</a>
       
       
     </footer>
@@ -295,7 +398,7 @@ print(url)</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/03/15/python-urllib/" data-id="ckfze3hut000egcv9rn6bo3eq" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/03/15/python-urllib/" data-id="ckh65nt0d000ejsv9lg3mpww6" class="article-share-link">Share</a>
       
       
     </footer>
@@ -416,7 +519,7 @@ if __name__ == &apos;__main__&apos;:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/03/15/buuoj-Hack-World-easy-tornado/" data-id="ckfze3hui0006gcv9xb1796m7" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/03/15/buuoj-Hack-World-easy-tornado/" data-id="ckh65nt040008jsv95yjx4whk" class="article-share-link">Share</a>
       
       
     </footer>
@@ -612,7 +715,7 @@ return dp[s.length()-1]；
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/03/10/leetcode-dynamic-programming-2/" data-id="ckfze3huo000agcv91re14si1" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/03/10/leetcode-dynamic-programming-2/" data-id="ckh65nt08000bjsv9uup8bqdg" class="article-share-link">Share</a>
       
       
     </footer>
@@ -798,7 +901,7 @@ return dp[s.length()-1]；
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/03/08/leetcode-动态规划-2/" data-id="ckfze3hus000dgcv9kip2zmit" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/03/08/leetcode-动态规划-2/" data-id="ckh65nt0f000gjsv9ipomsn5o" class="article-share-link">Share</a>
       
       
     </footer>
@@ -865,7 +968,7 @@ Resource ：前面已经介绍过了，即指定资源文件，存的就是配�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/02/29/Metasploit学习笔记/" data-id="ckfze3huc0002gcv9fxfw1ge7" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/02/29/Metasploit学习笔记/" data-id="ckh65nszp0001jsv9h9j2ehf3" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1063,7 +1166,7 @@ public int uniquePaths(int m, int n) {//n为行数，m为列数
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/02/25/leetcode-动态规划-1/" data-id="ckfze3hur000cgcv9oz2qiqrj" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/02/25/leetcode-动态规划-1/" data-id="ckh65nt050009jsv93m17eyae" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1134,7 +1237,7 @@ print(&quot;&lt;svg&gt;&lt;script&gt;eval&amp;#40&amp;#34&quot; + output + &quot
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/12/02/xss/" data-id="ckfze3hux000igcv9f4iy520i" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/12/02/xss/" data-id="ckh65nt0h000hjsv95eicsfix" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1272,56 +1375,7 @@ if( isset( $_REQUEST[ &apos;Submit&apos; ] ) ) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/10/22/新文档/" data-id="ckfze3hv8000kgcv9qv96485m" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/06/04/hello-world/" class="article-date">
-  <time datetime="2019-06-04T10:51:05.224Z" itemprop="datePublished">2019-06-04</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/04/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/06/04/hello-world/" data-id="ckfze3hul0008gcv9dml3htfg" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/10/22/新文档/" data-id="ckh65nt0p000ljsv9o889mqod" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1335,7 +1389,7 @@ if( isset( $_REQUEST[ &apos;Submit&apos; ] ) ) {
 
   <nav id="page-nav">
     
-    <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -1354,7 +1408,7 @@ if( isset( $_REQUEST[ &apos;Submit&apos; ] ) ) {
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
     </div>
   </div>
 
@@ -1365,6 +1419,10 @@ if( isset( $_REQUEST[ &apos;Submit&apos; ] ) ) {
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2020/11/06/JAVA处理JSON数据的实现与注意事项/">JAVA处理JSON数据的实现与注意事项</a>
+          </li>
         
           <li>
             <a href="/2020/10/07/flutter与spring-boot交互获取session/">flutter与spring boot交互获取session</a>
@@ -1380,10 +1438,6 @@ if( isset( $_REQUEST[ &apos;Submit&apos; ] ) ) {
         
           <li>
             <a href="/2020/08/31/vue-element-admin用户登录流程/">vue-element-admin用户登录流程</a>
-          </li>
-        
-          <li>
-            <a href="/2020/05/13/git版本回退提交操作/">(no title)</a>
           </li>
         
       </ul>

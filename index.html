@@ -62,6 +62,74 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-JAVA处理JSON数据的实现与注意事项" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/11/06/JAVA处理JSON数据的实现与注意事项/" class="article-date">
+  <time datetime="2020-11-06T11:05:53.955Z" itemprop="datePublished">2020-11-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/11/06/JAVA处理JSON数据的实现与注意事项/">JAVA处理JSON数据的实现与注意事项</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-JSON简介"><a href="#1-JSON简介" class="headerlink" title="1.JSON简介"></a>1.JSON简介</h2><p>   JSON(Javascript Object Notation,JS对象简谱)是一种轻量级的数据交换格式。它基于 ECMAScript (欧洲计算机协会制定的js规范)的一个子集，采用完全独立于编程语言的文本格式来存储和表示数据。简洁和清晰的层次结构使得 JSON 成为理想的数据交换语言。 易于人阅读和编写，同时也易于机器解析和生成，并有效地提升网络传输效率。</p>
+<h2 id="2-JSON格式"><a href="#2-JSON格式" class="headerlink" title="2.JSON格式"></a>2.JSON格式</h2><p>JSON实际上类似于键值对。以大括号”{“开始并以大括号”}”结束,结构如下：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	key1:value1</span><br><span class="line">	<span class="selector-tag">key2</span><span class="selector-pseudo">:value2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>熟悉JSON的人都知道两个概念：JSON对象以及JSON字符串。之前总是分不清这两个概念，仔细查询了资料发现两者其实很好区分。</p>
+<p>json字符串：指的其实是符合json格式的字符串。比如：<br><code>var jsonStr=&#39;{&quot;name&quot;:&quot;stu&quot;,&quot;sno&quot;:101,&quot;grade&quot;:80}&#39;</code><br>实际上就是用字符串的格式表现json对象。<br>json对象：指的是js对象的字符串表示<br><code>var jsonObj={&quot;name&quot;:&quot;stu&quot;,&quot;sno&quot;:101,&quot;grade&quot;:80}</code></p>
+<p>json对象可以直观的表现js对象的结构，但是客户端向服务器发起一些（例如http）请求时，一般会以json字符串的形式发送到客户端。</p>
+<p>js中，json对象和json字符串之间的转换也比较简单，通常使用<code>JSON.parse()</code>把json字符转换为json对象。而使用<code>JSON.stringify()</code>把json对象转换为json字符串(js发送ajax请求传送对象时通常会采用这个方法)。</p>
+<h2 id="3-JAVA对JSON的处理"><a href="#3-JAVA对JSON的处理" class="headerlink" title="3.JAVA对JSON的处理"></a>3.JAVA对JSON的处理</h2><hr>
+<p>这里以springboot为例演示代码。</p>
+<p>对于json数据的处理在java开发的后台中还是非常常见的，因此也有不少的第三方库使开发者能够快捷处理json数据。这里我采用了阿里的fastjson对json数据进行处理。在最近的项目中需用到科大讯飞的接口实现语音听写功能，但是返回的处理数据是json，还要转换为数据库可接受的类型才能进行数据库的查询。</p>
+<p>科大讯飞接口返回的数据：<br><img src="https://img-blog.csdnimg.cn/20201106183813720.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70#pic_center" alt="在这里插入图片描述"><br>使用java对json数据处理，并把分词拼接为字符串</p>
+<pre><code>public String getString(String jsonStr){
+    StringBuffer stringBuffer=new StringBuffer(&quot;&quot;);
+    JSONObject jsonObject=JSON.parseObject(jsonStr);
+    JSONArray wsArr=jsonObject.getJSONArray(&quot;ws&quot;);
+    for(int i=0;i&lt;wsArr.size();i++) {
+      JSONObject wsArrObj=wsArr.getJSONObject(i);
+      JSONArray CWArr=wsArrObj.getJSONArray(&quot;cw&quot;);
+      for (int j = 0; j &lt; CWArr.size(); j++) {
+        JSONObject CWArrObj = CWArr.getJSONObject(j);
+        String wStr = CWArrObj.getString(&quot;w&quot;);
+        stringBuffer.append(wStr);
+        str.add(wStr);
+      }
+    }
+   return stringBuffer.toString();
+}</code></pre><p>首先jsonStr是科大讯飞语音识别后得到的json数据，调用 <code>parseObject(String str)</code>把数据转换为JSON对象。由于返回的JSON对象当中有的键值对值为数组(表示分词结果的数组对象)我们需要调用<code>getJSONArray(JSONObject jsonObject)</code>得到这个JSON格式的数组。之后循环遍历得到每个中文分词结果，在采用同样的操作，得到“w”（分词）的值。最后定义stringbuffer拼接每个分词。</p>
+<h2 id="4-springMVC与JSON有关的几个注解"><a href="#4-springMVC与JSON有关的几个注解" class="headerlink" title="4.springMVC与JSON有关的几个注解"></a>4.springMVC与JSON有关的几个注解</h2><p>@RequestBody</p>
+<p>注解用于读取http请求的内容(字符串)，通过springmvc提供了可用的接口lHttpMessageConverter接口将读到的内容（json数据）转换为java对象并绑定到Controller方法的参数上。</p>
+<pre><code>public Map&lt;String,Object&gt; addFavorite(@PathVariable Integer userId, @RequestBody List&lt;Integer&gt; typeList){</code></pre><p>这个代码表示了发送的list是json格式的。格式:[0,1,2] (传了一个元素为0，1，2的list)。<br>@ResponseBody<br>用于将Controller的方法返回的对象，通过springmvc提供的HttpMessageConverter接口转换为指定格式的数据如：json,xml等，通过Response响应给客户端。一般来说，如果在类加上了@RestController注解可以不在方法上加上@RepsonseBody注解。</p>
+<h2 id="5-springMVC返回JSON"><a href="#5-springMVC返回JSON" class="headerlink" title="5.springMVC返回JSON"></a>5.springMVC返回JSON</h2><pre><code>@GetMapping(value = &quot;/fuzz&quot;,produces = &quot;application/json;charset=UTF-8&quot;)</code></pre><p>produces指定返回的数据MIME类型为application/json类型的数据。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/11/06/JAVA处理JSON数据的实现与注意事项/" data-id="ckh65nszw0003jsv90oj6yiev" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-flutter与spring-boot交互获取session" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/10/07/flutter与spring-boot交互获取session/" class="article-date">
@@ -107,7 +175,7 @@ response.setHeader(&quot;Set-Cookie&quot;, session.getId());</code></pre><p>在�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/10/07/flutter与spring-boot交互获取session/" data-id="ckfze3hug0004gcv9npuw53kb" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/10/07/flutter与spring-boot交互获取session/" data-id="ckh65nt020006jsv9tsq5n671" class="article-share-link">Share</a>
       
       
     </footer>
@@ -143,7 +211,7 @@ response.setHeader(&quot;Set-Cookie&quot;, session.getId());</code></pre><p>在�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/09/06/new-post/" data-id="ckfze3hum0009gcv9ywqwegi9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/09/06/new-post/" data-id="ckh65nt06000ajsv9o8tyuoh8" class="article-share-link">Share</a>
       
       
     </footer>
@@ -209,7 +277,7 @@ return new PageImpl&lt;WeighData&gt;(resultList.subList(begin,en),pageable,resul
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/09/06/springboot分页-pageable作参数以及List转换为Page/" data-id="ckfze3huq000bgcv92vhk8sif" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/09/06/springboot分页-pageable作参数以及List转换为Page/" data-id="ckh65nt0e000fjsv9443g1q72" class="article-share-link">Share</a>
       
       
     </footer>
@@ -316,7 +384,7 @@ public Map&lt;String, Object&gt; confirm(@RequestBody User user) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/08/31/vue-element-admin用户登录流程/" data-id="ckfze3huv000ggcv9nr8yeyie" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/08/31/vue-element-admin用户登录流程/" data-id="ckh65nt0i000ijsv90pcwktio" class="article-share-link">Share</a>
       
       
     </footer>
@@ -355,7 +423,7 @@ hard head指针，工作区，暂存区内容都改变</code></pre><p>版本回�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/05/13/git版本回退提交操作/" data-id="ckfze3huk0007gcv9m67f5lu4" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/05/13/git版本回退提交操作/" data-id="ckh65nszz0004jsv9o835cmd7" class="article-share-link">Share</a>
       
       
     </footer>
@@ -419,7 +487,7 @@ hard head指针，工作区，暂存区内容都改变</code></pre><p>版本回�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/04/26/BUUCTF-old-hack/" data-id="ckfze3htx0001gcv9wp2swbnp" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/04/26/BUUCTF-old-hack/" data-id="ckh65nszu0002jsv9fu3d8hzx" class="article-share-link">Share</a>
       
       
     </footer>
@@ -527,7 +595,7 @@ webapp下的文件目录是容易出现安全问题的
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/04/26/RoarCTF2019-easy-Java/" data-id="ckfze3hue0003gcv9n6b382n2" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/04/26/RoarCTF2019-easy-Java/" data-id="ckh65nt000005jsv9ikqhjzzd" class="article-share-link">Share</a>
       
       
     </footer>
@@ -569,7 +637,7 @@ webapp下的文件目录是容易出现安全问题的
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/04/25/SWPUCTF2019 web1/" data-id="ckfze3huh0005gcv9jvy8bjqr" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/04/25/SWPUCTF2019 web1/" data-id="ckh65nt030007jsv99p3o91w0" class="article-share-link">Share</a>
       
       
     </footer>
@@ -679,110 +747,7 @@ at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntit
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/04/13/JPA初学问题总结/" data-id="ckfze3hv7000jgcv9h8s1qhjr" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-python序列化及反序列化" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/04/11/python序列化及反序列化/" class="article-date">
-  <time datetime="2020-04-11T08:12:38.980Z" itemprop="datePublished">2020-04-11</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Python序列化及反序列化"><a href="#Python序列化及反序列化" class="headerlink" title="Python序列化及反序列化"></a>Python序列化及反序列化</h1><hr>
-<p><strong>1.为什么要使用序列化？</strong></p>
-<p>  由于TCP/IP协议不能够传输对象，我们需要将对象转换为字节数组来传输。所以对象序列化后结果就是字节数组。当通信双方进行通讯时，发送方通过序列化将对象转化为可传输的二进制字节序列。而接受方则通过反序列化将二进制字节序列转换为对象。</p>
-<p><strong>2.什么是序列化及反序列化？</strong></p>
-<p>  通俗地讲，序列化就是将内存中的变量转换成可存储的，可传输的二进制序列。而反序列化就是二进制序列重新转换成对象。在python中序列化可以理解为将对象转换成json字符串，而反序列化则是将json字符串转换成对象。序列化在python中被称作pickling，反之，反序列化就称做unpickling。python为我们提供了json和pickle库来执行序列化及反序列化的操作。</p>
-<p><strong>3.pickle模块</strong></p>
-<p>  pickle模块只限于通信双方都是python的情况。和json比较，pickle模块可以持久化用户自定义的对象，而json只限于python的基本类型。python的pickle模块提供了几个函数：</p>
-<pre><code>dump 将对象序列化，存在文件中
-dumps 将对象序列化 但不存入文件而是返回bytes数组
-load 文件中读取的数据反序列化
-loads bytes数组反序列化</code></pre><p>示例：</p>
-<p>首先要导入pickle模块</p>
-<pre><code>import pickle
-list=&apos;a b c h j k&apos;.split(&apos; &apos;)
-data=pickle.dumps(list)
-print(&apos;序列化{}&apos;.format(data))
-data2=pickle.loads(data)
-print(&apos;反序列化{}&apos;.format(data2))</code></pre><p>输出：</p>
-<pre><code>序列化b&apos;\x80\x03]q\x00(X\x01\x00\x00\x00aq\x01X\x01\x00\x00\x00bq\x02X\x01\x00\x00\x00cq\x03X\x01\x00\x00\x00hq\x04X\x01\x00\x00\x00jq\x05X\x01\x00\x00\x00kq\x06e.&apos;
-反序列化[&apos;a&apos;, &apos;b&apos;, &apos;c&apos;, &apos;h&apos;, &apos;j&apos;, &apos;k&apos;]</code></pre><p>第一个示例是序列化为了bytes 我们也可以利用dump方法直接写入文件。得到file like object。不过pickle是以二进制的形式处理文件，所以读写文件要用’wb’和’rb’。</p>
-<pre><code>import pickle
-d=dict(name=&quot;张三&quot;,age=16,grade=&quot;五年级&quot;,score=&quot;90&quot;)
-with open(&quot;json_pickle.txt&quot;,&apos;wb&apos;) as f:
-    pickle.dump(d,f)
-with open(&quot;json_pickle.txt&quot;,&apos;rb&apos;) as f:
-    d2=pickle.load(f)
-print(d2)</code></pre><p>对自定义对象进行序列化：</p>
-<pre><code>import pickle
-class car:
-
-
-
-    def __init__(self,brand):
-           self.brand=brand
-       def show(self):
-        print(&quot;the car belongs to&quot;+self.brand)
-with open(&apos;json_pickle.txt&apos;,&apos;wb&apos;) as f:
-s=car(&apos;法拉利&apos;)
-s.show()
-pickle.dump(s,f)
-with open(&apos;json_pickle.txt&apos;,&apos;rb&apos;) as f:
-    s2=pickle.load(f)
-    s2.show()</code></pre><p>输出：</p>
-<pre><code>the car belongs to法拉利
-the car belongs to法拉利</code></pre><p><strong>4.json模块</strong></p>
-<p>怎么在不同的编程语言之间传递对象？这里就用到了json（javascript object notation）JSON表示出来就是一个字符串(特殊格式），可以被所有语言读取，也可以方便地存储到磁盘或者通过网络传输。JSON不仅是标准格式，并且比XML更快，而且可以直接在Web页面中读取，非常方便。</p>
-<p>json的数据类型可以是双引号引起来的字符串，数值，true和false，null（None），对象（字典），数组（列表）。其中null相当python的none，ture，false相当python的True，False。</p>
-<p>json常用函数：</p>
-<pre><code>dumps json 编码 
-dump json 编码并存入文件
-loads json 解码
-load json 解码，从文件读取数据</code></pre><p>示例</p>
-<pre><code>import json
-    list=&quot;a b c h j k&quot;.split(&apos; &apos;)
-    print(list)
-with open(&apos;json_pickle.txt&apos;,&apos;w&apos;) as f:
-    json.dump(list,f)
-with open(&apos;json_pickle.txt&apos;,&apos;r&apos;) as f:
-    d2=json.load(f)
-print(d2)</code></pre><p>输出：</p>
-<pre><code>[&apos;a&apos;, &apos;b&apos;, &apos;c&apos;, &apos;h&apos;, &apos;j&apos;, &apos;k&apos;]
-[&apos;a&apos;, &apos;b&apos;, &apos;c&apos;, &apos;h&apos;, &apos;j&apos;, &apos;k&apos;]</code></pre><p>json不能对自定义对象进行序列化和反序列化。</p>
-<pre><code>import json
-class Car:
-    def __init__(self,brand):
-        self.brand=brand
-    def show(self):
-        print(&quot;the car belongs to&quot;+self.brand)
-car=Car(&apos;法拉利&apos;)
-def car2dict(car):
-return {
-&apos;brand&apos;: car.brand,
-}
-
-# 对自定义类的对象进行序列化操作
-print(json.dumps(car, default=car2dict))</code></pre><p>##python序列化及反序列化中的安全问题</p>
-<hr>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/04/11/python序列化及反序列化/" data-id="ckfze3huw000hgcv9wvcinowt" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/04/13/JPA初学问题总结/" data-id="ckh65nt0o000kjsv90moita22" class="article-share-link">Share</a>
       
       
     </footer>
@@ -796,7 +761,7 @@ print(json.dumps(car, default=car2dict))</code></pre><p>##python序列化及反�
 
   <nav id="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
   </nav>
 
 </section>
@@ -815,7 +780,7 @@ print(json.dumps(car, default=car2dict))</code></pre><p>##python序列化及反�
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
     </div>
   </div>
 
@@ -826,6 +791,10 @@ print(json.dumps(car, default=car2dict))</code></pre><p>##python序列化及反�
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2020/11/06/JAVA处理JSON数据的实现与注意事项/">JAVA处理JSON数据的实现与注意事项</a>
+          </li>
         
           <li>
             <a href="/2020/10/07/flutter与spring-boot交互获取session/">flutter与spring boot交互获取session</a>
@@ -841,10 +810,6 @@ print(json.dumps(car, default=car2dict))</code></pre><p>##python序列化及反�
         
           <li>
             <a href="/2020/08/31/vue-element-admin用户登录流程/">vue-element-admin用户登录流程</a>
-          </li>
-        
-          <li>
-            <a href="/2020/05/13/git版本回退提交操作/">(no title)</a>
           </li>
         
       </ul>
