@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="#Vue打包上传至Linux环境下Nginx服务器##1.打包输入npm run build 1npm run build  得到图中的文件夹  ##2.上传至Linux服务器    把打包得到的dist文件夹压缩为zip文件，使用ssh工具上传至服务器。或者直接把dist文件上传到服务器。这里我采用了第二种办法，使用了FinalShell工具。 ##3.配置Nginx 1whereis ngin">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/2022/01/09/Vue打包上传至Linux环境下Nginx服务器/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="#Vue打包上传至Linux环境下Nginx服务器##1.打包输入npm run build 1npm run build  得到图中的文件夹  ##2.上传至Linux服务器    把打包得到的dist文件夹压缩为zip文件，使用ssh工具上传至服务器。或者直接把dist文件上传到服务器。这里我采用了第二种办法，使用了FinalShell工具。 ##3.配置Nginx 1whereis ngin">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/0169c2dcd84e4d22bf93c9617204d5bb.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAenlkYmsxMjM0NTY=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/f60509a4c645453b8939e3c749efe996.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/911193a79e3d483eb659da97795875a8.png#pic_center">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/f8ceaf34ce6c416aba907d94ccb4e010.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAenlkYmsxMjM0NTY=,size_16,color_FFFFFF,t_70,g_se,x_16#pic_center">
+<meta property="og:updated_time" content="2022-01-09T05:51:09.275Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="#Vue打包上传至Linux环境下Nginx服务器##1.打包输入npm run build 1npm run build  得到图中的文件夹  ##2.上传至Linux服务器    把打包得到的dist文件夹压缩为zip文件，使用ssh工具上传至服务器。或者直接把dist文件上传到服务器。这里我采用了第二种办法，使用了FinalShell工具。 ##3.配置Nginx 1whereis ngin">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/0169c2dcd84e4d22bf93c9617204d5bb.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAenlkYmsxMjM0NTY=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Vue打包上传至Linux环境下Nginx服务器" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/01/09/Vue打包上传至Linux环境下Nginx服务器/" class="article-date">
+  <time datetime="2022-01-09T05:50:25.417Z" itemprop="datePublished">2022-01-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Vue打包上传至Linux环境下Nginx服务器"><a href="#Vue打包上传至Linux环境下Nginx服务器" class="headerlink" title="#Vue打包上传至Linux环境下Nginx服务器"></a>#Vue打包上传至Linux环境下Nginx服务器</h2><p>##1.打包<br>输入npm run build</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run build</span><br></pre></td></tr></table></figure>
+
+<p>得到图中的文件夹</p>
+<p><img src="https://img-blog.csdnimg.cn/0169c2dcd84e4d22bf93c9617204d5bb.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAenlkYmsxMjM0NTY=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/f60509a4c645453b8939e3c749efe996.png#pic_center" alt="在这里插入图片描述"></p>
+<p>##2.上传至Linux服务器</p>
+<p>   把打包得到的dist文件夹压缩为zip文件，使用ssh工具上传至服务器。或者直接把dist文件上传到服务器。这里我采用了第二种办法，使用了FinalShell工具。</p>
+<p>##3.配置Nginx</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">whereis nginx</span><br></pre></td></tr></table></figure>
+
+<p>先看看nginx的安装位置，找到根目录下的nginx.conf配置文件。</p>
+<p><img src="https://img-blog.csdnimg.cn/911193a79e3d483eb659da97795875a8.png#pic_center" alt="在这里插入图片描述"><br>配置nignx.conf</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">        listen       8091;<span class="comment">#监听的接口</span></span><br><span class="line">    <span class="comment">#    listen       [::]:80;</span></span><br><span class="line">        server_name  81.70.153.9;<span class="comment">#服务器的ip地址</span></span><br><span class="line">    <span class="comment">#    root         /usr/share/nginx/html;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Load configuration files for the default server block.</span></span><br><span class="line">    <span class="comment">#    include /etc/nginx/default.d/*.conf;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#    error_page 404 /404.html;</span></span><br><span class="line">    <span class="comment">#    location = /404.html &#123;</span></span><br><span class="line">    <span class="comment">#    &#125;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#    error_page 500 502 503 504 /50x.html;</span></span><br><span class="line">    <span class="comment">#    location = /50x.html &#123;</span></span><br><span class="line">    <span class="comment">#    &#125;</span></span><br><span class="line">    	    location / &#123;</span><br><span class="line">    			root /root/yushijujin-web/dist;<span class="comment">#注意dist后无斜杠</span></span><br><span class="line">    			<span class="comment">#try_files $uri $uri/ @router;</span></span><br><span class="line">    			index index.html index.htm;</span><br><span class="line">    	    &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>##重启nginx</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx -s reload</span><br></pre></td></tr></table></figure>
+
+<p>需要注意，打包之前要修改Vue的配置信息，打开config下的index.js,把assetsPublicPath的路径修改为’./‘(默认为/).上传后可能打不开页面,可能会是服务器的自定义端口没开,打开服务器设置自定义的(8091)端口可用,也有可能是路径的问题比如assetsPublicPath路径为/<br><img src="https://img-blog.csdnimg.cn/f8ceaf34ce6c416aba907d94ccb4e010.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAenlkYmsxMjM0NTY=,size_16,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2022/01/09/Vue打包上传至Linux环境下Nginx服务器/" data-id="cky6u9pga0008c8v96yd2yikh" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/11/06/JAVA处理JSON数据的实现与注意事项/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">JAVA处理JSON数据的实现与注意事项</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2022/01/09/Vue打包上传至Linux环境下Nginx服务器/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2020/11/06/JAVA处理JSON数据的实现与注意事项/">JAVA处理JSON数据的实现与注意事项</a>
+          </li>
+        
+          <li>
+            <a href="/2020/10/07/flutter与spring-boot交互获取session/">flutter与spring boot交互获取session</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/06/new-post/">new post</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/06/springboot分页-pageable作参数以及List转换为Page/">springboot分页 pageable作参数以及List转换为Page</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2022 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
