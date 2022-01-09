@@ -62,6 +62,51 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Vue打包上传至Linux环境下Nginx服务器-1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/01/09/Vue打包上传至Linux环境下Nginx服务器-1/" class="article-date">
+  <time datetime="2022-01-09T05:35:03.376Z" itemprop="datePublished">2022-01-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Vue打包上传至Linux环境下Nginx服务器"><a href="#Vue打包上传至Linux环境下Nginx服务器" class="headerlink" title="Vue打包上传至Linux环境下Nginx服务器"></a>Vue打包上传至Linux环境下Nginx服务器</h2><hr>
+<p>##1.打包<br>输入npm run build</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run build</span><br></pre></td></tr></table></figure>
+
+<p>得到图中的文件夹</p>
+<p><img src="https://img-blog.csdnimg.cn/0169c2dcd84e4d22bf93c9617204d5bb.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAenlkYmsxMjM0NTY=,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/f60509a4c645453b8939e3c749efe996.png#pic_center" alt="在这里插入图片描述"></p>
+<p>##2.上传至Linux服务器</p>
+<p>   把打包得到的dist文件夹压缩为zip文件，使用ssh工具上传至服务器。或者直接把dist文件上传到服务器。这里我采用了第二种办法，使用了FinalShell工具。</p>
+<p>##3.配置Nginx</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">whereis nginx</span><br></pre></td></tr></table></figure>
+
+<p>先看看nginx的安装位置，找到根目录下的nginx.conf配置文件。</p>
+<p><img src="https://img-blog.csdnimg.cn/911193a79e3d483eb659da97795875a8.png#pic_center" alt="在这里插入图片描述"><br>配置nignx.conf</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">        listen       8091;<span class="comment">#监听的接口</span></span><br><span class="line">    <span class="comment">#    listen       [::]:80;</span></span><br><span class="line">        server_name  81.70.153.9;<span class="comment">#服务器的ip地址</span></span><br><span class="line">    <span class="comment">#    root         /usr/share/nginx/html;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Load configuration files for the default server block.</span></span><br><span class="line">    <span class="comment">#    include /etc/nginx/default.d/*.conf;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#    error_page 404 /404.html;</span></span><br><span class="line">    <span class="comment">#    location = /404.html &#123;</span></span><br><span class="line">    <span class="comment">#    &#125;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#    error_page 500 502 503 504 /50x.html;</span></span><br><span class="line">    <span class="comment">#    location = /50x.html &#123;</span></span><br><span class="line">    <span class="comment">#    &#125;</span></span><br><span class="line">    	    location / &#123;</span><br><span class="line">    			root /root/yushijujin-web/dist;<span class="comment">#注意dist后无斜杠</span></span><br><span class="line">    			<span class="comment">#try_files $uri $uri/ @router;</span></span><br><span class="line">    			index index.html index.htm;</span><br><span class="line">    	    &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>##重启nginx</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx -s reload</span><br></pre></td></tr></table></figure>
+
+<p>需要注意，打包之前要修改Vue的配置信息，打开config下的index.js,把assetsPublicPath的路径修改为’./‘(默认为/).上传后可能打不开页面,可能会是服务器的自定义端口没开,打开服务器设置自定义的(8091)端口可用,也有可能是路径的问题比如assetsPublicPath路径为/<br><img src="https://img-blog.csdnimg.cn/f8ceaf34ce6c416aba907d94ccb4e010.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAenlkYmsxMjM0NTY=,size_16,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2022/01/09/Vue打包上传至Linux环境下Nginx服务器-1/" data-id="cky6tqd6s0003swv9p2lkq136" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-JAVA处理JSON数据的实现与注意事项" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/11/06/JAVA处理JSON数据的实现与注意事项/" class="article-date">
@@ -120,7 +165,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/11/06/JAVA处理JSON数据的实现与注意事项/" data-id="ckh65nszw0003jsv90oj6yiev" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/11/06/JAVA处理JSON数据的实现与注意事项/" data-id="cky6tqd6l0001swv9ij5rob6d" class="article-share-link">Share</a>
       
       
     </footer>
@@ -175,7 +220,7 @@ response.setHeader(&quot;Set-Cookie&quot;, session.getId());</code></pre><p>在�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/10/07/flutter与spring-boot交互获取session/" data-id="ckh65nt020006jsv9tsq5n671" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/10/07/flutter与spring-boot交互获取session/" data-id="cky6tqd70000aswv9us0jlgvr" class="article-share-link">Share</a>
       
       
     </footer>
@@ -211,7 +256,7 @@ response.setHeader(&quot;Set-Cookie&quot;, session.getId());</code></pre><p>在�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/09/06/new-post/" data-id="ckh65nt06000ajsv9o8tyuoh8" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/09/06/new-post/" data-id="cky6tqd6z0009swv9j2l4mqua" class="article-share-link">Share</a>
       
       
     </footer>
@@ -277,7 +322,7 @@ return new PageImpl&lt;WeighData&gt;(resultList.subList(begin,en),pageable,resul
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/09/06/springboot分页-pageable作参数以及List转换为Page/" data-id="ckh65nt0e000fjsv9443g1q72" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/09/06/springboot分页-pageable作参数以及List转换为Page/" data-id="cky6tqd7a000jswv92nqfayuf" class="article-share-link">Share</a>
       
       
     </footer>
@@ -384,7 +429,7 @@ public Map&lt;String, Object&gt; confirm(@RequestBody User user) {
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/08/31/vue-element-admin用户登录流程/" data-id="ckh65nt0i000ijsv90pcwktio" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/08/31/vue-element-admin用户登录流程/" data-id="cky6tqd79000iswv9vhnrwlya" class="article-share-link">Share</a>
       
       
     </footer>
@@ -423,7 +468,7 @@ hard head指针，工作区，暂存区内容都改变</code></pre><p>版本回�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/05/13/git版本回退提交操作/" data-id="ckh65nszz0004jsv9o835cmd7" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/05/13/git版本回退提交操作/" data-id="cky6tqd73000cswv9270brvba" class="article-share-link">Share</a>
       
       
     </footer>
@@ -487,7 +532,7 @@ hard head指针，工作区，暂存区内容都改变</code></pre><p>版本回�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/04/26/BUUCTF-old-hack/" data-id="ckh65nszu0002jsv9fu3d8hzx" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/04/26/BUUCTF-old-hack/" data-id="cky6tqd6q0002swv9at2krw7w" class="article-share-link">Share</a>
       
       
     </footer>
@@ -595,7 +640,7 @@ webapp下的文件目录是容易出现安全问题的
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/04/26/RoarCTF2019-easy-Java/" data-id="ckh65nt000005jsv9ikqhjzzd" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/04/26/RoarCTF2019-easy-Java/" data-id="cky6tqd6w0006swv93io7l4s8" class="article-share-link">Share</a>
       
       
     </footer>
@@ -637,117 +682,7 @@ webapp下的文件目录是容易出现安全问题的
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/04/25/SWPUCTF2019 web1/" data-id="ckh65nt030007jsv99p3o91w0" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-JPA初学问题总结" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/04/13/JPA初学问题总结/" class="article-date">
-  <time datetime="2020-04-13T13:04:54.234Z" itemprop="datePublished">2020-04-13</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="JPA初学问题总结"><a href="#JPA初学问题总结" class="headerlink" title="JPA初学问题总结"></a>JPA初学问题总结</h1><hr>
-<p><strong>1.IDE无法解析junit和spring framework-test</strong></p>
-<p>  创建实体DAO的测试类时，按往常一样导入junit和spring framework-test的依赖。但是发现在测试类中导入相关的类时发现eclipse报错’cannot reslove …’，一开始纳闷导入的类都是正确的，为什么eclipse无法解析？原来是需要如下这样在项目的pom.xml文件中导入依赖</p>
-<!-- ============== test begin ============== -->
-<pre><code>&lt;dependency&gt;&lt;!-- JUnit单元测试框架 --&gt;
-    &lt;groupId&gt;junit&lt;/groupId&gt;
-    &lt;artifactId&gt;junit&lt;/artifactId&gt;
-    &lt;version&gt;4.12&lt;/version&gt;
-&lt;/dependency&gt;
-
-&lt;!-- https://mvnrepository.com/artifact/org.springframework/spring-test --&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-    &lt;artifactId&gt;spring-test&lt;/artifactId&gt;
-    &lt;version&gt;5.1.6.RELEASE&lt;/version&gt;
-    &lt;scope&gt;provided&lt;/scope&gt;
-&lt;/dependency&gt;
-
-&lt;!-- ============== test end ============== --&gt;</code></pre><hr>
-<p><strong>2.junit test运行时报错</strong></p>
-<p>报错信息：</p>
-<pre><code>Caused by: org.hibernate.MappingException: Could not get constructor for org.hibernate.persister.entity.SingleTableEntityPersister
-at org.hibernate.persister.internal.PersisterFactoryImpl.createEntityPersister(PersisterFactoryImpl.java:123) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
-at org.hibernate.persister.internal.PersisterFactoryImpl.createEntityPersister(PersisterFactoryImpl.java:77) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
-at org.hibernate.metamodel.internal.MetamodelImpl.initialize(MetamodelImpl.java:128) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
-at org.hibernate.internal.SessionFactoryImpl.&lt;init&gt;(SessionFactoryImpl.java:300) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
-at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:460) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
-at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:892) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
-at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:58) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
-at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:365) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
-at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:391) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
-at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:378) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
-at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:341) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
-at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1855) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1792) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:595) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:517) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:323) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:222) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:321) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1108) ~[spring-context-5.2.4.RELEASE.jar:5.2.4.RELEASE]
-...
-...25 more
-Caused by: org.hibernate.HibernateException: Unable to instantiate default tuplizer [org.hibernate.tuple.entity.PojoEntityTuplizer]
-at org.hibernate.tuple.entity.EntityTuplizerFactory.constructTuplizer(EntityTuplizerFactory.java:91) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
-at org.hibernate.tuple.entity.EntityTuplizerFactory.constructDefaultTuplizer(EntityTuplizerFactory.java:116) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
-at org.hibernate.tuple.entity.EntityMetamodel.&lt;init&gt;(EntityMetamodel.java:382) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
-at org.hibernate.persister.entity.AbstractEntityPersister.&lt;init&gt;(AbstractEntityPersister.java:519) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
-at org.hibernate.persister.entity.SingleTableEntityPersister.&lt;init&gt;(SingleTableEntityPersister.java:124) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
-at jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[?:?]
-at jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62) ~[?:?]
-at jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[?:?]
-at java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:500) ~[?:?]
-at java.lang.reflect.Constructor.newInstance(Constructor.java:481) ~[?:?]
-at org.hibernate.persister.internal.PersisterFactoryImpl.createEntityPersister(PersisterFactoryImpl.java:96) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
-at org.hibernate.persister.internal.PersisterFactoryImpl.createEntityPersister(PersisterFactoryImpl.java:77) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
-at org.hibernate.metamodel.internal.MetamodelImpl.initialize(MetamodelImpl.java:128) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
-at org.hibernate.internal.SessionFactoryImpl.&lt;init&gt;(SessionFactoryImpl.java:300) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
-at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:460) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
-at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:892) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
-at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:58) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
-at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:365) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
-at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:391) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
-...
-... 25 more
-...</code></pre><p>最初还提示’org.springframework.beans.factory.BeanCreationException:’，我一开始以为是配置文件applicationContextTest-resources.xml的问题。一直在找是不是bean定义的问题。但是怎么改都这样。查了网上的资料才知道有可能不是配置文件的问题。’Caused by: org.hibernate.MappingException: Could not get constructor for org.hibernate.persister.entity.SingleTableEntityPersister’可能是有三种原因导致的。</p>
-<p>1.实体类属性没有get,set方法，或者get，set方法的格式不严谨</p>
-<p>右键source，选择’generate getter and setter’生成属性的get,set方法。但是检查了一下，发现我都是eclipse自动生成的get，set方法。格式是严格按照要求的，属性也都有get，set方法。但是每次运行测试类之前最好检查一下实体类属性的get,set方法</p>
-<p>2.没有导入需要的jar文件</p>
-<p>这里需要导入java-assist的jar文件，在pom中添加这个</p>
-<pre><code>&lt;dependency&gt;
-    &lt;groupId&gt;org.javassist&lt;/groupId&gt;
-    &lt;artifactId&gt;javassist&lt;/artifactId&gt;
-    &lt;version&gt;3.23.1-GA&lt;/version&gt;
-&lt;/dependency&gt;</code></pre><p>导入这个jar包后发现，不报错，说明需要导入这个jar包。</p>
-<p>3.实体属性名和映射文件的property name不一致</p>
-<p>这个的解决方法就是让实体属性名和映射文件property name一致就行了。</p>
-<hr>
-<p><strong>3.javax.net.ssl.SSLException</strong></p>
-<p>在stackflow上看到了解决方法，在jdbc配置文件（我这里是jdbc.properties）给url添加一个参数useSSL=false,不再报错。</p>
-<hr>
-<p>参考链接：<a href="https://stackoverflow.com/questions/18042247/could-not-get-constructor-for-org-hibernate-persister-entity-singletableentitype" target="_blank" rel="noopener">https://stackoverflow.com/questions/18042247/could-not-get-constructor-for-org-hibernate-persister-entity-singletableentitype</a></p>
-<p><a href="https://blog.51cto.com/zero01/2294152" target="_blank" rel="noopener">https://blog.51cto.com/zero01/2294152</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/04/13/JPA初学问题总结/" data-id="ckh65nt0o000kjsv90moita22" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/04/25/SWPUCTF2019 web1/" data-id="cky6tqd6t0004swv99fj23ssj" class="article-share-link">Share</a>
       
       
     </footer>
@@ -780,7 +715,7 @@ at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntit
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
     </div>
   </div>
 
@@ -791,6 +726,10 @@ at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntit
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2022/01/09/Vue打包上传至Linux环境下Nginx服务器-1/">(no title)</a>
+          </li>
         
           <li>
             <a href="/2020/11/06/JAVA处理JSON数据的实现与注意事项/">JAVA处理JSON数据的实现与注意事项</a>
@@ -808,10 +747,6 @@ at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntit
             <a href="/2020/09/06/springboot分页-pageable作参数以及List转换为Page/">springboot分页 pageable作参数以及List转换为Page</a>
           </li>
         
-          <li>
-            <a href="/2020/08/31/vue-element-admin用户登录流程/">vue-element-admin用户登录流程</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -824,7 +759,7 @@ at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntit
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2020 John Doe<br>
+      &copy; 2022 John Doe<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>

